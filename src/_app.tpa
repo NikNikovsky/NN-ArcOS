@@ -1,0 +1,43 @@
+{
+  "metadata": {
+    "name": "ArcOS",
+    "version": "0.4.3",
+    "author": "Nik Nikovsky",
+    "icon": "@local:icon.png",
+    "appGroup": "entertainment"
+  },
+  "position": {
+    "centered": true,
+    "x": 0,
+    "y": 0
+  },
+  "size": {
+    "w": 300,
+    "h": 300
+  },
+  "minSize": {
+    "w": 300,
+    "h": 300
+  },
+  "maxSize": {
+    "w": 300,
+    "h": 300
+  },
+  "state": {
+    "minimized": false,
+    "maximized": true,
+    "headless": false,
+    "resizable": true,
+    "fullscreen": false
+  },
+  "controls": {
+    "minimize": true,
+    "maximize": true,
+    "close": true
+  },
+  "glass": true,
+  "hidden": false,
+  "core": false,
+  "entrypoint": "main.js",
+  "id": "NikN_ArcOS"
+}

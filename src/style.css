@@ -1,0 +1,52 @@
+/* Basic reset for maximum control */
+html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important; /* Prevent extra scrollbars */
+    background-color: #000000; /* Default background for the app */
+    color: #FF0000; /* Default text color for the app (red) */
+}
+
+/* Targeting the specific ArcOS container for your app's body.html content */
+/* This is where your app's content is injected by ArcOS */
+#NikN_ArcOS > div.body {
+    padding: 0 !important; /* Remove any default padding */
+    margin: 0 !important;  /* Remove any default margin */
+    width: 100% !important;
+    height: 100% !important; /* Force height to 100% */
+    box-sizing: border-box !important;
+    display: flex !important; /* Ensure flexbox is active */
+    flex-direction: column !important; /* Or row, depending on desired main axis */
+    justify-content: flex-start !important; /* Align children to start */
+    align-items: stretch !important; /* Crucial for children to fill width */
+}
+
+/* Your app's main container (from body.html) */
+/* This container holds the iframe and needs to fill the div.body */
+#app-container {
+    width: 100% !important;
+    height: 100% !important; /* Force height to 100% */
+    flex-grow: 1 !important; /* Ensure it grows to fill flex parent */
+    display: flex !important; /* Make it a flex container for the iframe */
+    justify-content: center !important;
+    align-items: center !important;
+    background-color: #000000;
+}
+
+/* The iframe itself */
+#google-frame {
+    width: 100% !important;
+    height: 100% !important; /* Force height to 100% */
+    border: none !important;
+    background-color: #FFFFFF;
+    min-width: 0 !important; /* Prevent flexbox issues */
+    min-height: 0 !important; /* Prevent flexbox issues */
+}
+
+/* Optional: General text styling for consistency if you add any other text */
+body {
+    font-family: sans-serif;
+    color: #FF0000;
+}

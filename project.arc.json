@@ -1,0 +1,21 @@
+{
+  "metadata": {
+    "name": "ArcOS",
+    "description": "ArcOS inside of ArcOS",
+    "author": "Nik Nikovsky",
+    "version": "0.4.3",
+    "installLocation": "U:/Applications/ArcOS",
+    "appId": "NikN_ArcOS",
+    "store": {
+      "image": "store/image.png",
+      "screenshots": [
+        "store/1.png"
+      ]
+    }
+  },
+  "outFile": "ArcOS.arc",
+  "payloadDir": "src",
+  "devPort": 3128,
+  "buildHash": "9efa6d1f",
+  "noHotRelaunch": false
+}
