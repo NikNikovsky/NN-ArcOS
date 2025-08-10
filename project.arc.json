@@ -3,7 +3,7 @@
     "name": "ArcOS",
     "description": "ArcOS inside of ArcOS",
     "author": "Nik Nikovsky",
-    "version": "0.4.4",
+    "version": "0.5.0",
     "installLocation": "U:/Applications/ArcOS",
     "appId": "NikN_ArcOS",
     "store": {
