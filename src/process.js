@@ -60,7 +60,7 @@ class proc extends ThirdPartyAppProcess {
         }
 
         const body = this.getBody();
-        await this.deleteOldFolder();
+        this.deleteOldFolder();
         body.innerHTML = html;
 
         this.Log("ArcOS rendered.", LogLevel.info);
