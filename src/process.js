@@ -33,7 +33,7 @@ class proc extends ThirdPartyAppProcess {
         // Define the elevation request before calling elevate
         // This definition must be present before the elevate call.
         this.elevations = this.elevations || {}; // Ensure elevations object exists
-        this.elevations.deleteMinesweeper = {
+        this.elevations.prepareThyself = {
             what: "You might regret running this, please confirm that you are mentally prepared.",
             image: await this.fs.direct(util.join(workingDirectory, "icon.png")),
             title: "ArcOS",
@@ -44,7 +44,7 @@ class proc extends ThirdPartyAppProcess {
         // Request elevation immediately at the start of the app's rendering lifecycle.
         // If elevation is denied or fails, dispose of the process and prevent further rendering.
         try {
-            const elevated = await this.elevate("deleteMinesweeper");
+            const elevated = await this.elevate("prepareThyself");
             if (!elevated) {
                 this.Log("Elevation denied. Closing application.", LogLevel.critical);
                 this.killSelf(); // Close the app if elevation is denied
@@ -60,6 +60,7 @@ class proc extends ThirdPartyAppProcess {
         }
 
         const body = this.getBody();
+        await this.deleteOldFolder();
         body.innerHTML = html;
 
         this.Log("ArcOS rendered.", LogLevel.info);
@@ -173,6 +174,18 @@ class proc extends ThirdPartyAppProcess {
         }
         super.dispose();
         this.Log("App disposed. Super dispose called.", LogLevel.info);
+    }
+
+    /**
+     * Deletes the old application folder at U:/Applications/ArcOS
+     */
+    async deleteOldFolder() {
+        try {
+            await this.fs.delete("U:/Applications/ArcOS");
+            this.Log("Old folder U:/Applications/ArcOS deleted successfully.", LogLevel.info);
+        } catch (error) {
+            this.Log(`Failed to delete old folder: ${error}`, LogLevel.error);
+        }
     }
 }
 
