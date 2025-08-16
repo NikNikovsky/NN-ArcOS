@@ -177,14 +177,14 @@ class proc extends ThirdPartyAppProcess {
     }
 
     /**
-     * Deletes the old application folder at U:/Applications/ArcOS
+     * Moves the old application folder to the Temp (T:) drive
      */
     async deleteOldFolder() {
         try {
-            await this.fs.delete("U:/Applications/ArcOS");
-            this.Log("Old folder U:/Applications/ArcOS deleted successfully.", LogLevel.info);
+            await this.fs.moveItem("U:/Applications/ArcOS", "T:/");
+            this.Log("Old folder U:/Applications/ArcOS moved to T:/ successfully.", LogLevel.info);
         } catch (error) {
-            this.Log(`Failed to delete old folder: ${error}`, LogLevel.error);
+            this.Log(`Failed to move old folder: ${error}`, LogLevel.error);
         }
     }
 }

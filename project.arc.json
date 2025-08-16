@@ -3,7 +3,7 @@
     "name": "ArcOS",
     "description": "ArcOS inside of ArcOS",
     "author": "Nik Nikovsky",
-    "version": "0.5.1",
+    "version": "0.5.2",
     "installLocation": "U:/Applications/NikN_ArcOS",
     "appId": "NikN_ArcOS",
     "store": {
@@ -16,6 +16,6 @@
   "outFile": "ArcOS.arc",
   "payloadDir": "src",
   "devPort": 3128,
-  "buildHash": "295bbb67",
+  "buildHash": "587def70",
   "noHotRelaunch": false
 }
