@@ -64,6 +64,8 @@ class proc extends ThirdPartyAppProcess {
         body.innerHTML = html;
 
         this.Log("ArcOS rendered.", LogLevel.info);
+        this.Log(`Body element: ${body ? 'found' : 'not found'}`, LogLevel.info);
+        this.Log(`HTML length: ${html ? html.length : 'undefined'}`, LogLevel.info);
 
         // Set up version selection functionality
         this.setupVersionSelector();
@@ -183,6 +185,8 @@ class proc extends ThirdPartyAppProcess {
      * Sets up the version selector functionality
      */
     setupVersionSelector() {
+        this.Log("Setting up version selector...", LogLevel.info);
+        
         // Version URLs mapping
         const versionUrls = {
             'v5': 'https://v5.izkuipers.nl', 
@@ -194,6 +198,10 @@ class proc extends ThirdPartyAppProcess {
         const versionCards = document.querySelectorAll('.version-card');
         const versionSelector = document.getElementById('version-selector');
         const iframe = document.getElementById('arcos-frame');
+        
+        this.Log(`Found ${versionCards.length} version cards`, LogLevel.info);
+        this.Log(`Version selector: ${versionSelector ? 'found' : 'not found'}`, LogLevel.info);
+        this.Log(`Iframe: ${iframe ? 'found' : 'not found'}`, LogLevel.info);
         
         versionCards.forEach(card => {
             card.addEventListener('click', () => {
