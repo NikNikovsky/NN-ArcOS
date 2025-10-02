@@ -70,6 +70,9 @@ class proc extends ThirdPartyAppProcess {
         // Set up version selection functionality
         this.setupVersionSelector();
 
+        // Set up keyboard shortcuts
+        this.setupKeyboardShortcuts();
+
         const arcos = document.getElementById('arcos-frame');
         if (arcos) {
             // Initial sizing
@@ -182,6 +185,41 @@ class proc extends ThirdPartyAppProcess {
     }
 
     /**
+     * Sets up keyboard shortcuts for the application
+     */
+    setupKeyboardShortcuts() {
+        // Use ArcOS accelerator store for Alt+M to return to menu
+        this.acceleratorStore.push({
+            alt: true,
+            key: "m",
+            action: (procInstance, event) => {
+                this.showVersionSelector();
+                this.Log("Alt+M pressed - returning to version selector", LogLevel.info);
+                event.preventDefault();
+            }
+        });
+    }
+
+    /**
+     * Shows the version selector and hides the iframe
+     */
+    showVersionSelector() {
+        const versionSelector = document.getElementById('version-selector');
+        const iframe = document.getElementById('arcos-frame');
+        
+        if (versionSelector && iframe) {
+            // Show the version selector
+            versionSelector.style.display = 'flex';
+            
+            // Hide and clear the iframe
+            iframe.style.display = 'none';
+            iframe.src = '';
+            
+            this.Log("Returned to version selector", LogLevel.info);
+        }
+    }
+
+    /**
      * Sets up the version selector functionality
      */
     setupVersionSelector() {
@@ -192,7 +230,7 @@ class proc extends ThirdPartyAppProcess {
             'v5': 'https://v5.izkuipers.nl', 
             'v6': 'https://v6.izkuipers.nl', 
             'v7': 'https://v7.izkuipers.nl',
-            'nightly': 'https://v7.izkuipers.nl/nightly' 
+            'nightly': 'https://v7.izkuipers.nl/nightly/' 
         };
 
         const versionCards = document.querySelectorAll('.version-card');
