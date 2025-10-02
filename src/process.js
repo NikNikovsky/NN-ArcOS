@@ -65,6 +65,9 @@ class proc extends ThirdPartyAppProcess {
 
         this.Log("ArcOS rendered.", LogLevel.info);
 
+        // Set up version selection functionality
+        this.setupVersionSelector();
+
         const arcos = document.getElementById('arcos-frame');
         if (arcos) {
             // Initial sizing
@@ -174,6 +177,44 @@ class proc extends ThirdPartyAppProcess {
         }
         super.dispose();
         this.Log("App disposed. Super dispose called.", LogLevel.info);
+    }
+
+    /**
+     * Sets up the version selector functionality
+     */
+    setupVersionSelector() {
+        // Version URLs mapping
+        const versionUrls = {
+            'v5': 'https://v5.izkuipers.nl', 
+            'v6': 'https://v6.izkuipers.nl', 
+            'v7': 'https://v7.izkuipers.nl',
+            'nightly': 'https://v7.izkuipers.nl/nightly' 
+        };
+
+        const versionCards = document.querySelectorAll('.version-card');
+        const versionSelector = document.getElementById('version-selector');
+        const iframe = document.getElementById('arcos-frame');
+        
+        versionCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const version = card.getAttribute('data-version');
+                const url = versionUrls[version];
+                
+                if (url) {
+                    this.Log(`Loading ArcOS ${version} from ${url}`, LogLevel.info);
+                    
+                    // Hide the version selector
+                    versionSelector.style.display = 'none';
+                    
+                    // Set iframe source and show it
+                    iframe.src = url;
+                    iframe.style.display = 'block';
+                    
+                    // Re-initialize resize handling for the iframe
+                    this.handleResize();
+                }
+            });
+        });
     }
 
     /**

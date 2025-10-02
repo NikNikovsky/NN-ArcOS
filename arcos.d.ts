@@ -16,125 +16,6 @@ declare global {
 
   export const EchoIntro: () => void;
 
-  export const ArcOSVersion = "7.0.5";
-
-  export const VALIDATION_STR = "thisWonderfulArcOSServerIdentifiedByTheseWordsPleaseDontSteal(c)IzKuipers";
-
-  export const BETA = true;
-
-  export function getBuild(): Promise<void>;
-
-  export const ArcBuild: () => string;
-
-  export function getLicense(): Promise<void>;
-
-  export const ArcLicense: () => string;
-
-  export function getMode(): Promise<void>;
-
-  export const ArcMode: () => string;
-
-  export type Subscriber<T> = (value: T) => void;
-
-  export type Unsubscriber = () => void;
-
-  export type Updater<T> = (value: T) => T;
-
-  export interface Readable<T> {
-      subscribe(this: void, run: Subscriber<T>, invalidate?: () => void): Unsubscriber;
-  }
-
-  export interface Writable<T> extends Readable<T> {
-      set(this: void, value: T): void;
-      update(this: void, updater: Updater<T>): void;
-  }
-
-  export type ReadableStore<T> = Writable<T> & {
-      (): T;
-      get: () => T;
-  };
-
-  export type BooleanStore = ReadableStore<boolean>;
-
-  export type StringStore = ReadableStore<string>;
-
-  export type NumberStore = ReadableStore<number>;
-
-  export function Store<T>(initial?: T): ReadableStore<T>;
-
-  export interface LogItem {
-      source: string;
-      message: string;
-      timestamp: number;
-      level: LogLevel;
-      kernelTime: number;
-  }
-
-  export enum LogLevel {
-      info = 0,
-      warning = 1,
-      error = 2,
-      critical = 3
-  }
-
-  export const LogLevelCaptions: Record<LogLevel, string>;
-
-  export const ShortLogLevelCaptions: Record<LogLevel, string>;
-
-  export function Log(source: string, message: string, level?: LogLevel): void;
-
-  export class KernelModule {
-      protected readonly IS_KMOD = true;
-      protected kernel: WaveKernel;
-      id: string;
-      constructor(kernel: WaveKernel, id: string);
-      _init(): Promise<void>;
-      __init(): Promise<void>;
-      protected Log(message: string, level?: LogLevel): void;
-  }
-
-  export class Environment extends KernelModule {
-      private store;
-      private readOnlyValues;
-      constructor(kernel: WaveKernel, id: string);
-      _init(): Promise<void>;
-      set(key: string, value: any): boolean;
-      setMultiple(entries: [
-          string,
-          any
-      ][]): void;
-      delete(key: string): boolean;
-      get(key: string): any;
-      getMultiple(keys: string[]): any[];
-      setReadonly(key: string): void;
-      setWritable(key: string): void;
-      reset(): void;
-  }
-
-  export type DispatchCallback = (...args: any[]) => any;
-
-  export type SystemDispatchResult = "success" | "err_systemOnly" | "err_unknownCaller";
-
-  export interface GlobalDispatchClient {
-      socketId: string;
-      userId: string;
-      authorized: boolean;
-      ip?: string;
-  }
-
-  export const SystemOnlyDispatches: string[];
-
-  export const KnownSystemDispatchers: string[];
-
-  export class SystemDispatch extends KernelModule {
-      subscribers: Record<string, Record<number, (data: any) => void>>;
-      constructor(kernel: WaveKernel, id: string);
-      subscribe<T = any[]>(event: string, callback: (data: T) => void): number;
-      unsubscribeId(event: string, id: number): void;
-      discardEvent(event: string): void;
-      dispatch<T = any[]>(caller: string, data?: T, system?: boolean): SystemDispatchResult;
-  }
-
   export function arrayToText(buffer: ArrayLike<number> | ArrayBufferLike): string;
 
   export function textToArrayBuffer(text: string): ArrayBuffer;
@@ -173,312 +54,65 @@ declare global {
       mutationLock: boolean;
       urlCache: Record<string, string>;
       elements: Record<string, Element>;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, workingDirectory: string, ...args: any[]);
+      constructor(pid: number, parentPid: number, app: AppProcessData, workingDirectory: string, ...args: any[]);
       __render__(body: HTMLDivElement): Promise<void>;
   }
 
-  export const Sleep: (ms?: number) => Promise<unknown>;
-
-  export function getAllJsonPaths(obj: any, prefix?: string): string[];
-
-  export function getJsonHierarchy<T = any>(object: Object, hierarchy: string): T | null;
-
-  export function setJsonHierarchy<T = any>(object: Object, hierarchy: string, value: any): T | null;
-
-  export type NestedObject = Record<string, any>;
-
-  export function applyDefaults<T = NestedObject>(target: NestedObject, defaults: NestedObject): T;
-
-  export function validateUsername(username: string): boolean;
-
-  export function htmlspecialchars(text: string): string;
-
-  export function detectJavaScript(htmlString: string): string[] | null;
-
-  export const validateEmail: (email: string) => RegExpMatchArray | null;
-
-  export function checkPasswordStrength(password: string): Result<string>;
-
-  export const Plural: (s: string, x: number) => string;
-
-  export function sliceIntoChunks(arr: any[], chunkSize: number): any[][];
-
-  export const decimalToHex: (value: number, maxLength?: number) => string;
-
-  export function sha256(message: string): Promise<string>;
-
-  export function CountInstances(input: string, search: string): number;
-
-  export const maxLength: (m: string[], padding?: number) => number;
-
-  export const Truncate: (s: string, m: number) => string;
-
-  export const FormatLargeNumber: (n: number) => string;
-
-  export const Gap: (n: number, s?: string) => string;
-
-  export function tryParseInt(input: any, returnsUndefined?: boolean): any;
-
-  export function sortByKey(array: any[], key: string, reverse?: boolean): any[];
-
-  export function sortByHierarchy(array: any[], hierarchy: string): any[];
-
-  export function deepCopyWithBlobs<T>(obj: T): Promise<T>;
-
-  export function authcode(): string;
-
-  export interface ArcShortcut {
-      icon: string;
-      name: string;
-      type: "folder" | "file" | "app" | "new";
-      target: string;
+  export interface LogItem {
+      source: string;
+      message: string;
+      timestamp: number;
+      level: LogLevel;
+      kernelTime: number;
   }
 
-  export type ShortcutStore = Record<string, ArcShortcut>;
-
-  export interface FileEntry {
-      name: string;
-      size: number;
-      dateCreated: Date;
-      dateModified: Date;
-      mimeType: string;
-      itemId: string;
-      shortcut?: ArcShortcut;
-      action?: () => void;
+  export enum LogLevel {
+      info = 0,
+      warning = 1,
+      error = 2,
+      critical = 3
   }
 
-  export interface FsAccess {
-      _id?: string;
+  export const LogLevelCaptions: Record<LogLevel, string>;
+
+  export const ShortLogLevelCaptions: Record<LogLevel, string>;
+
+  export function Log(source: string, message: string, level?: LogLevel): void;
+
+  export type DispatchCallback = (...args: any[]) => any;
+
+  export type SystemDispatchResult = "success" | "err_systemOnly" | "err_unknownCaller";
+
+  export interface GlobalDispatchClient {
+      socketId: string;
       userId: string;
-      shareId?: string;
-      path: string;
-      accessor: string;
-      createdAt?: Date;
-  }
-
-  export type PathedFileEntry = FileEntry & {
-      path: string;
-  };
-
-  export type FullFileEntry = FileEntry & {
-      data: Blob;
-  };
-
-  export interface FolderEntry {
-      name: string;
-      dateCreated: Date;
-      dateModified: Date;
-      itemId: string;
-  }
-
-  export interface DirectoryReadReturn {
-      dirs: FolderEntry[];
-      files: FileEntry[];
-      totalFiles: number;
-      totalFolders: number;
-      totalSize: number;
-      shortcuts: ShortcutStore;
-  }
-
-  export interface RecursiveDirectoryReadReturn {
-      dirs: RecursiveDirectory[];
-      files: FileEntry[];
-      shortcuts: ShortcutStore;
-  }
-
-  export type RecursiveDirectory = FolderEntry & {
-      children: RecursiveDirectoryReadReturn;
-  };
-
-  export interface UserQuota extends Record<string, number | boolean | undefined> {
-      used: number;
-      max: number;
-      free: number;
-      percentage: number;
-      unknown?: boolean;
-  }
-
-  export interface SingleUploadReturn {
-      path: string;
-      file: File;
-      content: Blob;
-  }
-
-  export type UploadReturn = SingleUploadReturn[];
-
-  export interface FilesystemProgress {
-      type: "size" | "items" | "percentage";
-      max: number;
-      value: number;
-      what?: string;
-  }
-
-  export type FilesystemProgressCallback = (progress: FilesystemProgress) => void;
-
-  export interface FileHandler {
-      isHandler: true;
-      name: string;
-      description: string;
-      icon: string;
-      hidden?: boolean;
-      opens: {
-          extensions?: string[];
-          mimetypes?: string[];
-      };
-      handle: (path: string) => void;
-  }
-
-  export interface FileOpenerResult {
-      type: "handler" | "app";
-      app?: App;
-      handler?: FileHandler;
-      id: string;
-  }
-
-  export type DriveCapabilities = "readDir" | "makeDir" | "readFile" | "writeFile" | "tree" | "copyItem" | "moveItem" | "deleteItem" | "direct" | "quota" | "bulk";
-
-  export interface ServerInfo {
-      validation: string;
-      status: string;
-      loginWallpaper: boolean;
-      loginBottomText: string;
-      loginNotice: string;
-      disableRegistration: boolean;
-  }
-
-  export const Backend: AxiosInstance;
-
-  export class ServerManager extends KernelModule {
-      url: string;
-      connected: boolean;
-      serverInfo: ServerInfo | undefined;
-      static isConnected(): boolean;
-      static url(): string | false | undefined;
-      constructor(kernel: WaveKernel, id: string);
-      _init(): Promise<void>;
-      private getServerUrl;
-      private testConnection;
-      checkUsernameAvailability(username: string): Promise<boolean>;
-      checkEmailAvailability(email: string): Promise<boolean>;
-  }
-
-  export class FilesystemDrive {
-      server: ServerManager;
-      driveLetter: string | undefined;
-      label: string;
-      uuid: string;
-      kernel: WaveKernel;
-      readonly FIXED: boolean;
-      readonly REMOVABLE: boolean;
-      readonly READONLY: boolean;
-      readonly HIDDEN: boolean;
-      readonly IDENTIFIES_AS: string;
-      readonly FILESYSTEM_SHORT: string;
-      readonly FILESYSTEM_LONG: string;
-      BUSY: boolean;
-      protected fileLocks: Record<string, number>;
-      protected CAPABILITIES: Record<DriveCapabilities, boolean>;
-      constructor(kernel: WaveKernel, uuid: string, letter?: string, ...args: any[]);
-      Log(message: string, level?: LogLevel): void;
-      lockFile(path: string, pid: number): Promise<void>;
-      releaseLock(path: string, pid: number, fromSystem?: boolean): Promise<void>;
-      __spinUp(onProgress?: FilesystemProgressCallback): Promise<boolean>;
-      __spinDown(onProgress?: FilesystemProgressCallback): Promise<boolean>;
-      _spinUp(onProgress?: FilesystemProgressCallback): Promise<boolean>;
-      _spinDown(onProgress?: FilesystemProgressCallback): Promise<boolean>;
-      readDir(path: string): Promise<DirectoryReadReturn | undefined>;
-      createDirectory(path: string): Promise<boolean>;
-      readFile(path: string, onProgress?: FilesystemProgressCallback): Promise<ArrayBuffer | undefined>;
-      writeFile(path: string, data: Blob, onProgress?: FilesystemProgressCallback): Promise<boolean>;
-      tree(path: string): Promise<RecursiveDirectoryReadReturn | undefined>;
-      copyItem(source: string, destination: string): Promise<boolean>;
-      moveItem(source: string, destination: string): Promise<boolean>;
-      deleteItem(path: string): Promise<boolean>;
-      direct(path: string): Promise<string | undefined>;
-      quota(): Promise<UserQuota>;
-      bulk<T = any>(path: string, extension: string): Promise<Record<string, T>>;
-      isCapable(capability: DriveCapabilities): void;
-  }
-
-  export class Filesystem extends KernelModule {
-      private dispatch;
-      drives: Record<string, FilesystemDrive>;
-      constructor(kernel: WaveKernel, id: string);
-      _init(): Promise<void>;
-      getDriveById(id: string): FilesystemDrive;
-      mountDrive<T = FilesystemDrive>(id: string, supplier: typeof FilesystemDrive, letter?: string, onProgress?: FilesystemProgressCallback, ...args: any[]): Promise<T | false>;
-      getDriveIdByIdentifier(identifier: string): string;
-      umountDrive(id: string, fromSystem?: boolean, onProgress?: FilesystemProgressCallback): Promise<boolean>;
-      getDriveByLetter(letter: string, error?: boolean): FilesystemDrive;
-      getDriveIdentifier(path: string): string;
-      getDriveByPath(path: string): FilesystemDrive;
-      validatePath(p: string): void;
-      removeDriveLetter(p: string): string;
-      validateDriveLetter(letter: string): void;
-      readDir(path: string): Promise<DirectoryReadReturn | undefined>;
-      bulk<T = any>(path: string, extension: string): Promise<Record<string, T>>;
-      createDirectory(path: string, dispatch?: boolean): Promise<boolean>;
-      readFile(path: string, onProgress?: FilesystemProgressCallback): Promise<ArrayBuffer | undefined>;
-      writeFile(path: string, data: Blob, onProgress?: FilesystemProgressCallback, dispatch?: boolean): Promise<boolean>;
-      tree(path: string): Promise<RecursiveDirectoryReadReturn | undefined>;
-      copyItem(source: string, destination: string, dispatch?: boolean, onProgress?: FilesystemProgressCallback): Promise<boolean>;
-      moveItem(source: string, destination: string, dispatch?: boolean, onProgress?: FilesystemProgressCallback): Promise<boolean>;
-      deleteItem(path: string, dispatch?: boolean): Promise<boolean>;
-      uploadFiles(target: string, accept?: string, multiple?: boolean, onProgress?: FilesystemProgressCallback): Promise<UploadReturn>;
-      defaultProgress(d: FilesystemProgress): void;
-      lockFile(path: string, pid: number): Promise<void>;
-      releaseLock(path: string, pid: number): Promise<void>;
-      direct(path: string): Promise<string | undefined>;
-      nextAvailableDriveLetter(): string | undefined;
-      isDirectory(path: string): Promise<false | DirectoryReadReturn | undefined>;
-  }
-
-  export type SoundStore = Record<string, any>;
-
-  export type SoundBusStore = {
-      [key: string]: HTMLAudioElement[];
-  };
-
-  export const ArcSounds: SoundStore;
-
-  export class SoundBus extends KernelModule {
-      private store;
-      private _bus;
-      private env;
-      constructor(kernel: WaveKernel, id: string);
-      playSound(id: string, volume?: number): boolean | undefined;
-      stopSound(id: string): boolean;
-      getStore(): [
-          string,
-          string
-      ][];
-      loadExternal(source: string, play?: boolean): void;
+      authorized: boolean;
+      ip?: string;
   }
 
   export class ProcessDispatch {
       private store;
       private parent;
-      private kernel;
       constructor(process: Process);
       subscribe(event: string, callback: DispatchCallback): void;
       dispatch(event: string, ...args: any[]): Promise<boolean>;
   }
 
   export class Process {
-      env: Environment;
-      soundBus: SoundBus;
-      handler: ProcessHandler;
+      env: EnvironmentType;
+      soundBus: SoundbusType;
       dispatch: ProcessDispatch;
-      systemDispatch: SystemDispatch;
-      kernel: WaveKernel;
+      systemDispatch: SystemDispatchType;
+      handler: ProcessHandlerType;
       pid: number;
       parentPid: number;
       name: string;
       _disposed: boolean;
       _criticalProcess: boolean;
-      fs: Filesystem;
+      fs: FilesystemType;
+      sourceUrl: string;
       private fileLocks;
-      constructor(handler: ProcessHandler, pid: number, parentPid?: number, ...args: any[]);
+      constructor(pid: number, parentPid?: number, ...args: any[]);
       protected stop(): Promise<any>;
       protected start(): Promise<any>;
       __start(): Promise<any>;
@@ -487,9 +121,40 @@ declare global {
       protected Log(message: string, level?: LogLevel): void;
       requestFileLock(path: string): Promise<false | undefined>;
       unlockFile(path: string): Promise<false | undefined>;
+      setSource(source: string): void;
   }
 
+  export type Subscriber<T> = (value: T) => void;
+
+  export type Unsubscriber = () => void;
+
+  export type Updater<T> = (value: T) => T;
+
+  export interface Readable<T> {
+      subscribe(this: void, run: Subscriber<T>, invalidate?: () => void): Unsubscriber;
+  }
+
+  export interface Writable<T> extends Readable<T> {
+      set(this: void, value: T): void;
+      update(this: void, updater: Updater<T>): void;
+  }
+
+  export type ReadableStore<T> = Writable<T> & {
+      (): T;
+      get: () => T;
+  };
+
+  export type BooleanStore = ReadableStore<boolean>;
+
+  export type StringStore = ReadableStore<string>;
+
+  export type NumberStore = ReadableStore<number>;
+
+  export function Store<T>(initial?: T): ReadableStore<T>;
+
   export type MaybePromise<T> = T | Promise<T>;
+
+  export type IntBool = 1 | 0;
 
   export interface App {
       metadata: AppMetadata;
@@ -521,6 +186,10 @@ declare global {
       tpaRevision?: number;
       noSafeMode?: boolean;
       vital?: boolean;
+      _internalOriginalPath?: string;
+      _internalMinVer?: string;
+      _internalSysVer?: string;
+      _internalLoadTime?: number;
   }
 
   export type RegisteredProcess = {
@@ -530,6 +199,7 @@ declare global {
           runtime: typeof Process;
       };
       vital?: boolean;
+      _internalMinVer?: string;
   };
 
   export interface InstalledApp extends App {
@@ -569,8 +239,6 @@ declare global {
   export interface AppComponentProps<T = AppProcess> {
       process: T;
       pid: number;
-      kernel: WaveKernel;
-      handler: ProcessHandler;
       app: App;
       windowTitle: ReadableStore<string>;
       windowIcon: ReadableStore<string>;
@@ -660,7 +328,7 @@ declare global {
   export class MessageBoxRuntime extends AppProcess {
       data: MessageBoxData | undefined;
       acted: ReadableStore<boolean>;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, data: MessageBoxData);
+      constructor(pid: number, parentPid: number, app: AppProcessData, data: MessageBoxData);
       start(): Promise<void>;
       render(): Promise<void>;
       onClose(): Promise<boolean>;
@@ -671,6 +339,8 @@ declare global {
   export function MessageBox(data: MessageBoxData, parentPid: number, overlay?: boolean): Promise<void>;
 
   export function GetConfirmation(data: ConfirmationData, parentPid: number, overlay?: boolean): Promise<boolean>;
+
+  export const Sleep: (ms?: number) => Promise<unknown>;
 
   export interface SearchItem {
       caption: string;
@@ -727,7 +397,6 @@ declare global {
       createdAt: string;
       hasTotp: boolean;
       restricted: boolean;
-      accountNumber: number;
       storageSize: number;
   }
 
@@ -751,6 +420,8 @@ declare global {
       workspaces: WorkspacesOptions;
       globalSettings: Record<string, any>;
       startup?: Record<string, "app" | "file" | "folder" | "share" | "disabled">;
+      _internalImportBlocklist: string[];
+      enableVerboseLogin?: boolean;
   }
 
   export type ExpandedUserInfo = UserInfo & {
@@ -832,6 +503,7 @@ declare global {
       noGlass: boolean;
       userFont?: string;
       trafficLights: boolean;
+      blurRadius: number;
   }
 
   export interface SecurityPreferences {
@@ -839,6 +511,7 @@ declare global {
       noPassword: boolean;
       disabled: boolean;
       enableThirdParty: boolean;
+      restrictSystemFolders: boolean;
   }
 
   export interface AccountSettings {
@@ -871,27 +544,186 @@ declare global {
       username: string;
       displayName?: string;
       profilePicture: string;
-      accountNumber: number;
       admin: boolean;
       dispatchClients: number;
   }
 
-  export interface TypedProcess {
-      start?: () => any;
-      stop?: () => any;
-      killSelf: () => Promise<boolean>;
-      pid: number;
-      parentPid?: number;
-      name: string;
-      _disposed: boolean;
-      _criticalProcess: boolean;
+  export interface CategorizedDiskUsage {
+      sizes: {
+          system: number;
+          trash: number;
+          home: number;
+          apps: number;
+      };
+      absolutePercentages: {
+          system: number;
+          trash: number;
+          home: number;
+          apps: number;
+      };
+      relativePercentages: {
+          system: number;
+          trash: number;
+          home: number;
+          apps: number;
+      };
+      used: number;
+      free: number;
+      total: number;
   }
 
-  export type RenderArgs = Record<string, any>;
+  export interface ArcShortcut {
+      icon: string;
+      name: string;
+      type: "folder" | "file" | "app" | "new";
+      target: string;
+  }
 
-  export type ProcessSpawnResult = "success" | "err_disabled" | "err_aboveLimit";
+  export type ShortcutStore = Record<string, ArcShortcut>;
 
-  export type ProcessKillResult = "success" | "err_elevation" | "err_criticalProcess" | "err_disposed" | "err_noExist" | "err_killCancel";
+  export interface FileEntry {
+      name: string;
+      size: number;
+      dateCreated: Date;
+      dateModified: Date;
+      mimeType: string;
+      itemId: string;
+      shortcut?: ArcShortcut;
+      action?: () => void;
+      modifiers?: SummarizedFsModifiers;
+  }
+
+  export interface FsAccess {
+      _id?: string;
+      userId: string;
+      shareId?: string;
+      path: string;
+      accessor: string;
+      createdAt?: Date;
+  }
+
+  export type PathedFileEntry = FileEntry & {
+      path: string;
+  };
+
+  export type FullFileEntry = FileEntry & {
+      data: Blob;
+  };
+
+  export interface FolderEntry {
+      name: string;
+      dateCreated: Date;
+      dateModified: Date;
+      itemId: string;
+      modifiers?: SummarizedFsModifiers;
+  }
+
+  export interface DirectoryReadReturn {
+      dirs: FolderEntry[];
+      files: FileEntry[];
+      totalFiles: number;
+      totalFolders: number;
+      totalSize: number;
+      shortcuts: ShortcutStore;
+  }
+
+  export interface RecursiveDirectoryReadReturn {
+      dirs: RecursiveDirectory[];
+      files: FileEntry[];
+      shortcuts: ShortcutStore;
+  }
+
+  export type RecursiveDirectory = FolderEntry & {
+      children: RecursiveDirectoryReadReturn;
+  };
+
+  export interface UserQuota extends Record<string, number | boolean | undefined> {
+      used: number;
+      max: number;
+      free: number;
+      percentage: number;
+      unknown?: boolean;
+  }
+
+  export interface SingleUploadReturn {
+      path: string;
+      file: File;
+      content: Blob;
+  }
+
+  export type UploadReturn = SingleUploadReturn[];
+
+  export interface FilesystemProgress {
+      type: "size" | "items" | "percentage";
+      max: number;
+      value: number;
+      what?: string;
+  }
+
+  export type FilesystemProgressCallback = (progress: FilesystemProgress) => void;
+
+  export interface FileHandler {
+      isHandler: true;
+      name: string;
+      description: string;
+      icon: string;
+      hidden?: boolean;
+      opens: {
+          extensions?: string[];
+          mimetypes?: string[];
+      };
+      handle: (path: string) => void;
+  }
+
+  export interface FileOpenerResult {
+      type: "handler" | "app";
+      app?: App;
+      handler?: FileHandler;
+      id: string;
+  }
+
+  export type DriveCapabilities = "readDir" | "makeDir" | "readFile" | "writeFile" | "tree" | "copyItem" | "moveItem" | "deleteItem" | "direct" | "quota" | "bulk" | "stat";
+
+  export interface FilesystemStat {
+      isFile: boolean;
+      isDirectory: boolean;
+      size: number;
+      created: number;
+      modified: number;
+  }
+
+  export interface FsModifier {
+      _id?: string;
+      userId: string;
+      itemId: string;
+      kind: FsModifierKind;
+      isAdmin?: boolean;
+      isDir?: boolean;
+      createdAt?: string;
+      modifiedAt?: string;
+  }
+
+  export interface ExtendedFsModifier extends FsModifier {
+      user?: PublicUserInfo;
+  }
+
+  export interface SummarizedFsModifiers {
+      itemId: string;
+      lastWrite: ExtendedFsModifier | null;
+      createdBy: ExtendedFsModifier | null;
+  }
+
+  export type FsModifierKind = "create" | "write";
+
+  export interface FsModifierOptions {
+      kind: FsModifierKind;
+      isAdmin?: boolean;
+      isDir?: boolean;
+  }
+
+  export interface ExtendedStat extends FilesystemStat {
+      modifiers?: SummarizedFsModifiers;
+  }
 
   export interface FsProgressOperation {
       type: "quantity" | "size" | "none";
@@ -901,8 +733,6 @@ declare global {
       done: number;
       max: number;
       cancel?: () => void;
-      waiting: boolean;
-      working: boolean;
       errors: string[];
   }
 
@@ -917,32 +747,121 @@ declare global {
       setCancel: (cancel: (() => void) | undefined) => void;
       updateCaption: (caption: string) => void;
       updSub: (subtitle: string) => void;
-      setWait: (waiting: boolean) => void;
-      setWork: (waiting: boolean) => void;
       stop: () => Promise<any>;
       show: () => Promise<any>;
       setType: (type: "quantity" | "size" | "none") => void;
-      process: () => FsProgressRuntime | undefined;
+      process: () => FsProgressProc | undefined;
   }
 
   export const DummyFileProgress: FileProgressMutator;
 
-  export class FsProgressRuntime extends AppProcess {
+  export interface FsProgressProc extends AppProcess {
       Progress: ReadableStore<FsProgressOperation>;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, store: ReadableStore<FsProgressOperation>);
-      render({ store }: RenderArgs): Promise<void> | undefined;
-      onClose(): Promise<boolean>;
   }
 
   export class GlobalLoadIndicatorRuntime extends AppProcess {
       caption: ReadableStore<string>;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, caption: string);
+      constructor(pid: number, parentPid: number, app: AppProcessData, caption: string);
   }
+
+  export const GlobalLoadIndicatorApp: App;
 
   export interface IconPickerData {
       forWhat: string;
       defaultIcon: string;
       returnId: string;
+  }
+
+  export class TerminalWindowRuntime extends AppProcess {
+      term: Terminal | undefined;
+      overridePopulatable: boolean;
+      constructor(pid: number, parentPid: number, app: AppProcessData);
+      render(): Promise<void>;
+      protected stop(): Promise<void>;
+  }
+
+  export const TerminalWindowApp: App;
+
+  export class FilesystemDrive {
+      server: ServerManagerType;
+      driveLetter: string | undefined;
+      label: string;
+      uuid: string;
+      readonly FIXED: boolean;
+      readonly REMOVABLE: boolean;
+      readonly READONLY: boolean;
+      readonly HIDDEN: boolean;
+      readonly IDENTIFIES_AS: string;
+      readonly FILESYSTEM_SHORT: string;
+      readonly FILESYSTEM_LONG: string;
+      BUSY: boolean;
+      protected fileLocks: Record<string, number>;
+      protected CAPABILITIES: Record<DriveCapabilities, boolean>;
+      constructor(uuid: string, letter?: string, ...args: any[]);
+      Log(message: string, level?: LogLevel): void;
+      lockFile(path: string, pid: number): Promise<void>;
+      releaseLock(path: string, pid: number, fromSystem?: boolean): Promise<void>;
+      __spinUp(onProgress?: FilesystemProgressCallback): Promise<boolean>;
+      __spinDown(onProgress?: FilesystemProgressCallback): Promise<boolean>;
+      _spinUp(onProgress?: FilesystemProgressCallback): Promise<boolean>;
+      _spinDown(onProgress?: FilesystemProgressCallback): Promise<boolean>;
+      readDir(path: string): Promise<DirectoryReadReturn | undefined>;
+      createDirectory(path: string): Promise<boolean>;
+      readFile(path: string, onProgress?: FilesystemProgressCallback): Promise<ArrayBuffer | undefined>;
+      writeFile(path: string, data: Blob, onProgress?: FilesystemProgressCallback): Promise<boolean>;
+      tree(path: string): Promise<RecursiveDirectoryReadReturn | undefined>;
+      copyItem(source: string, destination: string): Promise<boolean>;
+      moveItem(source: string, destination: string): Promise<boolean>;
+      deleteItem(path: string): Promise<boolean>;
+      direct(path: string): Promise<string | undefined>;
+      quota(): Promise<UserQuota>;
+      bulk<T = any>(path: string, extension: string): Promise<Record<string, T>>;
+      stat(path: string): Promise<FilesystemStat | undefined>;
+      isCapable(capability: DriveCapabilities): void;
+      imageThumbnail(path: string, width: number, height?: number): Promise<string | undefined>;
+  }
+
+  export interface Tab {
+      location: string;
+      title: string;
+      icon: string;
+  }
+
+  export interface Location {
+      name: string;
+      icon: string;
+      component: any;
+  }
+
+  export type QuotedDrive = {
+      data: FilesystemDrive;
+      quota: UserQuota;
+  };
+
+  export interface LoadSaveDialogData {
+      title: string;
+      icon: string;
+      startDir?: string;
+      isSave?: boolean;
+      targetPid?: number;
+      extensions?: string[];
+      returnId: string;
+      saveName?: string;
+      multiple?: boolean;
+      folder?: boolean;
+  }
+
+  export interface FileManagerNotice {
+      icon: string;
+      text: string;
+      className?: string;
+  }
+
+  export interface VirtualFileManagerLocation {
+      name: string;
+      icon: string;
+      component: Component;
+      hidden?: boolean;
   }
 
   export function tryJsonParse<T = any>(input: any): T;
@@ -960,7 +879,7 @@ declare global {
   export class BaseService extends Process {
       host: ServiceHost;
       activated: boolean;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, name: string, host: ServiceHost);
+      constructor(pid: number, parentPid: number, name: string, host: ServiceHost);
   }
 
   export interface BugReport {
@@ -976,6 +895,7 @@ declare global {
       api?: string;
       frontend: string;
       meta: MetaEnvironment;
+      env: Record<string, string>;
       _id?: string;
       createdAt: string;
       mode: string;
@@ -1035,6 +955,10 @@ declare global {
       public?: boolean;
   }
 
+  export interface BugHuntProc extends AppProcess {
+      invalidateCaches: (restoreSelected?: boolean) => Promise<void>;
+  }
+
   export interface Service {
       name: string;
       description: string;
@@ -1062,8 +986,8 @@ declare global {
       cachedPrivateResponseCount: number;
       cachedPublicResponseCount: number;
       token: string | undefined;
-      module: BugHunt;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, name: string, host: ServiceHost);
+      module: BugHuntType;
+      constructor(pid: number, parentPid: number, name: string, host: ServiceHost);
       afterActivate(): Promise<void>;
       sendBugReport(options: ReportOptions): Promise<boolean>;
       getPrivateReports(forceInvalidate?: boolean): Promise<BugReport[]>;
@@ -1074,6 +998,10 @@ declare global {
   }
 
   export const bhuspService: Service;
+
+  export function getBuild(): Promise<void>;
+
+  export const ArcBuild: () => string;
 
   export interface ArcPackage {
       name: string;
@@ -1181,7 +1109,7 @@ declare global {
       private url;
       label: string;
       protected CAPABILITIES: Record<DriveCapabilities, boolean>;
-      constructor(kernel: WaveKernel, uuid: string, letter: string, axios: AxiosInstance, url: string);
+      constructor(uuid: string, letter: string, axios: AxiosInstance, url: string);
       readDir(path: string): Promise<DirectoryReadReturn | undefined>;
       createDirectory(path: string): Promise<boolean>;
       readFile(path: string, onProgress?: FilesystemProgressCallback): Promise<ArrayBuffer | undefined>;
@@ -1203,84 +1131,154 @@ declare global {
       meta?: ProjectMetadata;
       private daemon;
       private pids;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, name: string, host: ServiceHost);
+      constructor(pid: number, parentPid: number, name: string, host: ServiceHost);
+      stop(): Promise<void>;
       connect(port: number): Promise<DevEnvActivationResult>;
       disconnect(): Promise<undefined>;
       getProjectMeta(): Promise<ProjectMetadata | undefined>;
       mountDevDrive(): Promise<boolean | undefined>;
       restartTpa(): Promise<undefined>;
       killTpa(): Promise<undefined>;
-      stop(): Promise<void>;
       refreshCSS(filename: string): Promise<void>;
   }
 
   export const devEnvironmentService: Service;
 
-  export interface SharedDriveType {
-      userId: string;
-      accessors: string[];
-      shareName: string;
-      maxSize: number;
-      passwordHash: string;
-      description?: string;
-      locked: boolean;
-      ownerName?: string;
-      _id: string;
+  export const Backend: AxiosInstance;
+
+  export type ComparisonResult = "lower" | "higher" | "equal";
+
+  export function compareVersion(left: string, right: string): ComparisonResult;
+
+  export function UUID(): string;
+
+  export class InstallerProcess extends Process {
+      status: ReadableStore<InstallStatus>;
+      failReason: ReadableStore<string>;
+      installing: ReadableStore<boolean>;
+      completed: ReadableStore<boolean>;
+      focused: ReadableStore<string>;
+      verboseLog: string[];
+      metadata?: ArcPackage;
+      userDaemon: UserDaemon;
+      parent: DistributionServiceProcess;
+      TOTAL_COUNT: ReadableStore<number>;
+      COUNT: ReadableStore<number>;
+      item?: StoreItem;
+      zip?: JSZip;
+      constructor(pid: number, parentPid: number, zip: JSZip, metadata: ArcPackage, item: StoreItem);
+      start(): Promise<void>;
+      stop(): Promise<boolean>;
+      logStatus(content: string, type?: InstallStatusType, status?: InstallStatusMode): void;
+      setCurrentStatus(status: InstallStatusMode): Promise<void>;
+      setCurrentContent(content: string): Promise<void>;
+      getFiles(): Promise<{
+          files: {
+              [k: string]: JSZip.JSZipObject;
+          };
+          sortedPaths: string[];
+      }>;
+      createInstallLocation(): Promise<boolean>;
+      registerApp(): Promise<boolean>;
+      mkdir(path: string): Promise<boolean>;
+      writeFile(path: string, content: ArrayBuffer): Promise<boolean>;
+      fail(reason: string): void;
+      go(): Promise<boolean>;
+      checkDesktopIcon(): Promise<void>;
+      onStop(): Promise<void>;
   }
 
-  export interface ShareCreateOptions {
-      userId: string;
-      description?: string;
-      size?: number;
-      shareName: string;
-      password: string;
+  export class DistributionServiceProcess extends BaseService {
+      private readonly dataFolder;
+      private readonly tempFolder;
+      private readonly installedListPath;
+      _BUSY: string;
+      private installListCache;
+      preferences: UserPreferencesStore;
+      constructor(pid: number, parentPid: number, name: string, host: ServiceHost);
+      start(): Promise<false | undefined>;
+      packageInstallerFromPath(path: string, progress?: FilesystemProgressCallback, item?: StoreItem): Promise<InstallerProcess | undefined>;
+      packageInstaller(zip: JSZip, metadata: ArcPackage, item?: StoreItem): Promise<InstallerProcess | undefined>;
+      getStoreItem(id: string): Promise<StoreItem | undefined>;
+      getStoreItemByName(name: string): Promise<StoreItem | undefined>;
+      downloadStoreItem(id: string, onProgress?: FilesystemProgressCallback): Promise<ArrayBuffer | undefined>;
+      storeItemInstaller(id: string, onProgress?: FilesystemProgressCallback): Promise<false | InstallerProcess | undefined>;
+      addToInstalled(item: StoreItem): Promise<boolean | undefined>;
+      removeFromInstalled(id: string): Promise<boolean | undefined>;
+      loadInstalledList(): Promise<StoreItem[]>;
+      writeInstalledList(list: StoreItem[]): Promise<boolean>;
+      publishPackage(data: Blob, onProgress?: FilesystemProgressCallback): Promise<boolean>;
+      publishPackageFromPath(path: string, onProgress?: FilesystemProgressCallback): Promise<boolean>;
+      getPublishedPackages(): Promise<StoreItem[]>;
+      searchStoreItems(query: string): Promise<PartialStoreItem[]>;
+      updateStoreItem(itemId: string, newData: Blob, onProgress?: FilesystemProgressCallback): Promise<boolean>;
+      updateStoreItemFromPath(itemId: string, updatePath: string, onProgress?: FilesystemProgressCallback): Promise<boolean>;
+      deprecateStoreItem(id: string): Promise<boolean>;
+      deleteStoreItem(id: string): Promise<boolean>;
+      getInstalledPackage(id: string, installedList?: StoreItem[]): Promise<StoreItem>;
+      getInstalledPackageByAppId(appId: string): Promise<StoreItem | undefined>;
+      uninstallApp(appId: string, deleteFiles?: boolean, onStage?: (stage: string) => void): Promise<boolean>;
+      checkForUpdate(id: string, installedList?: StoreItem[], allPackages?: StoreItem[]): Promise<UpdateInfo | false>;
+      checkForAllUpdates(list?: StoreItem[]): Promise<UpdateInfo[]>;
+      updatePackage(id: string, force?: boolean, progress?: FilesystemProgressCallback): Promise<InstallerProcess | false>;
+      checkBusy(action?: string): string;
+      get BUSY(): string;
+      set BUSY(value: string);
+      getAllStoreItems(): Promise<StoreItem[]>;
+      getStoreItemsByAuthor(userId: string): Promise<StoreItem[]>;
+      storeItemReadme(id: string): Promise<string>;
   }
 
-  export class SharedDrive extends FilesystemDrive {
-      shareId: string | undefined;
-      token: string;
-      shareInfo: SharedDriveType;
-      IDENTIFIES_AS: string;
-      FILESYSTEM_SHORT: string;
-      FILESYSTEM_LONG: string;
-      protected CAPABILITIES: Record<DriveCapabilities, boolean>;
-      constructor(kernel: WaveKernel, uuid: string, letter: string, info: SharedDriveType, token: string);
-      _spinUp(): Promise<boolean>;
-      readDir(path?: string): Promise<DirectoryReadReturn | undefined>;
-      createDirectory(path: string): Promise<boolean>;
-      readFile(path: string, onProgress: FilesystemProgressCallback): Promise<ArrayBuffer | undefined>;
-      writeFile(path: string, blob: Blob, onProgress: FilesystemProgressCallback): Promise<boolean>;
-      tree(path?: string): Promise<RecursiveDirectoryReadReturn | undefined>;
-      copyItem(source: string, destination: string): Promise<boolean>;
-      moveItem(source: string, destination: string): Promise<boolean>;
-      deleteItem(path: string): Promise<boolean>;
-      quota(): Promise<UserQuota>;
-      direct(path: string): Promise<string | undefined>;
-      bulk<T = any>(path: string, extension: string): Promise<Record<string, T>>;
+  export const distributionService: Service;
+
+  export function getAllImages(): Record<string, string>;
+
+  export function getGroupedIcons(): Record<string, Record<string, string>>;
+
+  export function getIconPath(id: string): string;
+
+  export function iconIdFromPath(path: string): string;
+
+  export function maybeIconId(id: string): string;
+
+  export class IconService extends BaseService {
+      PATH: string;
+      FILE_CACHE: Record<string, string>;
+      ICON_TYPES: string[];
+      DEFAULT_ICON: string;
+      Configuration: ReadableStore<Record<string, string>>;
+      constructor(pid: number, parentPid: number, name: string, host: ServiceHost);
+      start(): Promise<void>;
+      loadConfiguration(): Promise<Record<string, string>>;
+      writeConfiguration(config: Record<string, string>): Promise<Record<string, string>>;
+      defaultConfiguration(): Record<string, string>;
+      getIcon(id: string, noCache?: boolean): Promise<string>;
+      getIconCached(id: string): string;
+      parseIcon(id: string): [
+          "fs" | "builtin" | "app",
+          string
+      ];
+      cacheEverything(): Promise<void>;
+      getAppIcon(app: App, workingDirectory?: string): string;
+      getGroupedIcons(): Record<string, Record<string, string>>;
+      migrateIconConfiguration(): void;
   }
 
-  export class ShareManager extends BaseService {
-      token: string | undefined;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, name: string, host: ServiceHost);
-      getOwnedShares(): Promise<SharedDriveType[]>;
-      mountOwnedShares(): Promise<void>;
-      getJoinedShares(): Promise<SharedDriveType[]>;
-      createShare(name: string, password: string): Promise<SharedDriveType | undefined>;
-      deleteShare(shareId: string): Promise<boolean>;
-      changeSharePassword(shareId: string, newPassword: string): Promise<boolean>;
-      renameShare(shareId: string, newName: string): Promise<boolean>;
-      joinShare(username: string, shareName: string, password: string, mountAlso?: boolean): Promise<boolean | FilesystemDrive | undefined>;
-      leaveShare(shareId: string): Promise<boolean>;
-      unmountIfMounted(shareId: string): Promise<void>;
-      kickUserFromShare(shareId: string, userId: string): Promise<boolean>;
-      mountShare(username: string, shareName: string, letter?: string, onProgress?: FilesystemProgressCallback): Promise<false | FilesystemDrive | undefined>;
-      mountShareById(shareId: string, letter?: string, onProgress?: FilesystemProgressCallback): Promise<false | FilesystemDrive>;
-      getShareMembers(shareId: string): Promise<Record<string, string>>;
-      getShareInfoByName(username: string, shareName: string): Promise<SharedDriveType | undefined>;
-      getShareInfoById(shareId: string): Promise<SharedDriveType | undefined>;
-  }
+  export const iconService: Service;
 
-  export const shareService: Service;
+  export const KernelLogs: () => LogItem[];
+
+  export const KernelParams: () => URLSearchParams;
+
+  export const KernelInitPid: () => number;
+
+  export const KernelModules: () => string[];
+
+  export const KernelStateHandler: () => StateHandler | undefined;
+
+  export const KernelIsPanicked: () => boolean | undefined;
+
+  export const KernelPremature: () => boolean;
 
   export interface ArcProtocol {
       subCommand: string;
@@ -1316,7 +1314,7 @@ declare global {
       lockObserver: boolean;
       observer?: MutationObserver;
       store: Record<string, ProtocolHandler>;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, name: string, host: ServiceHost);
+      constructor(pid: number, parentPid: number, name: string, host: ServiceHost);
       start(): Promise<void>;
       parseProtoParam(): void;
       processMutations(mutations: MutationRecord[]): void;
@@ -1329,6 +1327,56 @@ declare global {
 
   export const protoService: Service;
 
+  export function getAllJsonPaths(obj: any, prefix?: string): string[];
+
+  export function getJsonHierarchy<T = any>(object: Object, hierarchy: string): T | null;
+
+  export function setJsonHierarchy<T = any>(object: Object, hierarchy: string, value: any): T | null;
+
+  export type NestedObject = Record<string, any>;
+
+  export function applyDefaults<T = NestedObject>(target: NestedObject, defaults: NestedObject): T;
+
+  export function validateUsername(username: string): boolean;
+
+  export function htmlspecialchars(text: string): string;
+
+  export function detectJavaScript(htmlString: string): string[] | null;
+
+  export const validateEmail: (email: string) => RegExpMatchArray | null;
+
+  export function checkPasswordStrength(password: string): Result<string>;
+
+  export const Plural: (s: string, x: number) => string;
+
+  export function sliceIntoChunks(arr: any[], chunkSize: number): any[][];
+
+  export const decimalToHex: (value: number, maxLength?: number) => string;
+
+  export function sha256(message: string): Promise<string>;
+
+  export function CountInstances(input: string, search: string): number;
+
+  export const maxLength: (m: string[], padding?: number) => number;
+
+  export const Truncate: (s: string, m: number) => string;
+
+  export const FormatLargeNumber: (n: number) => string;
+
+  export const Gap: (n: number, s?: string) => string;
+
+  export function tryParseInt(input: any, returnsUndefined?: boolean): any;
+
+  export function sortByKey(array: any[], key: string, reverse?: boolean): any[];
+
+  export function sortByHierarchy(array: any[], hierarchy: string): any[];
+
+  export function deepCopyWithBlobs<T>(obj: T): Promise<T>;
+
+  export function authcode(): string;
+
+  export function groupByTimeFrame<T extends Record<string, any>>(items: T[], column?: keyof T): Record<string, T[]>;
+
   export class AdminServerDrive extends FilesystemDrive {
       private targetUsername;
       private token;
@@ -1338,8 +1386,8 @@ declare global {
       FILESYSTEM_SHORT: string;
       FILESYSTEM_LONG: string;
       protected CAPABILITIES: Record<DriveCapabilities, boolean>;
-      constructor(kernel: WaveKernel, uuid: string, letter: string, token: string, targetUsername: string);
-      _spinUp(onProgress?: FilesystemProgressCallback): Promise<boolean>;
+      constructor(uuid: string, letter: string, token: string, targetUsername: string);
+      _spinUp(): Promise<boolean>;
       writeFile(path: string, data: Blob, onProgress?: FilesystemProgressCallback): Promise<boolean>;
       createDirectory(path: string): Promise<boolean>;
       deleteItem(path: string): Promise<boolean>;
@@ -1351,6 +1399,7 @@ declare global {
       quota(): Promise<UserQuota>;
       direct(path: string): Promise<string | undefined>;
       bulk<T = any>(path: string, extension: string): Promise<Record<string, T>>;
+      stat(path: string): Promise<FilesystemStat | undefined>;
   }
 
   export interface Activity {
@@ -1463,7 +1512,6 @@ declare global {
 
   export interface ServerStatistics {
       counts: ServerStatGroup;
-      sizes: ServerStatGroup;
       endpoints: number;
   }
 
@@ -1519,6 +1567,26 @@ declare global {
       messages: number;
       shares: number;
       tokens: number;
+  }
+
+  export interface SharedDriveType {
+      userId: string;
+      accessors: string[];
+      shareName: string;
+      maxSize: number;
+      passwordHash: string;
+      description?: string;
+      locked: boolean;
+      ownerName?: string;
+      _id: string;
+  }
+
+  export interface ShareCreateOptions {
+      userId: string;
+      description?: string;
+      size?: number;
+      shareName: string;
+      password: string;
   }
 
   export interface Message {
@@ -1582,12 +1650,12 @@ declare global {
       client: Socket | undefined;
       token?: string;
       authorized: boolean;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, name: string, host: ServiceHost);
+      constructor(pid: number, parentPid: number, name: string, host: ServiceHost);
       start(): Promise<void>;
+      stop(): Promise<void>;
       connected(): Promise<void>;
       subscribe<T extends Array<any> = any[]>(event: string, callback: (...data: T) => void): void;
       emit(event: string, ...data: any[]): void;
-      stop(): Promise<void>;
       getClients(): Promise<GlobalDispatchClient[]>;
       disconnectClient(clientId: string): Promise<boolean>;
   }
@@ -1598,7 +1666,7 @@ declare global {
       token: string | undefined;
       serverUrl: string | false | undefined;
       serverAuthCode: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, name: string, host: ServiceHost);
+      constructor(pid: number, parentPid: number, name: string, host: ServiceHost);
       start(): Promise<void>;
       getSentMessages(): Promise<PartialMessage[]>;
       getReceivedMessages(): Promise<PartialMessage[]>;
@@ -1611,6 +1679,30 @@ declare global {
   }
 
   export const messagingService: Service;
+
+  export class AdminFileSystem extends FilesystemDrive {
+      private token;
+      READONLY: boolean;
+      FIXED: boolean;
+      IDENTIFIES_AS: string;
+      FILESYSTEM_SHORT: string;
+      FILESYSTEM_LONG: string;
+      label: string;
+      protected CAPABILITIES: Record<DriveCapabilities, boolean>;
+      constructor(uuid: string, letter: string, token: string);
+      writeFile(path: string, data: Blob, onProgress?: FilesystemProgressCallback): Promise<boolean>;
+      createDirectory(path: string): Promise<boolean>;
+      deleteItem(path: string): Promise<boolean>;
+      copyItem(source: string, destination: string): Promise<boolean>;
+      moveItem(source: string, destination: string): Promise<boolean>;
+      readDir(path?: string): Promise<DirectoryReadReturn | undefined>;
+      readFile(path: string, onProgress: FilesystemProgressCallback): Promise<ArrayBuffer | undefined>;
+      tree(path?: string): Promise<RecursiveDirectoryReadReturn | undefined>;
+      quota(): Promise<UserQuota>;
+      bulk<T = any>(path: string, extension: string): Promise<Record<string, T>>;
+      direct(path: string): Promise<string | undefined>;
+      stat(path: string): Promise<FilesystemStat | undefined>;
+  }
 
   export const AdminScopes: {
       adminGod: string;
@@ -1690,37 +1782,17 @@ declare global {
       adminStoreVerificationGet: string;
       adminStoreVerificationSet: string;
       adminStoreUnverify: string;
+      adminAfsRead: string;
+      adminAfsWrite: string;
+      adminAfsQuota: string;
   };
 
   export const AdminScopeCaptions: Record<string, string>;
 
-  export class AdminFileSystem extends FilesystemDrive {
-      private token;
-      READONLY: boolean;
-      FIXED: boolean;
-      IDENTIFIES_AS: string;
-      FILESYSTEM_SHORT: string;
-      FILESYSTEM_LONG: string;
-      label: string;
-      protected CAPABILITIES: Record<DriveCapabilities, boolean>;
-      constructor(kernel: WaveKernel, uuid: string, letter: string, token: string);
-      writeFile(path: string, data: Blob, onProgress?: FilesystemProgressCallback): Promise<boolean>;
-      createDirectory(path: string): Promise<boolean>;
-      deleteItem(path: string): Promise<boolean>;
-      copyItem(source: string, destination: string): Promise<boolean>;
-      moveItem(source: string, destination: string): Promise<boolean>;
-      readDir(path?: string): Promise<DirectoryReadReturn | undefined>;
-      readFile(path: string, onProgress: FilesystemProgressCallback): Promise<ArrayBuffer | undefined>;
-      tree(path?: string): Promise<RecursiveDirectoryReadReturn | undefined>;
-      quota(): Promise<UserQuota>;
-      bulk<T = any>(path: string, extension: string): Promise<Record<string, T>>;
-      direct(path: string): Promise<string | undefined>;
-  }
-
   export class AdminBootstrapper extends BaseService {
       private token;
       private userInfo;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, name: string, host: ServiceHost);
+      constructor(pid: number, parentPid: number, name: string, host: ServiceHost);
       start(): Promise<void>;
       getUserInfo(): Promise<UserInfo | undefined>;
       mountUserDrive(username: string, driveLetter?: string, onProgress?: FilesystemProgressCallback): Promise<false | FilesystemDrive | undefined>;
@@ -1807,7 +1879,62 @@ declare global {
 
   export const adminService: Service;
 
-  export function UUID(): string;
+  export interface FileDefinition {
+      friendlyName: string;
+      icon: string;
+  }
+
+  export interface FileAssociationConfig {
+      associations: {
+          apps: Record<string, string[]>;
+          handlers: Record<string, string[]>;
+      };
+      definitions: Record<string, FileDefinition>;
+  }
+
+  export interface BaseFileAssociationInfo {
+      extension: string;
+      handledBy?: {
+          app?: string;
+          handler?: string;
+      };
+      icon?: string;
+      friendlyName?: string;
+  }
+
+  export interface ExpandedFileAssociationInfo {
+      extension: string;
+      handledBy: {
+          app?: App;
+          handler?: FileHandler;
+      };
+      icon: string;
+      friendlyName: string;
+  }
+
+  export const AudioFileDefinitions: Record<string, FileDefinition>;
+
+  export const ImageFileDefinitions: Record<string, FileDefinition>;
+
+  export const VideoFileDefinitions: Record<string, FileDefinition>;
+
+  export const DefaultFileDefinitions: Record<string, FileDefinition>;
+
+  export class FileAssocService extends BaseService {
+      private CONFIG_PATH;
+      private Configuration;
+      constructor(pid: number, parentPid: number, name: string, host: ServiceHost);
+      start(): Promise<void>;
+      private loadConfiguration;
+      private writeConfiguration;
+      updateConfiguration(callback: (config: FileAssociationConfig) => FileAssociationConfig | Promise<FileAssociationConfig>): Promise<void>;
+      defaultFileAssociations(): FileAssociationConfig;
+      getFileAssociation(path: string): ExpandedFileAssociationInfo | undefined;
+      getUnresolvedAssociationIcon(path: string): string;
+      getConfiguration(): FileAssociationConfig;
+  }
+
+  export const fileAssocService: Service;
 
   export interface TrashIndexNode {
       name: string;
@@ -1820,7 +1947,7 @@ declare global {
   export class TrashCanService extends BaseService {
       INDEX_PATH: string;
       IndexBuffer: ReadableStore<Record<string, TrashIndexNode>>;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, name: string, host: ServiceHost);
+      constructor(pid: number, parentPid: number, name: string, host: ServiceHost);
       start(): Promise<void>;
       readIndex(): Promise<Record<string, TrashIndexNode>>;
       writeIndex(index: Record<string, TrashIndexNode>): Promise<Record<string, TrashIndexNode>>;
@@ -1833,12 +1960,63 @@ declare global {
 
   export const trashService: Service;
 
+  export class SharedDrive extends FilesystemDrive {
+      shareId: string | undefined;
+      token: string;
+      shareInfo: SharedDriveType;
+      IDENTIFIES_AS: string;
+      FILESYSTEM_SHORT: string;
+      FILESYSTEM_LONG: string;
+      protected CAPABILITIES: Record<DriveCapabilities, boolean>;
+      constructor(uuid: string, letter: string, info: SharedDriveType, token: string);
+      _spinUp(): Promise<boolean>;
+      readDir(path?: string): Promise<DirectoryReadReturn | undefined>;
+      createDirectory(path: string): Promise<boolean>;
+      readFile(path: string, onProgress: FilesystemProgressCallback): Promise<ArrayBuffer | undefined>;
+      writeFile(path: string, blob: Blob, onProgress: FilesystemProgressCallback): Promise<boolean>;
+      tree(path?: string): Promise<RecursiveDirectoryReadReturn | undefined>;
+      copyItem(source: string, destination: string): Promise<boolean>;
+      moveItem(source: string, destination: string): Promise<boolean>;
+      deleteItem(path: string): Promise<boolean>;
+      quota(): Promise<UserQuota>;
+      direct(path: string): Promise<string | undefined>;
+      bulk<T = any>(path: string, extension: string): Promise<Record<string, T>>;
+      stat(path: string): Promise<ExtendedStat | undefined>;
+      imageThumbnail(path: string, width: number, height?: number): Promise<string | undefined>;
+  }
+
+  export class ShareManager extends BaseService {
+      token: string | undefined;
+      constructor(pid: number, parentPid: number, name: string, host: ServiceHost);
+      getOwnedShares(): Promise<SharedDriveType[]>;
+      mountOwnedShares(): Promise<void>;
+      getJoinedShares(): Promise<SharedDriveType[]>;
+      createShare(name: string, password: string): Promise<SharedDriveType | undefined>;
+      deleteShare(shareId: string): Promise<boolean>;
+      changeSharePassword(shareId: string, newPassword: string): Promise<boolean>;
+      renameShare(shareId: string, newName: string): Promise<boolean>;
+      joinShare(username: string, shareName: string, password: string, mountAlso?: boolean): Promise<boolean | FilesystemDrive | undefined>;
+      leaveShare(shareId: string): Promise<boolean>;
+      unmountIfMounted(shareId: string): Promise<void>;
+      kickUserFromShare(shareId: string, userId: string): Promise<boolean>;
+      mountShare(username: string, shareName: string, letter?: string, onProgress?: FilesystemProgressCallback): Promise<false | FilesystemDrive | undefined>;
+      mountShareById(shareId: string, letter?: string, onProgress?: FilesystemProgressCallback): Promise<false | FilesystemDrive>;
+      getShareMembers(shareId: string): Promise<Record<string, string>>;
+      getShareInfoByName(username: string, shareName: string): Promise<SharedDriveType | undefined>;
+      getShareInfoById(shareId: string): Promise<SharedDriveType | undefined>;
+  }
+
+  export const shareService: Service;
+
   export class ServiceHost extends Process {
       Services: ReadableServiceStore;
       _holdRestart: boolean;
       private _storeLoaded;
       daemon: UserDaemon;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
+      initialRun(svcPreRun?: (service: Service) => void): Promise<void>;
+      init(svcPreRun?: (service: Service) => void): Promise<void>;
+      stop(): Promise<void>;
       readonly STORE: Map<string, {
           name: string;
           description: string;
@@ -1855,11 +2033,9 @@ declare global {
       startService(id: string): Promise<"success" | "err_noExist" | "err_alreadyRunning" | "err_startCondition" | "err_spawnFailed">;
       stopService(id: string): Promise<ServiceChangeResult>;
       restartService(id: string): Promise<ServiceChangeResult>;
-      initialRun(): Promise<void>;
-      init(): Promise<void>;
       verifyServicesProcesses(): Promise<void>;
       getService<T extends BaseService = BaseService>(id: string): T | undefined;
-      stop(): Promise<void>;
+      hasService(id: string): boolean;
   }
 
   export class ApplicationStorage extends BaseService {
@@ -1867,11 +2043,11 @@ declare global {
       private injectedStore;
       buffer: ReadableStore<AppStorage>;
       appIconCache: Record<string, string>;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, name: string, host: ServiceHost);
-      start(): Promise<void>;
+      constructor(pid: number, parentPid: number, name: string, host: ServiceHost);
       loadOrigin(id: string, store: AppStoreCb): boolean;
       unloadOrigin(id: string): boolean;
       loadApp(app: App): false | App;
+      loadAppModuleFile(path: string): Promise<boolean>;
       injected(): {
           metadata: AppMetadata;
           size: Size;
@@ -1902,100 +2078,152 @@ declare global {
           tpaRevision?: number;
           noSafeMode?: boolean;
           vital?: boolean;
+          _internalOriginalPath?: string;
+          _internalMinVer?: string;
+          _internalSysVer?: string;
+          _internalLoadTime?: number;
       }[];
       refresh(): Promise<void>;
-      get(): Promise<any[]>;
+      get(): Promise<AppStorage>;
+      getAppSynchronous(id: string): App | undefined;
       getAppById(id: string, fromBuffer?: boolean): Promise<App | undefined>;
   }
 
   export const appStoreService: Service;
 
-  export type ComparisonResult = "lower" | "higher" | "equal";
-
-  export function compareVersion(left: string, right: string): ComparisonResult;
-
-  export class InstallerProcess extends Process {
-      status: ReadableStore<InstallStatus>;
-      failReason: ReadableStore<string>;
-      installing: ReadableStore<boolean>;
-      completed: ReadableStore<boolean>;
-      focused: ReadableStore<string>;
-      verboseLog: string[];
-      metadata?: ArcPackage;
-      userDaemon: UserDaemon;
-      parent: DistributionServiceProcess;
-      TOTAL_COUNT: ReadableStore<number>;
-      COUNT: ReadableStore<number>;
-      item?: StoreItem;
-      zip?: JSZip;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, zip: JSZip, metadata: ArcPackage, item: StoreItem);
-      start(): Promise<void>;
-      logStatus(content: string, type?: InstallStatusType, status?: InstallStatusMode): void;
-      setCurrentStatus(status: InstallStatusMode): Promise<void>;
-      setCurrentContent(content: string): Promise<void>;
-      getFiles(): Promise<{
-          files: {
-              [k: string]: JSZip.JSZipObject;
-          };
-          sortedPaths: string[];
-      }>;
-      createInstallLocation(): Promise<boolean>;
-      registerApp(): Promise<boolean>;
-      mkdir(path: string): Promise<boolean>;
-      writeFile(path: string, content: ArrayBuffer): Promise<boolean>;
-      fail(reason: string): void;
-      go(): Promise<boolean>;
-      stop(): Promise<boolean>;
-      onStop(): Promise<void>;
+  export interface AppKeyCombination {
+      alt?: boolean;
+      ctrl?: boolean;
+      shift?: boolean;
+      key?: string;
+      action(proc: any, event: KeyboardEvent): void;
+      global?: boolean;
   }
 
-  export class DistributionServiceProcess extends BaseService {
-      private readonly dataFolder;
-      private readonly tempFolder;
-      private readonly installedListPath;
-      _BUSY: string;
-      private installListCache;
-      preferences: UserPreferencesStore;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, name: string, host: ServiceHost);
-      start(): Promise<false | undefined>;
-      packageInstallerFromPath(path: string, progress?: FilesystemProgressCallback, item?: StoreItem): Promise<InstallerProcess | undefined>;
-      packageInstaller(zip: JSZip, metadata: ArcPackage, item?: StoreItem): Promise<InstallerProcess | undefined>;
-      getStoreItem(id: string): Promise<StoreItem | undefined>;
-      getStoreItemByName(name: string): Promise<StoreItem | undefined>;
-      downloadStoreItem(id: string, onProgress?: FilesystemProgressCallback): Promise<ArrayBuffer | undefined>;
-      storeItemInstaller(id: string, onProgress?: FilesystemProgressCallback): Promise<false | InstallerProcess | undefined>;
-      addToInstalled(item: StoreItem): Promise<boolean | undefined>;
-      removeFromInstalled(id: string): Promise<boolean | undefined>;
-      loadInstalledList(): Promise<StoreItem[]>;
-      writeInstalledList(list: StoreItem[]): Promise<boolean>;
-      publishPackage(data: Blob, onProgress?: FilesystemProgressCallback): Promise<boolean>;
-      publishPackageFromPath(path: string, onProgress?: FilesystemProgressCallback): Promise<boolean>;
-      getPublishedPackages(): Promise<StoreItem[]>;
-      searchStoreItems(query: string): Promise<PartialStoreItem[]>;
-      updateStoreItem(itemId: string, newData: Blob, onProgress?: FilesystemProgressCallback): Promise<boolean>;
-      updateStoreItemFromPath(itemId: string, updatePath: string, onProgress?: FilesystemProgressCallback): Promise<boolean>;
-      deprecateStoreItem(id: string): Promise<boolean>;
-      deleteStoreItem(id: string): Promise<boolean>;
-      getInstalledPackage(id: string, installedList?: StoreItem[]): Promise<StoreItem>;
-      getInstalledPackageByAppId(appId: string): Promise<StoreItem | undefined>;
-      uninstallApp(appId: string, deleteFiles?: boolean, onStage?: (stage: string) => void): Promise<boolean>;
-      checkForUpdate(id: string, installedList?: StoreItem[], allPackages?: StoreItem[]): Promise<UpdateInfo | false>;
-      checkForAllUpdates(list?: StoreItem[]): Promise<UpdateInfo[]>;
-      updatePackage(id: string, force?: boolean, progress?: FilesystemProgressCallback): Promise<InstallerProcess | false>;
-      checkBusy(action?: string): string;
-      get BUSY(): string;
-      set BUSY(value: string);
-      getAllStoreItems(): Promise<StoreItem[]>;
-      storeItemReadme(id: string): Promise<string>;
-  }
+  export type AppKeyCombinations = AppKeyCombination[];
 
-  export const distributionService: Service;
+  export const BuiltinAppImportPathAbsolutes: Record<string, () => Promise<unknown>>;
+
+  export const appShortcuts: [
+      number,
+      AppKeyCombinations
+  ][];
+
+  export const AppOrigins: Record<string, string>;
+
+  export function lightenColor(color: string, modifier?: number): string;
+
+  export function hex3to6(color: string): string;
+
+  export function darkenColor(color: string, modifier?: number): string;
+
+  export function invertColor(hex: string): string;
+
+  export function bestForeground(bgColor: string): "white" | "black";
+
+  export function getReadableVibrantColor(url: string): Promise<string>;
 
   export function StoreItemIcon(item: PartialStoreItem | StoreItem): string;
 
   export function StoreItemScreenshot(item: PartialStoreItem | StoreItem, index?: number): string;
 
   export function StoreItemBanner(item: PartialStoreItem | StoreItem): string;
+
+  export class ServerDrive extends FilesystemDrive {
+      private token;
+      private isNightly;
+      label: string;
+      FIXED: boolean;
+      IDENTIFIES_AS: string;
+      FILESYSTEM_SHORT: string;
+      FILESYSTEM_LONG: string;
+      protected CAPABILITIES: Record<DriveCapabilities, boolean>;
+      constructor(uuid: string, letter: string, token: string);
+      readDir(path?: string): Promise<DirectoryReadReturn | undefined>;
+      createDirectory(path: string): Promise<boolean>;
+      readFile(path: string, onProgress: FilesystemProgressCallback): Promise<ArrayBuffer | undefined>;
+      writeFile(path: string, blob: Blob, onProgress: FilesystemProgressCallback): Promise<boolean>;
+      tree(path?: string): Promise<RecursiveDirectoryReadReturn | undefined>;
+      copyItem(source: string, destination: string): Promise<boolean>;
+      moveItem(source: string, destination: string): Promise<boolean>;
+      deleteItem(path: string): Promise<boolean>;
+      quota(): Promise<UserQuota>;
+      direct(path: string): Promise<string | undefined>;
+      bulk<T = any>(path: string, extension: string): Promise<Record<string, T>>;
+      stat(path: string): Promise<ExtendedStat | undefined>;
+      imageThumbnail(path: string, width: number, height?: number): Promise<string | undefined>;
+  }
+
+  export class MemoryFilesystemDrive extends FilesystemDrive {
+      private readonly data;
+      FIXED: boolean;
+      IDENTIFIES_AS: string;
+      FILESYSTEM_LONG: string;
+      FILESYSTEM_SHORT: string;
+      HIDDEN: boolean;
+      label: string;
+      protected CAPABILITIES: Record<DriveCapabilities, boolean>;
+      constructor(kernel: any, uuid: string, letter?: string);
+      private getPathParts;
+      private getEntry;
+      private setEntry;
+      private deleteEntry;
+      readDir(path: string): Promise<DirectoryReadReturn | undefined>;
+      createDirectory(path: string): Promise<boolean>;
+      readFile(path: string): Promise<ArrayBuffer | undefined>;
+      writeFile(path: string, data: Blob): Promise<boolean>;
+      tree(path: string): Promise<RecursiveDirectoryReadReturn | undefined>;
+      copyItem(source: string, destination: string): Promise<boolean>;
+      moveItem(source: string, destination: string): Promise<boolean>;
+      deleteItem(path: string): Promise<boolean>;
+      direct(path: string): Promise<string | undefined>;
+      quota(): Promise<UserQuota>;
+      takeSnapshot(): Promise<Record<string, any>>;
+      restoreSnapshot(snapshot: Record<string, any>): void;
+  }
+
+  export class ZIPDrive extends FilesystemDrive {
+      label: string;
+      private _buffer;
+      private _path;
+      REMOVABLE: boolean;
+      READONLY: boolean;
+      IDENTIFIES_AS: string;
+      FILESYSTEM_SHORT: string;
+      FILESYSTEM_LONG: string;
+      protected CAPABILITIES: Record<DriveCapabilities, boolean>;
+      constructor(uuid: string, letter: string, path: string);
+      _spinUp(onProgress?: FilesystemProgressCallback): Promise<boolean>;
+      _spinDown(onProgress?: FilesystemProgressCallback): Promise<boolean>;
+      readDir(path: string): Promise<DirectoryReadReturn | undefined>;
+      readFile(path: string): Promise<ArrayBuffer | undefined>;
+      writeFile(path: string, data: Blob, onProgress?: FilesystemProgressCallback): Promise<boolean>;
+      createDirectory(path: string): Promise<boolean>;
+      deleteItem(path: string): Promise<boolean>;
+      tree(path: string): Promise<RecursiveDirectoryReadReturn | undefined>;
+      copyItem(source: string, destination: string): Promise<boolean>;
+      moveItem(source: string, destination: string): Promise<boolean>;
+      _sync(progress?: FilesystemProgressCallback): Promise<void>;
+  }
+
+  export function getMode(): Promise<void>;
+
+  export const ArcMode: () => string;
+
+  export const Wallpapers: {
+      [key: string]: Wallpaper;
+  };
+
+  export interface LoginActivity {
+      authorId: string;
+      token?: string;
+      userAgent: string;
+      location?: Location;
+      action: "unknown" | "login" | "logout";
+      _id: string;
+      createdAt: string;
+      updatedAt: string;
+  }
 
   export interface ElevationData {
       what: string;
@@ -2011,1110 +2239,38 @@ declare global {
       high = 2
   }
 
-  export function groupByTimeFrame<T extends Record<string, any>>(items: T[], column?: keyof T): Record<string, T[]>;
-
-  export interface StorePage {
-      name: string;
-      icon: string;
-      content: Component<any>;
-      hidden?: boolean;
-      separator?: boolean;
-      props?: (process: AppStoreRuntime, props: Record<string, any>) => Promise<Record<string, any>>;
-      groupName?: string;
+  export interface BatteryType {
+      charging: boolean;
+      chargingTime: number;
+      dischargingTime: number;
+      level: number;
+      onchargingchange: number | null;
+      onchargingtimechange: number | null;
+      ondischargingtimechange: number | null;
+      onlevelchange: number | null;
   }
 
-  export type StorePages = Map<string, StorePage>;
-
-  export const appStorePages: StorePages;
-
-  export class AppStoreRuntime extends AppProcess {
-      searchQuery: ReadableStore<string>;
-      loadingPage: ReadableStore<boolean>;
-      pageProps: ReadableStore<Record<string, any>>;
-      searching: ReadableStore<boolean>;
-      currentPage: ReadableStore<string>;
-      operations: Record<string, InstallerProcess>;
-      distrib: DistributionServiceProcess;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, page?: number, props?: Record<string, any>);
-      start(): Promise<false | undefined>;
-      render({ page, props }: {
-          page?: string;
-          props?: Record<string, any>;
-      }): Promise<false | undefined>;
-      switchPage(id: string, props?: Record<string, any>, force?: boolean): Promise<void>;
-      Search(): Promise<void>;
-      installPackage(pkg: StoreItem, onDownloadProgress?: FilesystemProgressCallback): Promise<false | 0 | InstallerProcess>;
-      updatePackage(pkg: StoreItem, onDownloadProgress?: FilesystemProgressCallback): Promise<false | 0 | InstallerProcess>;
-      deprecatePackage(pkg: StoreItem): Promise<false | undefined>;
-      deletePackage(pkg: StoreItem): Promise<false | undefined>;
-      publishPackage(): Promise<boolean | undefined>;
-      updateStoreItem(pkg: StoreItem): Promise<void>;
-      readmeFallback(pkg: StoreItem): string;
-      learnMoreBlocking(): void;
-      registerOperation(id: string, proc: InstallerProcess): boolean;
-      discardOperation(id: string): boolean;
-      getRunningOperation(pkg: StoreItem): InstallerProcess;
-      viewImage(url: string, name?: string): Promise<void>;
-  }
-
-  export const AppStoreApp: App;
-
-  export function getAllImages(): Record<string, string>;
-
-  export function getGroupedIcons(): Record<string, Record<string, string>>;
-
-  export function getIconPath(id: string): string;
-
-  export function iconIdFromPath(path: string): string;
-
-  export function maybeIconId(id: string): string;
-
-  export interface AppKeyCombination {
-      alt?: boolean;
-      ctrl?: boolean;
-      shift?: boolean;
-      key?: string;
-      action(proc: any, event: KeyboardEvent): void;
-      global?: boolean;
-  }
-
-  export type AppKeyCombinations = AppKeyCombination[];
-
-  export function FileManagerAccelerators(runtime: FileManagerRuntime): AppKeyCombinations;
-
-  export function EditMenu(runtime: FileManagerRuntime): ContextMenuItem;
-
-  export function FileMenu(runtime: FileManagerRuntime): ContextMenuItem;
-
-  export function GoMenu(runtime: FileManagerRuntime): ContextMenuItem;
-
-  export function FileManagerAltMenu(runtime: FileManagerRuntime): ContextMenuItem[];
-
-  export interface Tab {
-      location: string;
+  export interface Notification {
       title: string;
-      icon: string;
-  }
-
-  export interface Location {
-      name: string;
-      icon: string;
-      component: any;
-  }
-
-  export type QuotedDrive = {
-      data: FilesystemDrive;
-      quota: UserQuota;
-  };
-
-  export interface LoadSaveDialogData {
-      title: string;
-      icon: string;
-      startDir?: string;
-      isSave?: boolean;
-      targetPid?: number;
-      extensions?: string[];
-      returnId: string;
-      saveName?: string;
-      multiple?: boolean;
-      folder?: boolean;
-  }
-
-  export interface FileManagerNotice {
-      icon: string;
-      text: string;
+      message: string;
+      icon?: string;
+      image?: string;
+      timeout?: number;
+      buttons?: ErrorButton[];
+      timestamp?: number;
+      deleted?: boolean;
       className?: string;
   }
 
-  export interface VirtualFileManagerLocation {
-      name: string;
-      icon: string;
-      component: Component;
-      hidden?: boolean;
-  }
-
-  export function FileManagerContextMenu(runtime: FileManagerRuntime): AppContextMenu;
-
-  export class FileManagerRuntime extends AppProcess {
-      path: ReadableStore<string>;
-      contents: ReadableStore<DirectoryReadReturn | undefined>;
-      shortcuts: ReadableStore<ShortcutStore>;
-      loading: ReadableStore<boolean>;
-      errored: ReadableStore<boolean>;
-      selection: ReadableStore<string[]>;
-      copyList: ReadableStore<string[]>;
-      cutList: ReadableStore<string[]>;
-      starting: ReadableStore<boolean>;
-      rootFolders: ReadableStore<FolderEntry[]>;
-      drives: ReadableStore<Record<string, QuotedDrive>>;
-      notice: ReadableStore<FileManagerNotice | undefined>;
-      showNotice: ReadableStore<boolean>;
-      loadSave: LoadSaveDialogData | undefined;
-      saveName: ReadableStore<string>;
-      virtual: ReadableStore<VirtualFileManagerLocation | undefined>;
-      drive: ReadableStore<FilesystemDrive | undefined>;
-      directoryListing: ReadableStore<HTMLDivElement>;
-      virtualLocations: Record<string, VirtualFileManagerLocation>;
-      private _refreshLocked;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, path?: string, loadSave?: LoadSaveDialogData);
-      contextMenu: AppContextMenu;
-      updateAltMenu(): void;
-      render({ path }: RenderArgs): Promise<void>;
-      updateDrives(): Promise<void>;
-      updateRootFolders(): Promise<void>;
-      navigate(path: string): Promise<void>;
-      refresh(): Promise<void>;
-      DirectoryNotFound(): void;
-      parentDir(): void;
-      updateSelection(e: MouseEvent, path: string): void;
-      setCopyFiles(files?: string[]): void;
-      setCutFiles(files?: string[]): void;
-      pasteFiles(): Promise<void>;
-      unmountDrive(drive: FilesystemDrive, id: string): void;
-      confirmUmountDrive(drive: FilesystemDrive, id: string): Promise<void>;
-      uploadItems(): Promise<void>;
-      lockRefresh(): void;
-      unlockRefresh(refresh?: boolean): void;
-      openFile(path: string): Promise<void>;
-      deleteSelected(): Promise<void>;
-      confirmDeleteSelected(): Promise<void>;
-      downloadSelected(): Promise<false | undefined>;
-      singlefySelected(): void;
-      selectorUp(): Promise<void>;
-      selectorDown(): Promise<void>;
-      EnterKey(alternative?: boolean): Promise<void>;
-      isDirectory(path: string, workingPath?: string): boolean | undefined;
-      confirmLoadSave(): Promise<void>;
-      createShortcut(name: string, path: string, folder?: boolean): Promise<void>;
-      checkNotice(): Promise<void>;
-      shareAccessIsAdministrative(drive: FilesystemDrive): boolean;
-  }
-
-  export const FileManagerApp: App;
-
-  export interface MessagingPage {
-      name: string;
-      icon: string;
-      supplier: (process: MessagingAppRuntime) => Promise<PartialMessage[]> | PartialMessage[];
-  }
-
-  export const messagingPages: Record<string, MessagingPage>;
-
-  export class MessagingAppRuntime extends AppProcess {
-      service: MessagingInterface;
-      page: ReadableStore<MessagingPage | undefined>;
-      pageId: ReadableStore<string | undefined>;
-      buffer: ReadableStore<PartialMessage[]>;
-      correlated: ReadableStore<PartialMessage[][]>;
-      loading: ReadableStore<boolean>;
-      refreshing: ReadableStore<boolean>;
-      errored: ReadableStore<boolean>;
-      messageNotFound: ReadableStore<boolean>;
-      message: ReadableStore<ExpandedMessage | undefined>;
-      userInfoCache: Record<string, PublicUserInfo>;
-      searchQuery: ReadableStore<string>;
-      searchResults: ReadableStore<string[]>;
-      messageWindow: boolean;
-      messageFromFile: boolean;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, pageOrMessagePath?: string, messageId?: string);
-      render({ page }: {
-          page: string;
-      }): Promise<void>;
-      getInbox(): Promise<PartialMessage[]>;
-      getSent(): Promise<PartialMessage[]>;
-      getArchived(): Promise<PartialMessage[]>;
-      getArchiveState(): string[];
-      setArchiveState(state: string[]): void;
-      isArchived(id: string): boolean;
-      addToArchive(id: string): void;
-      removeFromArchive(id: string): void;
-      switchPage(id: string): Promise<void>;
-      refresh(): Promise<void>;
-      correlateMessages(messages: PartialMessage[]): PartialMessage[][];
-      refreshFailed(): void;
-      readMessage(messageId: string, force?: boolean): Promise<void>;
-      userInfo(userId: string): Promise<PublicUserInfo | undefined>;
-      readAttachment(attachment: MessageAttachment, messageId: string, prog: FileProgressMutator): Promise<ArrayBuffer | undefined>;
-      openAttachment(attachment: MessageAttachment, messageId: string): Promise<void>;
-      Search(query: string): void;
-      popoutMessage(messageId: string): void;
-      saveMessage(): Promise<void>;
-      readMessageFromFile(path: string): Promise<void>;
-      compose(): void;
-      replyTo(message: ExpandedMessage): void;
-      forward(message: ExpandedMessage): Promise<void>;
-      toggleArchived(message: ExpandedMessage): void;
-      deleteMessage(id: string): Promise<void>;
-  }
-
-  export const MessagingApp: App;
-
-  export const ProcessKillResultCaptions: Record<ProcessKillResult, string>;
-
-  export class ProcessManagerRuntime extends AppProcess {
-      selected: ReadableStore<number>;
-      running: ReadableStore<number>;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData);
-      kill(proc: Process): Promise<void>;
-      killError(name: string, result: ProcessKillResult): void;
-  }
-
-  export const ProcessesApp: App;
-
-  export function SettingsContext(runtime: SettingsRuntime): AppContextMenu;
-
-  export class OverlayRuntime extends AppProcess {
-      parentProcess: SettingsRuntime;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData);
-  }
-
-  export const ChangePasswordApp: App;
-
-  export const ChangeUsernameApp: App;
-
-  export const SaveThemeApp: App;
-
-  export const UrlLoginBackground: App;
-
-  export const UrlProfilePicture: App;
-
-  export const UrlWallpaper: App;
-
-  export const UserFontApp: App;
-
-  export interface SettingsPage {
-      name: string;
-      icon: string;
-      content: Component<any>;
-      hidden?: boolean;
-      separator?: boolean;
-      description: string;
-      noSafeMode?: boolean;
-  }
-
-  export type SettingsPages = Map<string, SettingsPage>;
-
-  export type SettingsSlides = Map<string, Component<any>>;
-
-  export const settingsPageStore: SettingsPages;
-
-  export const SlideStore: SettingsSlides;
-
-  export class SettingsRuntime extends AppProcess {
-      currentPage: ReadableStore<string>;
-      currentSlide: ReadableStore<string>;
-      slideVisible: ReadableStore<boolean>;
-      requestedSlide: string | undefined;
-      protected overlayStore: Record<string, App>;
-      protected elevations: Record<string, ElevationData>;
-      contextMenu: AppContextMenu;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, page?: string, slide?: string);
-      render(): Promise<void>;
-      switchPage(pageId: string): void;
-      showSlide(id: string): Promise<void>;
-      loginActivity(): Promise<void>;
-      logOutEverywhere(): Promise<void>;
-      uploadWallpaper(): Promise<void>;
-      viewLicense(): Promise<void>;
-      deleteThemeConfirmation(id?: string): void;
-      chooseProfilePicture(): Promise<void>;
-      chooseWallpaper(): Promise<void>;
-      chooseLoginBackground(): Promise<void>;
-      setup2fa(): Promise<void>;
-      disableTotp(): Promise<void>;
-  }
-
-  export const SystemSettings: App;
-
-  export interface AdminPortalPage {
-      name: string;
-      icon: string;
-      content: Component<any>;
-      hidden?: boolean;
-      separator?: boolean;
-      scopes?: string[];
-      parent?: string;
-      props?: (process: AdminPortalRuntime) => Promise<Record<string, any>> | Record<string, any>;
-  }
-
-  export type AdminPortalPages = Map<string, AdminPortalPage>;
-
-  export type PageData = Record<string, any>;
-
-  export type DashboardData = {
-      stats: ServerStatistics;
-      logs: ServerLogItem[];
-  };
-
-  export type BugHuntData = {
-      users: User[];
-      reports: BugReport[];
-      stats: ReportStatistics;
-  };
-
-  export type ViewBugReportData = {
-      report: BugReport;
-  };
-
-  export type UsersData = {
-      users: ExpandedUserInfo[];
-  };
-
-  export type ViewUserData = {
-      user: ExpandedUserInfo;
-      reports: BugReport[];
-  };
-
-  export type SharesData = {
-      shares: SharedDriveType[];
-      users: ExpandedUserInfo[];
-  };
-
-  export type ViewShareData = {
-      share: SharedDriveType;
-      accessors: FsAccess[];
-      users: ExpandedUserInfo[];
-  };
-
-  export type FilesystemsData = {
-      users: ExpandedUserInfo[];
-  };
-
-  export type StoreData = {
-      items: StoreItem[];
-      users: ExpandedUserInfo[];
-  };
-
-  export type ViewStoreItemData = {
-      item: StoreItem;
-  };
-
-  export type TokensData = {
-      tokens: ExpandedToken[];
-      users: ExpandedUserInfo[];
-  };
-
-  export type ActivitiesData = {
-      activities: Activity[];
-      users: ExpandedUserInfo[];
-  };
-
-  export type ScopesData = {
-      admins: ExpandedUserInfo[];
-  };
-
-  export type ViewScopesData = {
-      admin: ExpandedUserInfo;
-      scopes: Record<string, string>;
-  };
-
-  export type AuditLogData = {
-      users: ExpandedUserInfo[];
-      audits: AuditLog[];
-  };
-
-  export type UsersPageFilters = "all" | "regular" | "admins" | "disapproved" | "online";
-
-  export type SharesPageFilters = "all" | "resized" | "locked";
-
-  export type StorePageFilters = "all" | "official" | "deprecated";
-
-  export interface SpecificAdminAction {
+  export interface ErrorButton {
       caption: string;
-      scopes: string[];
-      className?: string;
-      disabled?: (user: UserInfo) => boolean;
-      separate?: boolean;
-  }
-
-  export type SpecificAdminActions = Record<string, SpecificAdminAction>;
-
-  export interface FilesystemsPageQuota extends Record<string, any> {
-      user: ExpandedUserInfo;
-      used: number;
-      max: number;
-      free: number;
-      percentage: number;
-      unknown?: boolean;
-  }
-
-  export const AdminPortalPageStore: AdminPortalPages;
-
-  export const LogoTranslations: Record<string, string>;
-
-  export const specificAdminActions: SpecificAdminActions;
-
-  export class BugHuntUserDataRuntime extends AppProcess {
-      data: UserInfo;
-      hljs: HLJSApi;
-      html: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, data: UserInfo);
-  }
-
-  export const BugHuntUserDataApp: App;
-
-  export class AdminPortalRuntime extends AppProcess {
-      ready: ReadableStore<boolean>;
-      currentPage: ReadableStore<string>;
-      switchPageProps: ReadableStore<Record<string, any>>;
-      redacted: ReadableStore<boolean>;
-      shares: ShareManager;
-      admin: AdminBootstrapper;
-      protected overlayStore: Record<string, App>;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, page?: string, props?: Record<string, any>);
-      switchPage(pageId: string, props?: Record<string, any>, force?: boolean): Promise<void>;
-  }
-
-  export const AdminPortalApp: App;
-
-  export class AcceleratorOverviewRuntime extends AppProcess {
-      KnownAcceleratorKeys: string[];
-      store: ReadableStore<[
-          string,
-          [
-              string[],
-              string
-          ][]
-      ][]>;
-      apps: ReadableStore<AppStorage>;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData);
-      render(): Promise<void>;
-      splitAcceleratorString(accelerator: string): string[];
-  }
-
-  export const AcceleratorOverviewApp: App;
-
-  export class AppInfoRuntime extends AppProcess {
-      targetApp: ReadableStore<App>;
-      targetAppId: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, appId: string);
-      start(): Promise<false | undefined>;
-      render(): Promise<void>;
-      killAll(): Promise<void>;
-      processManager(): Promise<void>;
-  }
-
-  export const AppInfoApp: App;
-
-  export class AppInstallerRuntime extends AppProcess {
-      progress?: InstallerProcess;
-      metadata?: ArcPackage;
-      zip?: JSZip;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, metadata: ReadableStore<ArcPackage>, zip: JSZip);
-      start(): Promise<false | undefined>;
-      render(): Promise<void>;
-      revert(): Promise<void>;
-      runNow(): void;
-      go(): Promise<void>;
-  }
-
-  export const AppInstallerApp: App;
-
-  export class AppPreInstallRuntime extends AppProcess {
-      pkgPath: string;
-      zip: JSZip | undefined;
-      metadata: ReadableStore<ArcPackage>;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, pkgPath: string);
-      start(): Promise<false | undefined>;
-      render(): Promise<void>;
-      fail(reason: string): void;
-      install(): Promise<void>;
-  }
-
-  export const AppPreinstallApp: App;
-
-  export const ArcFind: App;
-
-  export function WindowSystemContextMenu(runtime: ContextMenuRuntime): AppContextMenu;
-
-  export class ContextMenuRuntime extends AppProcess {
-      contextData: ReadableStore<ContextMenuInstance | null>;
-      CLICKLOCKED: boolean;
-      contextProps: Record<string, any[]>;
-      currentMenu: ReadableStore<string>;
-      private readonly validContexMenuTags;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData);
-      start(): Promise<false | undefined>;
-      render(): Promise<void>;
-      createContextMenu(data: ContextMenuInstance): Promise<void>;
-      closeContextMenu(): void;
-      assignContextMenuHooks(): void;
-      handleContext(e: MouseEvent): Promise<void>;
-      getWindowByEventTarget(target: EventTarget[]): HTMLDivElement | null;
-      composePosition(x: number, y: number, mW: number, mH: number): [
-          number,
-          number
-      ];
-      getContextEntry(pid: number, scope: string): ContextMenuItem[];
-      getContextMenuScope(e: MouseEvent): HTMLDivElement | null;
-  }
-
-  export const ContextMenuApp: App;
-
-  export interface ExitAction {
-      caption: string;
-      action: (daemon: UserDaemon) => void;
-      alternateAction?: (daemon: UserDaemon) => void;
-      icon: string;
-  }
-
-  export const ExitActions: Record<string, ExitAction>;
-
-  export class ExitRuntime extends AppProcess {
-      selected: ReadableStore<string>;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, selected?: string);
-      go(action: ExitAction | undefined, alternate?: boolean): Promise<void>;
-  }
-
-  export const ExitApp: App;
-
-  export const ChooseProfilePictureApp: App;
-
-  export interface FirstRunPage {
-      name: string;
-      component: any;
-      hero?: boolean;
-      actions: {
-          left: Action[];
-          right: Action[];
-      };
-  }
-
-  export interface Action {
-      caption: string;
+      action: () => void;
       suggested?: boolean;
-      disabled?: boolean;
-      action: (process: FirstRunRuntime) => void;
   }
-
-  export interface FirstRunTheme {
-      name: string;
-      subtitle: string;
-      image: string;
-      configuration: {
-          style: string;
-          wallpaper: string;
-          accent: string;
-      };
-  }
-
-  export const FirstRunPages: Map<string, FirstRunPage>;
-
-  export const FirstRunThemes: Record<string, FirstRunTheme>;
-
-  export const FirstRunShortcuts: Record<string, ArcShortcut>;
-
-  export class FirstRunRuntime extends AppProcess {
-      done: ReadableStore<boolean>;
-      currentPage: ReadableStore<FirstRunPage>;
-      protected overlayStore: Record<string, App>;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, daemon: UserDaemon);
-      render(): Promise<void>;
-      onClose(): Promise<boolean>;
-      switchPage(id: string): void;
-      chooseProfilePicture(): void;
-  }
-
-  export const FirstRunApp: App;
-
-  export class NewFileRuntime extends AppProcess {
-      newFile: ReadableStore<string>;
-      path: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, path: string);
-      render(): void;
-      createFile(): Promise<void>;
-  }
-
-  export const FsNewFileApp: App;
-
-  export class NewFolderRuntime extends AppProcess {
-      newFolder: ReadableStore<string>;
-      path: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, path: string);
-      render(): Promise<void> | undefined;
-      createFolder(): Promise<void>;
-  }
-
-  export const FsNewFolderApp: App;
-
-  export const FsProgressApp: App;
-
-  export class RenameItemRuntime extends AppProcess {
-      newName: ReadableStore<string>;
-      parentDir: string;
-      path: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, path: string);
-      render(): void;
-      rename(): Promise<void>;
-  }
-
-  export const FsRenameItemApp: App;
-
-  export const GlobalLoadIndicatorApp: App;
-
-  export class IconPickerRuntime extends AppProcess {
-      forWhat?: string;
-      defaultIcon?: string;
-      selected: ReadableStore<string>;
-      groups: Record<string, Record<string, string>>;
-      store: Record<string, string>;
-      returnId?: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, data: IconPickerData);
-      start(): Promise<false | undefined>;
-      confirm(): Promise<void>;
-      cancel(): Promise<void>;
-  }
-
-  export const IconPickerApp: App;
-
-  export interface ItemInfo {
-      meta: {
-          sort: "file" | "folder";
-          mimetype?: string;
-          size?: number;
-          created: string;
-          modified: string;
-      };
-      location: {
-          fullPath: string;
-          extension?: string;
-          parent?: string;
-          drive?: string;
-          driveFs?: string;
-      };
-      isFolder: boolean;
-      isShortcut: boolean;
-      name: string;
-  }
-
-  export class ItemInfoRuntime extends AppProcess {
-      info: ReadableStore<ItemInfo>;
-      shortcut: ReadableStore<ArcShortcut>;
-      drive: FilesystemDrive | undefined;
-      isDrive: boolean;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, path: string, file: FileEntry | FolderEntry);
-      start(): Promise<false | undefined>;
-      render({ path, file }: RenderArgs): Promise<void>;
-      open(): Promise<void>;
-      openWith(path: string): Promise<void>;
-      renameItem(): Promise<void>;
-      unmount(): void;
-      confirmUmountDrive(drive: FilesystemDrive, id: string): Promise<void>;
-  }
-
-  export const ItemInfoApp: App;
-
-  export interface Attachment {
-      data: File;
-      uuid: string;
-  }
-
-  export class MessageComposerRuntime extends AppProcess {
-      sending: ReadableStore<boolean>;
-      recipients: ReadableStore<string[]>;
-      attachments: ReadableStore<Attachment[]>;
-      title: ReadableStore<string>;
-      body: ReadableStore<string>;
-      replyId: string | undefined;
-      service: MessagingInterface;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, initialData?: MessageCreateData, replyId?: string);
-      send(): Promise<void>;
-      sendFailed(): void;
-      addAttachment(): Promise<void>;
-      removeRecipient(recipient: string): void;
-      filesToAttachments(...files: File[]): Attachment[];
-      removeAttachment(uuid: string): void;
-      isModified(): number;
-      discard(): Promise<void>;
-  }
-
-  export const MessageComposerApp: App;
-
-  export interface MultiUpdateStatusNode {
-      state: "pending" | "working" | "success" | "failed" | "downloading";
-      max: number;
-      done: number;
-      pkg: StoreItem;
-  }
-
-  export const StateIconTranslations: Record<string, string>;
-
-  export type MultiUpdateStatus = MultiUpdateStatusNode[];
-
-  export class MultiUpdateGuiRuntime extends AppProcess {
-      private updates;
-      private distrib;
-      private win;
-      status: ReadableStore<MultiUpdateStatus>;
-      currentPackage: ReadableStore<StoreItem | undefined>;
-      working: ReadableStore<boolean>;
-      done: ReadableStore<boolean>;
-      errored: ReadableStore<string[]>;
-      logs: ReadableStore<Record<string, InstallStatus>>;
-      focused: ReadableStore<string>;
-      showLog: ReadableStore<boolean>;
-      unified: ReadableStore<boolean>;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, updates: UpdateInfo[]);
-      start(): Promise<false | undefined>;
-      render(): Promise<void>;
-      updatePackageStatus(appId: string, newData: Partial<MultiUpdateStatusNode>): void;
-      packageFailed(appId: string): void;
-      go(): Promise<void>;
-      onClose(): Promise<boolean>;
-      checkForErrors(): void;
-      mainAction(): void;
-      toggleLog(): void;
-  }
-
-  export const MultiUpdateGuiApp: App;
-
-  export class OpenWithRuntime extends AppProcess {
-      available: ReadableStore<FileOpenerResult[]>;
-      all: ReadableStore<FileOpenerResult[]>;
-      apps: ReadableStore<FileOpenerResult[]>;
-      filename: ReadableStore<string>;
-      path: ReadableStore<string>;
-      selectedId: ReadableStore<string>;
-      viewMode: ReadableStore<"all" | "apps" | "compatible">;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, path: string);
-      start(): Promise<false | undefined>;
-      render({ path }: RenderArgs): Promise<void>;
-      go(id?: string): Promise<void>;
-  }
-
-  export const OpenWithApp: App;
 
   export function LoginUser(identity: string, password: string): Promise<any>;
 
   export function RegisterUser(username: string, email: string, password: string): Promise<boolean>;
-
-  export class SecureContextRuntime extends AppProcess {
-      private id;
-      private key;
-      data: ElevationData;
-      password: ReadableStore<string>;
-      loading: ReadableStore<boolean>;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, id: string, key: string, data: ElevationData);
-      start(): Promise<false | undefined>;
-      render(): Promise<void>;
-      validate(): Promise<boolean | undefined>;
-      approve(): Promise<void>;
-      deny(): Promise<void>;
-      passwordIncorrect(): Promise<void>;
-      settings(): Promise<void>;
-  }
-
-  export const SecureContextApp: App;
-
-  export class ShareConnGuiRuntime extends AppProcess {
-      shareUsername: ReadableStore<string>;
-      shareName: ReadableStore<string>;
-      sharePassword: ReadableStore<string>;
-      shares: ShareManager;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData);
-      go(): Promise<void>;
-      myShares(): Promise<void>;
-  }
-
-  export const ShareConnGuiApp: App;
-
-  export class ShareCreateGuiRuntime extends AppProcess {
-      shareName: ReadableStore<string>;
-      sharePassword: ReadableStore<string>;
-      shares: ShareManager;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData);
-      go(): Promise<void>;
-      myShares(): Promise<void>;
-  }
-
-  export const ShareCreateGuiApp: App;
-
-  export class ShareListGuiRuntime extends AppProcess {
-      ownedShares: ReadableStore<SharedDriveType[]>;
-      joinedShares: ReadableStore<SharedDriveType[]>;
-      selectedShare: ReadableStore<string>;
-      selectedIsOwn: ReadableStore<boolean>;
-      selectedIsMounted: ReadableStore<boolean>;
-      loading: ReadableStore<boolean>;
-      shares: ShareManager;
-      thisUserId: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData);
-      start(): Promise<void>;
-      manageShare(): Promise<void>;
-      leaveShare(): Promise<void>;
-      mountShare(): Promise<void>;
-      openShare(): Promise<void>;
-      createShare(): Promise<void>;
-  }
-
-  export const ShareListGuiApp: App;
-
-  export class OverlayRuntime extends AppProcess {
-      parentProcess: ShareMgmtGuiRuntime;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData);
-  }
-
-  export const ChangePasswordApp: App;
-
-  export const RenameShareApp: App;
-
-  export class ShareMgmtGuiRuntime extends AppProcess {
-      members: ReadableStore<Record<string, string>>;
-      info: SharedDriveType | undefined;
-      shares: ShareManager;
-      shareId: string;
-      selectedMember: ReadableStore<string>;
-      myShare: boolean;
-      protected overlayStore: Record<string, App>;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, shareId: string);
-      start(): Promise<any>;
-      updateMembers(): Promise<void>;
-      kickUser(id: string, username: string): Promise<void>;
-      deleteShare(): Promise<void>;
-  }
-
-  export const ShareMgmtGuiApp: App;
-
-  export const ArcShellApp: App;
-
-  export interface WeatherMeta {
-      caption: string;
-      iconColor: string;
-      icon: string;
-      gradient: {
-          start: string;
-          end: string;
-      };
-  }
-
-  export type WeatherInformation = {
-      temperature: number;
-      condition: string;
-      code: number;
-      className: string;
-      gradient: {
-          start: string;
-          end: string;
-      } | undefined;
-      icon: string;
-      iconColor: string;
-      isNight: boolean;
-  } | false;
-
-  export interface ShellTrayIcon {
-      pid: number;
-      identifier: string;
-      popup?: TrayPopup;
-      icon: string;
-      context?: ContextMenuItem[];
-      action?: (targetedProcess: Process) => void;
-  }
-
-  export interface TrayIconOptions {
-      popup?: TrayPopup;
-      icon: string;
-      context?: ContextMenuItem[];
-      action?: (targetedProcess: Process) => void;
-  }
-
-  export interface TrayPopup {
-      component?: Component;
-      width: number;
-      height: number;
-      className?: string;
-  }
-
-  export interface QuickSetting {
-      isActive: (process: ShellRuntime) => boolean | Promise<boolean>;
-      action: (process: ShellRuntime) => any;
-      icon: string;
-      className?: string;
-      caption: string;
-  }
-
-  export type TrayIconDiscriminator = `${number}#${string}`;
-
-  export class TrayIconProcess extends Process {
-      targetPid: number;
-      identifier: string;
-      popup?: TrayPopup;
-      context?: ContextMenuItem[];
-      action?: (targetedProcess: Process) => void;
-      componentMount: Record<string, any>;
-      icon: string;
-      shell: ShellRuntime;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, data: ShellTrayIcon);
-      __render(): Promise<void>;
-      stop(): Promise<void>;
-      renderPopup(popup: HTMLDivElement, target: Process): Promise<void>;
-      getPopupBody(): Element | null;
-  }
-
-  export class TrayHostRuntime extends Process {
-      userDaemon: UserDaemon | undefined;
-      userPreferences?: UserPreferencesStore;
-      trayIcons: ReadableStore<Record<`${number}#${string}`, TrayIconProcess>>;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, _: AppProcessData);
-      start(): Promise<false | undefined>;
-      createTrayIcon(pid: number, identifier: string, options: TrayIconOptions, process?: typeof TrayIconProcess): Promise<boolean>;
-      disposeTrayIcon(pid: number, identifier: string): Promise<false | undefined>;
-      disposeProcessTrayIcons(pid: number): void;
-  }
-
-  export class ShellHostRuntime extends Process {
-      private autoloadApps;
-      readonly shellComponents: string[];
-      userDaemon: UserDaemon | undefined;
-      userPreferences: UserPreferencesStore;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, _: AppProcessData, autoloadApps: string[]);
-      start(): Promise<false | undefined>;
-  }
-
-  export const ShellHostApp: App;
-
-  export class ShortcutPropertiesRuntime extends AppProcess {
-      shortcutData: ReadableStore<ArcShortcut>;
-      iconStore: Record<string, string>;
-      path?: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, path: string, data: ArcShortcut);
-      start(): Promise<false | undefined>;
-      save(): Promise<void>;
-      goTarget(): Promise<void>;
-      changeIcon(): Promise<void>;
-      pickTarget(): Promise<void>;
-  }
-
-  export const ShortcutPropertiesApp: App;
-
-  export class SystemShortcutsRuntime extends AppProcess {
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData);
-      start(): Promise<false | undefined>;
-      closeFocused(): Promise<void>;
-  }
-
-  export const SystemShortcuts: App;
-
-  export class TerminalWindowRuntime extends AppProcess {
-      term: Terminal | undefined;
-      overridePopulatable: boolean;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData);
-      render(): Promise<void>;
-      protected stop(): Promise<void>;
-  }
-
-  export const TerminalWindowApp: App;
-
-  export class TotpAuthGuiRuntime extends AppProcess {
-      private token;
-      private dispatchId;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, token: string, dispatchId: string);
-      render(args: RenderArgs): false | undefined;
-      validate(code: string): boolean;
-      verifyTotp(code: string): Promise<boolean>;
-      doDispatch(): Promise<void>;
-      cancel(): Promise<void>;
-      cantAccess(): void;
-  }
-
-  export const TotpAuthGuiApp: App;
-
-  export class TotpSetupGuiRuntime extends AppProcess {
-      digits: ReadableStore<(number | undefined)[]>;
-      inputs: ReadableStore<HTMLInputElement[]>;
-      url: ReadableStore<string>;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData);
-      render(): Promise<void>;
-      validate(): boolean;
-      activateTotp(): Promise<boolean>;
-  }
-
-  export const TotpSetupGuiApp: App;
-
-  export const TrayHost: App;
-
-  export function WallpaperContextMenu(runtime: WallpaperRuntime): AppContextMenu;
-
-  export class WallpaperRuntime extends AppProcess {
-      contents: ReadableStore<DirectoryReadReturn | undefined>;
-      selected: ReadableStore<string>;
-      shortcuts: ReadableStore<ShortcutStore>;
-      iconsElement: ReadableStore<HTMLDivElement>;
-      orphaned: ReadableStore<string[]>;
-      directory: string;
-      contextMenu: AppContextMenu;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, desktopDir?: string);
-      render({ desktopDir }: {
-          desktopDir: string;
-      }): Promise<void>;
-      updateContents(): Promise<void>;
-      findAndDeleteOrphans(contents: DirectoryReadReturn | undefined): void;
-      findFreeDesktopIconPosition(identifier: string, wrapper?: HTMLDivElement): Promise<unknown> | {
-          x: number;
-          y: number;
-      };
-      deleteItem(path: string): Promise<void>;
-      uploadItems(): Promise<void>;
-  }
-
-  export const WallpaperApp: App;
-
-  export class AdvSysSetRuntime extends AppProcess {
-      currentTab: ReadableStore<string>;
-      tabs: Record<string, Component>;
-      preferencesBuffer: ReadableStore<UserPreferences>;
-      syncInitialized: boolean;
-      bufferInitialized: boolean;
-      bufferChanged: ReadableStore<boolean>;
-      displayingDesync: boolean;
-      preferencesSub?: Unsubscriber;
-      bufferSub?: Unsubscriber;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, tab?: string);
-      start(): Promise<false | undefined>;
-      apply(close?: boolean): void;
-  }
-
-  export const AdvSystemSettings: App;
-
-  export interface TerminalCommand {
-      keyword: string;
-      description: string;
-      hidden?: boolean;
-      exec: (term: ArcTerminal, flags: Arguments, argv: string[]) => number | Promise<number>;
-  }
-
-  export type Arguments = Record<string, string | boolean>;
-
-  export interface Variable {
-      get: () => string | undefined;
-      set?: (v: string) => Promise<any> | any;
-      value?: string;
-      readOnly: boolean;
-      canDelete: boolean;
-  }
-
-  export type VariableStore = {
-      [key: string]: Variable;
-  };
-
-  export interface StaticVariable {
-      value: string | undefined;
-      readOnly: boolean;
-  }
-
-  export type StaticVariableStore = {
-      [key: string]: StaticVariable;
-  };
-
-  export type Sections = {
-      [key: string]: string[];
-  };
-
-  export interface ArcTermConfiguration {
-      prompt?: string;
-      greeting?: string;
-      noLogo?: boolean;
-      gooseBumps?: boolean;
-  }
 
   export class TerminalProcess extends Process {
       static keyword: string;
@@ -3124,7 +2280,7 @@ declare global {
       protected flags?: Arguments;
       protected argv?: string[];
       private exitCode;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal, flags: Arguments, argv: string[]): Promise<number>;
       _main(term: ArcTerminal, flags: Arguments, argv: string[]): Promise<any>;
   }
@@ -3146,7 +2302,7 @@ declare global {
       maxEntries: number;
       cursor: number;
       private terminal;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, maxEntries: number, terminal?: ArcTerminal);
+      constructor(pid: number, parentPid: number, maxEntries: number, terminal?: ArcTerminal);
       start(): Promise<false | undefined>;
       save(): void;
       restore(): undefined;
@@ -3262,7 +2418,7 @@ declare global {
       private highlighting;
       private history;
       private conceiled;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, prompt: string, tty: Tty, highlighter: Highlighter, history?: History, conceiled?: boolean);
+      constructor(pid: number, parentPid: number, prompt: string, tty: Tty, highlighter: Highlighter, history?: History, conceiled?: boolean);
       buffer(): string;
       shouldHighlight(): boolean;
       clearScreen(): void;
@@ -3305,7 +2461,7 @@ declare global {
       private ctrlCHandler;
       terminal: ArcTerminal | undefined;
       private pauseHandler;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, terminal?: ArcTerminal);
+      constructor(pid: number, parentPid: number, terminal?: ArcTerminal);
       start(): Promise<void>;
       activate(term: Terminal): void;
       dispose(): void;
@@ -3384,6 +2540,16 @@ declare global {
   export const AdminServerAuditlog: AdminCommandType;
 
   export const AdminServerLogs: AdminCommandType;
+
+  export interface ServerInfo {
+      validation: string;
+      status: string;
+      loginWallpaper: boolean;
+      loginBottomText: string;
+      loginNotice: string;
+      disableRegistration: boolean;
+      freshBackend: boolean;
+  }
 
   export const AdminServerPing: AdminCommandType;
 
@@ -3575,7 +2741,7 @@ declare global {
       static keyword: string;
       static description: string;
       static hidden: boolean;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal, flags: Arguments, argv: string[]): Promise<number>;
   }
 
@@ -3584,7 +2750,7 @@ declare global {
   export class AppListCommand extends TerminalProcess {
       static keyword: string;
       static description: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       main(term: ArcTerminal, flags: Arguments): Promise<0 | 1>;
   }
 
@@ -3641,7 +2807,7 @@ declare global {
   export class ArcFetchCommand extends TerminalProcess {
       static keyword: string;
       static description: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal): Promise<number>;
       getItems(term: ArcTerminal): [
           string,
@@ -3654,35 +2820,35 @@ declare global {
   export class AtConfCommand extends TerminalProcess {
       static keyword: string;
       static description: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal): Promise<number>;
   }
 
   export class CdCommand extends TerminalProcess {
       static keyword: string;
       static description: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal, _: Arguments, argv: string[]): Promise<number>;
   }
 
   export class ClearCommand extends TerminalProcess {
       static keyword: string;
       static description: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal, flags: Arguments, argv: string[]): Promise<number>;
   }
 
   export class ConfigCommand extends TerminalProcess {
       static keyword: string;
       static description: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal): Promise<number>;
   }
 
   export class CrTpaCommand extends TerminalProcess {
       static keyword: string;
       static description: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal): Promise<number>;
   }
 
@@ -3690,7 +2856,7 @@ declare global {
       static keyword: string;
       static description: string;
       commands: Record<string, (term: ArcTerminal, flags: Arguments, argv: string[]) => Promise<number>>;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal, flags: Arguments, argv: string[]): Promise<number>;
       connect(term: ArcTerminal, _: Arguments, argv: string[]): Promise<number>;
       disconnect(term: ArcTerminal): Promise<0 | 1>;
@@ -3699,42 +2865,42 @@ declare global {
   export class DirCommand extends TerminalProcess {
       static keyword: string;
       static description: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal, flags: Arguments, argv: string[]): Promise<number>;
   }
 
   export class DispatchCommand extends TerminalProcess {
       static keyword: string;
       static description: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal, flags: Arguments): Promise<number>;
   }
 
   export class DrivesCommand extends TerminalProcess {
       static keyword: string;
       static description: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal, flags: Arguments, argv: string[]): Promise<number>;
   }
 
   export class EchoCommand extends TerminalProcess {
       static keyword: string;
       static description: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal, _: Arguments, argv: string[]): Promise<number>;
   }
 
   export class ExitCommand extends TerminalProcess {
       static keyword: string;
       static description: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal): Promise<number>;
   }
 
   export class ExploreCommand extends TerminalProcess {
       static keyword: string;
       static description: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal, flags: Arguments, argv: string[]): Promise<number>;
   }
 
@@ -3771,48 +2937,49 @@ declare global {
   export class FindCommand extends TerminalProcess {
       static keyword: string;
       static description: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal, _: Arguments, argv: string[]): Promise<number>;
   }
 
   export class HelpCommand extends TerminalProcess {
       static description: string;
       static keyword: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal, flags: Arguments): Promise<number>;
   }
 
   export class HistoryCommand extends TerminalProcess {
       static keyword: string;
       static description: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal): Promise<number>;
   }
 
   export class KillCommand extends TerminalProcess {
       static keyword: string;
       static description: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal, flags: Arguments, argv: string[]): Promise<number>;
   }
 
   export class LogoutCommand extends TerminalProcess {
       static keyword: string;
       static description: string;
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal, flags: Arguments, argv: string[]): Promise<number>;
   }
 
   export class MkdirCommand extends TerminalProcess {
       static keyword: string;
       static description: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal, _: Arguments, argv: string[]): Promise<number>;
   }
 
   export class OpenCommand extends TerminalProcess {
       static description: string;
       static keyword: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal, _: Arguments, argv: string[]): Promise<number>;
   }
 
@@ -3820,7 +2987,7 @@ declare global {
       static keyword: string;
       static description: string;
       private distrib?;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal, _: Arguments, argv: string[]): Promise<number>;
       installPackage(name: string): Promise<number>;
       removePackage(name: string): Promise<number>;
@@ -3836,27 +3003,28 @@ declare global {
   export class QuotaCommand extends TerminalProcess {
       static keyword: string;
       static description: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal, flags: Arguments, argv: string[]): Promise<number>;
   }
 
   export class ReloadCommand extends TerminalProcess {
       static keyword: string;
       static description: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal): Promise<number>;
   }
 
   export class RestartCommand extends TerminalProcess {
       static keyword: string;
       static description: string;
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal): Promise<number>;
   }
 
   export class RmCommand extends TerminalProcess {
       static keyword: string;
       static description: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal, flags: Arguments, argv: string[]): Promise<number>;
   }
 
@@ -3869,14 +3037,14 @@ declare global {
   export class SpawnCommand extends TerminalProcess {
       static keyword: string;
       static description: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal, _: Arguments, argv: string[]): Promise<number>;
   }
 
   export class TasksCommand extends TerminalProcess {
       static keyword: string;
       static description: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal, flags: Arguments, argv: string[]): Promise<number>;
   }
 
@@ -3884,21 +3052,21 @@ declare global {
       static keyword: string;
       static description: string;
       static hidden: boolean;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal): Promise<number>;
   }
 
   export class TreeCommand extends TerminalProcess {
       static keyword: string;
       static description: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal, flags: Arguments, argv: string[]): Promise<number>;
   }
 
   export class VerCommand extends TerminalProcess {
       static keyword: string;
       static description: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number);
+      constructor(pid: number, parentPid: number);
       protected main(term: ArcTerminal): Promise<number>;
   }
 
@@ -3989,7 +3157,7 @@ declare global {
       lastCommandErrored: boolean;
       config: ArcTermConfiguration;
       window: TerminalWindowRuntime | undefined;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, term: Terminal, path?: string);
+      constructor(pid: number, parentPid: number, term: Terminal, path?: string);
       start(): Promise<false | void>;
       readline(): Promise<void>;
       processLine(text: string | undefined): Promise<void>;
@@ -4019,546 +3187,49 @@ declare global {
       migrateConfigurationPath(): Promise<void>;
   }
 
-  export class ArcTermRuntime extends Process {
-      term: ArcTerminal | undefined;
-      path: string | undefined;
-      app: AppProcessData;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, path?: string);
-      protected start(): Promise<any>;
+  export interface TerminalCommand {
+      keyword: string;
+      description: string;
+      hidden?: boolean;
+      exec: (term: ArcTerminal, flags: Arguments, argv: string[]) => number | Promise<number>;
   }
 
-  export const ArcTermApp: App;
+  export type Arguments = Record<string, string | boolean>;
 
-  export interface BugHuntCreatorOptions {
-      sendAnonymously: boolean;
-      excludeLogs: boolean;
-      makePublic: boolean;
+  export interface Variable {
+      get: () => string | undefined;
+      set?: (v: string) => Promise<any> | any;
+      value?: string;
+      readOnly: boolean;
+      canDelete: boolean;
   }
 
-  export class BugHuntCreatorRuntime extends AppProcess {
-      parent: BugHuntRuntime | undefined;
-      title: ReadableStore<string>;
-      body: ReadableStore<string>;
-      loading: ReadableStore<boolean>;
-      overrideOptions: BugHuntCreatorOptions | undefined;
-      bughunt: BugHuntUserSpaceProcess;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, title?: string, body?: string, options?: BugHuntCreatorOptions);
-      Send(): Promise<void>;
-      dataPrivacy(): Promise<void>;
-  }
-
-  export const BugReportsCreatorApp: App;
-
-  export const BugHuntAltMenu: (p: BugHuntRuntime) => ContextMenuItem[];
-
-  export class BugHuntUserDataRuntime extends AppProcess {
-      data: UserInfo;
-      hljs: HLJSApi;
-      html: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, data: UserInfo);
-  }
-
-  export const BugHuntUserDataApp: App;
-
-  export class BugHuntRuntime extends AppProcess {
-      loading: ReadableStore<boolean>;
-      currentTab: ReadableStore<string>;
-      store: ReadableStore<BugReport[]>;
-      selectedReport: ReadableStore<string>;
-      bughunt: BugHuntUserSpaceProcess;
-      protected overlayStore: Record<string, App>;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData);
-      render(): Promise<void>;
-      changeTab(tab: string): Promise<void>;
-      refresh(tab?: string): Promise<void>;
-      invalidateCaches(restoreSelected?: boolean): Promise<void>;
-      newReport(): void;
-      viewLogs(): void;
-      userData(): void;
-      exportReport(): Promise<void>;
-  }
-
-  export const BugHuntApp: App;
-
-  export type CalculatorKey = [
-      string | null,
-      string | null
-  ];
-
-  export type CalculatorKeys = [
-      string | null,
-      string | null
-  ][];
-
-  export type CalculatorOverrides = {
-      [key: string]: string;
+  export type VariableStore = {
+      [key: string]: Variable;
   };
 
-  export class CalculatorStore {
-      AllowedKeys: string[];
-      Shortcuts: string[];
-      Overrides: CalculatorOverrides;
-      altClasses: string[];
+  export interface StaticVariable {
+      value: string | undefined;
+      readOnly: boolean;
   }
 
-  export class CalculatorRuntime extends AppProcess {
-      Value: ReadableStore<string>;
-      Store: CalculatorStore;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData);
-      render(args: RenderArgs): Promise<void>;
-      keys: CalculatorKeys;
-      Functions: {
-          [key: string]: [
-              string,
-              () => void,
-              string
-          ];
-      };
-      private eval;
-      private compileKeys;
-      evaluate(): string | false;
-      private isValid;
-      generateKeyboardShortcuts(): AppKeyCombination[];
-      processKey(key: string): false | undefined;
-      validate(expr: string): boolean;
-  }
-
-  export const CalculatorApp: App;
-
-  export class EditRowRuntime extends AppProcess {
-      view: ReadableStore<Uint8Array<ArrayBufferLike>>;
-      output: ReadableStore<Uint8Array<ArrayBufferLike>>;
-      offset: ReadableStore<number>;
-      rows: ReadableStore<[
-          number,
-          [
-              number,
-              number
-          ][]
-      ][]>;
-      editorInputs: ReadableStore<HTMLInputElement[]>;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, view: ReadableStore<Uint8Array>, offset: number);
-      render(): Promise<void>;
-      getByteClass(byte: number): "nul" | "ascii-control" | "printable-ascii" | "rest";
-      writeBytes(): Promise<void>;
-  }
-
-  export const EditRow: App;
-
-  export class HexEditRuntime extends AppProcess {
-      buffer: ReadableStore<ArrayBuffer>;
-      original: ReadableStore<Uint8Array<ArrayBufferLike> | undefined>;
-      view: ReadableStore<Uint8Array<ArrayBufferLike>>;
-      offsets: ReadableStore<number[]>;
-      offsetLength: ReadableStore<number>;
-      hexRows: ReadableStore<[
-          number,
-          number
-      ][][]>;
-      decoded: ReadableStore<[
-          string,
-          number
-      ][][]>;
-      requestedFile: string;
-      editorInputs: ReadableStore<HTMLButtonElement[]>;
-      filename: ReadableStore<string>;
-      activeByte: ReadableStore<number>;
-      modified: ReadableStore<boolean>;
-      protected overlayStore: Record<string, App>;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, file: string);
-      updateVariables(view: Uint8Array): void;
-      saveVariables(hexRows: [
-          number,
-          number
-      ][][], decoded: [
-          string,
-          number
-      ][][], offsetLength: number, offsets: number[]): void;
-      render(): Promise<void>;
-      sanitizeDecoded(input: string): string;
-      getByteClass(byte: number): "nul" | "ascii-control" | "printable-ascii" | "rest";
-      newByte(): void;
-      alterRow(rowIndex: number): Promise<void>;
-      isModified(): boolean;
-      onClose(): Promise<boolean>;
-      saveFile(): Promise<void>;
-  }
-
-  export const HexEditorApp: App;
-
-  export class ImageViewerRuntime extends AppProcess {
-      openedFile: ReadableStore<string>;
-      imageUrl: ReadableStore<string>;
-      indirect: ReadableStore<boolean>;
-      overridePopulatable: boolean;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, path?: string);
-      render({ path }: {
-          path: string;
-      }): Promise<void>;
-      readFile(path: string): Promise<void>;
-      readFileIndirectFallback(path: string): Promise<void>;
-  }
-
-  export const ImageViewerApp: App;
-
-  export type LightsOffGrid = boolean[][];
-
-  export class LightsOffLevels {
-      runtime: LightsOffRuntime;
-      constructor(runtime: LightsOffRuntime);
-      private _store;
-      loadLevel(level: number): void;
-      checkNextLevel(): Promise<boolean | void>;
-  }
-
-  export class LightsOffRuntime extends AppProcess {
-      xModifiers: number[];
-      yModifiers: number[];
-      Grid: ReadableStore<LightsOffGrid>;
-      Transitioning: ReadableStore<boolean>;
-      Clicks: ReadableStore<number>;
-      LEVEL: ReadableStore<number>;
-      Levels: LightsOffLevels;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData);
-      containsLights(): boolean;
-      finish(): void;
-      ToggleLight(x: number, y: number): void;
-      loadData(): void;
-      saveData(): void;
-  }
-
-  export const LightsOffApp: App;
-
-  export type CollectorResult = {
-      [key: string]: LogItem[];
+  export type StaticVariableStore = {
+      [key: string]: StaticVariable;
   };
 
-  export type IterableCollectorResult = [
-      string,
-      LogItem[]
-  ][];
-
-  export type FilterLevel = LogLevel | "all";
-
-  export type GroupedBySource = Map<string, LogItem[]>;
-
-  export type CurrentSource = ReadableStore<string>;
-
-  export type LogSource = {
-      what: string;
-      timestamp: number;
+  export type Sections = {
+      [key: string]: string[];
   };
 
-  export class LoggingRuntime extends AppProcess {
-      groups: ReadableStore<Map<string, LogItem[]>>;
-      sources: ReadableStore<LogSource[]>;
-      currentSource: ReadableStore<string>;
-      selectedLevel: ReadableStore<FilterLevel>;
-      private archive;
-      isArchive: boolean;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, source?: string, level?: FilterLevel, archive?: LogItem[]);
-      updateGroups(): void;
-      collectLogsBySource(logs: LogItem[], reverse?: boolean): {
-          items: CollectorResult;
-          sources: LogSource[];
-      };
+  export interface ArcTermConfiguration {
+      prompt?: string;
+      greeting?: string;
+      noLogo?: boolean;
   }
 
-  export const LoggingApp: App;
-
-  export const MediaPlayerAccelerators: (runtime: MediaPlayerRuntime) => AppKeyCombinations;
-
-  export function FileMenu(runtime: MediaPlayerRuntime): ContextMenuItem;
-
-  export function PlaylistAltMenu(runtime: MediaPlayerRuntime): ContextMenuItem;
-
-  export function MediaPlayerAltMenu(runtime: MediaPlayerRuntime): ContextMenuItem[];
-
-  export interface PlayerState {
-      paused: boolean;
-      current: number;
-      duration: number;
-  }
-
-  export class MediaPlayerRuntime extends AppProcess {
-      queue: ReadableStore<string[]>;
-      queueIndex: ReadableStore<number>;
-      url: ReadableStore<string>;
-      player: HTMLVideoElement | undefined;
-      State: ReadableStore<PlayerState>;
-      isVideo: ReadableStore<boolean>;
-      Loaded: ReadableStore<boolean>;
-      playlistPath: ReadableStore<string>;
-      contextMenu: AppContextMenu;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, file?: string);
-      onClose(): Promise<boolean>;
-      protected stop(): Promise<any>;
-      render({ file }: RenderArgs): Promise<void>;
-      setPlayer(player: HTMLVideoElement): void;
-      Reset(): void;
-      Play(): Promise<void>;
-      Pause(): Promise<void>;
-      Seek(mod: number): void;
-      Stop(): void;
-      updateState(): void | {
-          paused: boolean;
-          current: number;
-          duration: number;
-      };
-      formatTime(seconds: number): string | undefined;
-      openFileLocation(): void;
-      openFile(): Promise<void>;
-      readFile(paths: string[], addToQueue?: boolean): Promise<void>;
-      nextSong(): void;
-      previousSong(): Promise<void>;
-      clearQueue(): void;
-      handleSongChange(v: number): Promise<void>;
-      addToQueue(): Promise<void>;
-      moveQueueItem(sourceIndex: number, targetIndex: number): void;
-      savePlaylist(): Promise<void>;
-      loadPlaylist(): Promise<void>;
-      readPlaylist(path: string): Promise<void>;
-      createPlaylistShortcut(): Promise<void>;
-      failedToPlay(): Promise<void>;
-  }
-
-  export const MediaPlayerApp: App;
-
-  export class PdfViewerRuntime extends AppProcess {
-      openedFile: ReadableStore<string>;
-      documentUrl: ReadableStore<string>;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, path?: string);
-      render({ path }: {
-          path: string;
-      }): Promise<void>;
-      readFile(path: string): Promise<void>;
-      readFileIndirectFallback(path: string): Promise<void>;
-  }
-
-  export const PdfViewerApp: App;
-
-  export interface Box {
-      modifier: number;
-      class: string;
-      yoffset: number;
-  }
-
-  export class QlorbRuntime extends AppProcess {
-      readonly random: (m: number) => number;
-      readonly Boxes: ReadableStore<Box[]>;
-      readonly BoxesOffset: ReadableStore<number>;
-      readonly Clicks: ReadableStore<number>;
-      readonly Score: ReadableStore<number>;
-      readonly OldClicks: ReadableStore<number>;
-      readonly BOX_SIZE = 30;
-      readonly BOX_VALUES: number[];
-      readonly PAGES: string[];
-      readonly CurrentPage: ReadableStore<string>;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData);
-      render(): Promise<void>;
-      spawnBox(props?: Box | null, useOffset?: boolean, forcePositive?: boolean): Box;
-      private createRandomBox;
-      private findBoxClass;
-      ScorePoints(box: Box, button?: HTMLButtonElement): void;
-      ScoreNegativePoints(box: Box, button?: HTMLButtonElement): void;
-      private levelDown;
-      clickReset(): void;
-      flushStores(): void;
-      onSwitchPage(): void;
-      switchPage(page: string): boolean;
-  }
-
-  export const QlorbApp: App;
-
-  export class TestAppRuntime extends AppProcess {
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData);
-      render(): Promise<void>;
-  }
-
-  export const TestApp: App;
-
-  export function WriterAccelerators(runtime: WriterRuntime): AppKeyCombinations;
-
-  export function EditMenu(runtime: WriterRuntime): ContextMenuItem;
-
-  export function FileMenu(runtime: WriterRuntime): ContextMenuItem;
-
-  export function ViewMenu(runtime: WriterRuntime): ContextMenuItem;
-
-  export function WriterAltMenu(runtime: WriterRuntime): ContextMenuItem[];
-
-  export class ReplaceRuntime extends AppProcess {
-      parent: WriterRuntime;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData);
-      replaceOnce(text: string, replacer: string): void;
-      replaceAll(text: string, replacer: string): void;
-  }
-
-  export const ReplaceOverlay: App;
-
-  export class WriterRuntime extends AppProcess {
-      buffer: ReadableStore<string>;
-      openedFile: ReadableStore<string>;
-      filename: ReadableStore<string>;
-      mimetype: ReadableStore<string>;
-      directoryName: ReadableStore<string>;
-      original: ReadableStore<string>;
-      input: ReadableStore<HTMLTextAreaElement>;
-      mimeIcon: ReadableStore<string>;
-      protected overlayStore: Record<string, App>;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, path?: string);
-      acceleratorStore: AppKeyCombinations;
-      render({ path }: {
-          path: string;
-      }): Promise<void>;
-      readFile(path: string): Promise<void>;
-      onClose(): Promise<boolean>;
-      saveChanges(force?: boolean): Promise<void>;
-      saveAs(): Promise<void>;
-      openFile(): Promise<void>;
-      selectAll(): void;
-  }
-
-  export const WriterApp: App;
-
-  export const BuiltinApps: AppStorage;
-
-  export const AdminApps: AppStorage;
-
-  export const appShortcuts: [
-      number,
-      AppKeyCombinations
-  ][];
-
-  export const AppOrigins: Record<string, string>;
-
-  export function lightenColor(color: string, modifier?: number): string;
-
-  export function hex3to6(color: string): string;
-
-  export function darkenColor(color: string, modifier?: number): string;
-
-  export function invertColor(hex: string): string;
-
-  export function bestForeground(bgColor: string): "white" | "black";
-
-  export class ServerDrive extends FilesystemDrive {
-      private token;
-      label: string;
-      FIXED: boolean;
-      IDENTIFIES_AS: string;
-      FILESYSTEM_SHORT: string;
-      FILESYSTEM_LONG: string;
-      protected CAPABILITIES: Record<DriveCapabilities, boolean>;
-      constructor(kernel: WaveKernel, uuid: string, letter: string, token: string);
-      readDir(path?: string): Promise<DirectoryReadReturn | undefined>;
-      createDirectory(path: string): Promise<boolean>;
-      readFile(path: string, onProgress: FilesystemProgressCallback): Promise<ArrayBuffer | undefined>;
-      writeFile(path: string, blob: Blob, onProgress: FilesystemProgressCallback): Promise<boolean>;
-      tree(path?: string): Promise<RecursiveDirectoryReadReturn | undefined>;
-      copyItem(source: string, destination: string): Promise<boolean>;
-      moveItem(source: string, destination: string): Promise<boolean>;
-      deleteItem(path: string): Promise<boolean>;
-      quota(): Promise<UserQuota>;
-      direct(path: string): Promise<string | undefined>;
-      bulk<T = any>(path: string, extension: string): Promise<Record<string, T>>;
-  }
-
-  export class MemoryFilesystemDrive extends FilesystemDrive {
-      private readonly data;
-      FIXED: boolean;
-      IDENTIFIES_AS: string;
-      FILESYSTEM_LONG: string;
-      FILESYSTEM_SHORT: string;
-      HIDDEN: boolean;
-      label: string;
-      protected CAPABILITIES: Record<DriveCapabilities, boolean>;
-      constructor(kernel: any, uuid: string, letter?: string);
-      private getPathParts;
-      private getEntry;
-      private setEntry;
-      private deleteEntry;
-      readDir(path: string): Promise<DirectoryReadReturn | undefined>;
-      createDirectory(path: string): Promise<boolean>;
-      readFile(path: string): Promise<ArrayBuffer | undefined>;
-      writeFile(path: string, data: Blob): Promise<boolean>;
-      tree(path: string): Promise<RecursiveDirectoryReadReturn | undefined>;
-      copyItem(source: string, destination: string): Promise<boolean>;
-      moveItem(source: string, destination: string): Promise<boolean>;
-      deleteItem(path: string): Promise<boolean>;
-      direct(path: string): Promise<string | undefined>;
-      quota(): Promise<UserQuota>;
-      takeSnapshot(): Promise<Record<string, any>>;
-      restoreSnapshot(snapshot: Record<string, any>): void;
-  }
-
-  export class ZIPDrive extends FilesystemDrive {
-      label: string;
-      private _buffer;
-      private _path;
-      REMOVABLE: boolean;
-      READONLY: boolean;
-      IDENTIFIES_AS: string;
-      FILESYSTEM_SHORT: string;
-      FILESYSTEM_LONG: string;
-      protected CAPABILITIES: Record<DriveCapabilities, boolean>;
-      constructor(kernel: WaveKernel, uuid: string, letter: string, path: string);
-      _spinUp(onProgress?: FilesystemProgressCallback): Promise<boolean>;
-      _spinDown(onProgress?: FilesystemProgressCallback): Promise<boolean>;
-      readDir(path: string): Promise<DirectoryReadReturn | undefined>;
-      readFile(path: string): Promise<ArrayBuffer | undefined>;
-      writeFile(path: string, data: Blob, onProgress?: FilesystemProgressCallback): Promise<boolean>;
-      createDirectory(path: string): Promise<boolean>;
-      deleteItem(path: string): Promise<boolean>;
-      tree(path: string): Promise<RecursiveDirectoryReadReturn | undefined>;
-      copyItem(source: string, destination: string): Promise<boolean>;
-      moveItem(source: string, destination: string): Promise<boolean>;
-      _sync(progress?: FilesystemProgressCallback): Promise<void>;
-  }
-
-  export const Wallpapers: {
-      [key: string]: Wallpaper;
+  export type ExpandedTerminal = Terminal & {
+      process?: TerminalWindowRuntime;
   };
-
-  export interface LoginActivity {
-      authorId: string;
-      token?: string;
-      userAgent: string;
-      location?: Location;
-      action: "unknown" | "login" | "logout";
-      _id: string;
-      createdAt: string;
-      updatedAt: string;
-  }
-
-  export interface BatteryType {
-      charging: boolean;
-      chargingTime: number;
-      dischargingTime: number;
-      level: number;
-      onchargingchange: number | null;
-      onchargingtimechange: number | null;
-      ondischargingtimechange: number | null;
-      onlevelchange: number | null;
-  }
-
-  export interface Notification {
-      title: string;
-      message: string;
-      icon?: string;
-      image?: string;
-      timeout?: number;
-      buttons?: ErrorButton[];
-      timestamp?: number;
-      deleted?: boolean;
-      className?: string;
-  }
-
-  export interface ErrorButton {
-      caption: string;
-      action: () => void;
-      suggested?: boolean;
-  }
 
   export const AdminProtocolHandlers: Record<string, ProtocolHandler>;
 
@@ -4566,7 +3237,16 @@ declare global {
 
   export const DefaultUserInfo: UserInfo;
 
-  export function contextProps(node: HTMLElement, args: any[]): void;
+  export function contextProps(node: HTMLElement, args: any[]): {
+      destroy: () => void;
+  } | undefined;
+
+  export function contextMenu(node: HTMLElement, [items, process]: [
+      ContextMenuItem[],
+      AppProcess
+  ]): {
+      destroy: () => void;
+  } | undefined;
 
   export class CustomTitlebar {
       #private;
@@ -4575,6 +3255,79 @@ declare global {
       dispose(): void;
       getTarget(): HTMLElement | undefined;
       getTitlebar(): HTMLDivElement | undefined;
+  }
+
+  export interface WeatherMeta {
+      caption: string;
+      iconColor: string;
+      icon: string;
+      gradient: {
+          start: string;
+          end: string;
+      };
+  }
+
+  export type WeatherInformation = {
+      temperature: number;
+      condition: string;
+      code: number;
+      className: string;
+      gradient: {
+          start: string;
+          end: string;
+      } | undefined;
+      icon: string;
+      iconColor: string;
+      isNight: boolean;
+  } | false;
+
+  export interface ShellTrayIcon {
+      pid: number;
+      identifier: string;
+      popup?: TrayPopup;
+      icon: string;
+      context?: ContextMenuItem[];
+      action?: (targetedProcess: Process) => void;
+  }
+
+  export interface TrayIconOptions {
+      popup?: TrayPopup;
+      icon: string;
+      context?: ContextMenuItem[];
+      action?: (targetedProcess: Process) => void;
+  }
+
+  export interface TrayPopup {
+      component?: Component;
+      width: number;
+      height: number;
+      className?: string;
+  }
+
+  export interface QuickSetting {
+      isActive: (process: ShellRuntime) => boolean | Promise<boolean>;
+      action: (process: ShellRuntime) => any;
+      icon: string;
+      className?: string;
+      caption: string;
+  }
+
+  export type TrayIconDiscriminator = `${number}#${string}`;
+
+  export class TrayIconProcess extends Process {
+      targetPid: number;
+      identifier: string;
+      popup?: TrayPopup;
+      context?: ContextMenuItem[];
+      action?: (targetedProcess: Process) => void;
+      componentMount: Record<string, any>;
+      icon: string;
+      shell: ShellRuntime;
+      constructor(pid: number, parentPid: number, data: ShellTrayIcon);
+      __render(): Promise<void>;
+      stop(): Promise<void>;
+      renderPopup(popup: HTMLDivElement, target: Process): Promise<void>;
+      getPopupBody(): Element | null;
   }
 
   export type AxiosHeaderValue = AxiosHeaders | string | string[] | number | boolean | null;
@@ -5161,13 +3914,11 @@ declare global {
   }
 
   export interface ThirdPartyPropMap {
-      kernel: WaveKernel;
       daemon: UserDaemon;
-      handler: ProcessHandler;
-      fs: Filesystem;
-      env: Environment;
+      fs: FilesystemType;
+      env: EnvironmentType;
       serviceHost: ServiceHost | undefined;
-      dispatch: SystemDispatch;
+      dispatch: SystemDispatchType;
       icons: Record<string, string>;
       util: {
           htmlspecialchars: typeof htmlspecialchars;
@@ -5209,7 +3960,7 @@ declare global {
       [key: string]: any;
   }
 
-  export function SupplementaryThirdPartyPropFunctions(daemon: UserDaemon, fs: Filesystem, app: App, props: any, wrap: (c: string) => string, args: any[], metaPath: string): {
+  export function SupplementaryThirdPartyPropFunctions(daemon: UserDaemon, fs: FilesystemType, app: App, props: any, wrap: (c: string) => string, args: any[], metaPath: string): {
       load: (path: string) => Promise<any>;
       runApp: (process: typeof ThirdPartyAppProcess, metadataPath: string, parentPid?: number, ...args: any[]) => Promise<ThirdPartyAppProcess | undefined>;
       runAppDirect: (process: typeof ThirdPartyAppProcess, metadataPath: string, parentPid?: number, ...args: any[]) => Promise<ThirdPartyAppProcess | undefined>;
@@ -5219,57 +3970,297 @@ declare global {
 
   export function ThirdPartyProps(daemon: UserDaemon, args: any[], app: App, wrap: (c: string) => string, metaPath: string, workingDirectory?: string): ThirdPartyPropMap;
 
+  export function FileMenu(process: AdminPortalRuntime): ContextMenuItem;
+
+  export interface AdminPortalPage {
+      name: string;
+      icon: string;
+      content: Component<any>;
+      hidden?: boolean;
+      separator?: boolean;
+      scopes?: string[];
+      parent?: string;
+      props?: (process: AdminPortalRuntime) => Promise<Record<string, any>> | Record<string, any>;
+  }
+
+  export type AdminPortalPages = Map<string, AdminPortalPage>;
+
+  export type PageData = Record<string, any>;
+
+  export type DashboardData = {
+      stats: ServerStatistics;
+      logs: ServerLogItem[];
+  };
+
+  export type BugHuntData = {
+      users: User[];
+      reports: BugReport[];
+      stats: ReportStatistics;
+  };
+
+  export type ViewBugReportData = {
+      report: BugReport;
+  };
+
+  export type UsersData = {
+      users: ExpandedUserInfo[];
+  };
+
+  export type ViewUserData = {
+      user: ExpandedUserInfo;
+      reports: BugReport[];
+  };
+
+  export type SharesData = {
+      shares: SharedDriveType[];
+      users: ExpandedUserInfo[];
+  };
+
+  export type ViewShareData = {
+      share: SharedDriveType;
+      accessors: FsAccess[];
+      users: ExpandedUserInfo[];
+  };
+
+  export type FilesystemsData = {
+      users: ExpandedUserInfo[];
+  };
+
+  export type StoreData = {
+      items: StoreItem[];
+      users: ExpandedUserInfo[];
+  };
+
+  export type ViewStoreItemData = {
+      item: StoreItem;
+  };
+
+  export type TokensData = {
+      tokens: ExpandedToken[];
+      users: ExpandedUserInfo[];
+  };
+
+  export type ActivitiesData = {
+      activities: Activity[];
+      users: ExpandedUserInfo[];
+  };
+
+  export type ScopesData = {
+      admins: ExpandedUserInfo[];
+  };
+
+  export type ViewScopesData = {
+      admin: ExpandedUserInfo;
+      scopes: Record<string, string>;
+  };
+
+  export type AuditLogData = {
+      users: ExpandedUserInfo[];
+      audits: AuditLog[][];
+  };
+
+  export type UsersPageFilters = "all" | "regular" | "admins" | "disapproved" | "online";
+
+  export type SharesPageFilters = "all" | "resized" | "locked";
+
+  export type StorePageFilters = "all" | "official" | "deprecated";
+
+  export interface SpecificAdminAction {
+      caption: string;
+      scopes: string[];
+      className?: string;
+      disabled?: (user: UserInfo) => boolean;
+      separate?: boolean;
+  }
+
+  export type SpecificAdminActions = Record<string, SpecificAdminAction>;
+
+  export interface FilesystemsPageQuota extends Record<string, any> {
+      user: ExpandedUserInfo;
+      used: number;
+      max: number;
+      free: number;
+      percentage: number;
+      unknown?: boolean;
+  }
+
+  export interface BugReportFileUrlParseResult extends Record<string, string> {
+      appId: string;
+      filename: string;
+      timestamp: string;
+      userId: string;
+      url: string;
+  }
+
+  export interface BugReportTpaFile {
+      unavailable?: boolean;
+      filePath: string;
+      filename: string;
+      size: number;
+  }
+
+  export const AdminPortalPageStore: AdminPortalPages;
+
+  export const LogoTranslations: Record<string, string>;
+
+  export const specificAdminActions: SpecificAdminActions;
+
+  export const globalAdminActions: SpecificAdminActions;
+
+  export function PageMenu(process: AdminPortalRuntime): ContextMenuItem;
+
+  export function AdminPortalAltMenu(process: AdminPortalRuntime): ContextMenuItem[];
+
+  export class BugHuntUserDataRuntime extends AppProcess {
+      data: UserInfo;
+      hljs: HLJSApi;
+      html: string;
+      constructor(pid: number, parentPid: number, app: AppProcessData, data: UserInfo);
+  }
+
+  export const BugHuntUserDataApp: App;
+
+  export class AdminPortalRuntime extends AppProcess {
+      ready: ReadableStore<boolean>;
+      currentPage: ReadableStore<string>;
+      switchPageProps: ReadableStore<Record<string, any>>;
+      redacted: ReadableStore<boolean>;
+      propSize: ReadableStore<number>;
+      shares: ShareManager;
+      admin: AdminBootstrapper;
+      protected overlayStore: Record<string, App>;
+      constructor(pid: number, parentPid: number, app: AppProcessData, page?: string, props?: Record<string, any>);
+      start(): Promise<void>;
+      switchPage(pageId: string, props?: Record<string, any>, force?: boolean): Promise<void>;
+      saveTpaFilesOfBugReport(report: BugReport): Promise<BugReportTpaFile[]>;
+  }
+
+  export const AdminPortalApp: App;
+
   export class UserDaemon extends Process {
-      initialized: boolean;
       username: string;
       token: string;
-      preferences: ReadableStore<UserPreferences>;
-      notifications: Map<string, Notification>;
       userInfo: UserInfo;
-      battery: ReadableStore<BatteryType | undefined>;
-      serviceHost: ServiceHost | undefined;
-      Wallpaper: ReadableStore<Wallpaper>;
-      lastWallpaper: ReadableStore<string>;
-      _elevating: boolean;
-      _blockLeaveInvocations: boolean;
-      private elevations;
-      private preferencesUnsubscribe;
-      private wallpaperGetters;
       private localWallpaperCache;
+      private thumbnailCache;
+      private TempFsSnapshot;
       private virtualDesktops;
       private virtualDesktop;
       private virtualDesktopIndex;
-      private mimeIcons;
       private virtualdesktopChangingTimeout;
       private firstSyncDone;
-      safeMode: boolean;
-      fileHandlers: Record<string, FileHandler>;
-      _criticalProcess: boolean;
-      mountedDrives: string[];
-      server: ServerManager;
-      syncLock: boolean;
       autoLoadComplete: boolean;
-      globalDispatch?: GlobalDispatch;
-      private TempFsSnapshot;
+      safeMode: boolean;
+      syncLock: boolean;
+      initialized: boolean;
+      _elevating: boolean;
+      _blockLeaveInvocations: boolean;
+      _toLoginInvoked: boolean;
+      _criticalProcess: boolean;
       TempFs?: MemoryFilesystemDrive;
+      fileHandlers: Record<string, FileHandler>;
+      mountedDrives: string[];
+      Wallpaper: ReadableStore<Wallpaper>;
+      lastWallpaper: ReadableStore<string>;
+      battery: ReadableStore<BatteryType | undefined>;
+      preferences: ReadableStore<UserPreferences>;
+      private elevations;
+      private preferencesUnsubscribe;
+      private wallpaperGetters;
       private registeredAnchors;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, token: string, username: string, userInfo?: UserInfo);
+      notifications: Map<string, Notification>;
+      server: ServerManagerType;
+      globalDispatch?: GlobalDispatch;
+      assoc?: FileAssocService;
+      serviceHost: ServiceHost | undefined;
+      NIGHTLY: boolean;
+      constructor(pid: number, parentPid: number, token: string, username: string, userInfo?: UserInfo);
       start(): Promise<false | undefined>;
-      startApplicationStorage(): ApplicationStorage | undefined;
-      getUserInfo(): Promise<UserInfo | undefined>;
-      startPreferencesSync(): Promise<void>;
-      updateWallpaper(v: UserPreferences): Promise<void>;
-      getAppRendererStyle(accent: string): string;
-      setAppRendererClasses(v: UserPreferences): void;
-      setUserStyleLoader(style: CustomStylePreferences): void;
-      commitPreferences(preferences: UserPreferences): Promise<boolean | undefined>;
+      stop(): Promise<false | undefined>;
+      activateAdminBootstrapper(): Promise<void>;
+      startShareManager(): Promise<void>;
+      startServiceHost(svcPreRun?: (service: Service) => void): Promise<void>;
+      startAnchorRedirectionIntercept(): void;
+      activateGlobalDispatch(): Promise<void>;
+      migrateFilesystemLayout(): Promise<void>;
+      updateAppShortcutsDir(): Promise<void>;
+      migrateUserAppsToFs(): Promise<void>;
+      isRegisteredVersionOutdated(): Promise<boolean>;
+      updateRegisteredVersion(): Promise<void>;
+      checkForNewVersion(): Promise<void>;
+      batteryInfo(): Promise<BatteryType | undefined>;
+      startSystemStatusRefresh(): Promise<void>;
+      spawnApp<T>(id: string, parentPid?: number, ...args: any[]): Promise<T | undefined>;
+      spawnOverlay<T>(id: string, parentPid?: number, ...args: any[]): Promise<T | undefined>;
+      _spawnApp<T>(id: string, renderTarget?: HTMLDivElement | undefined, parentPid?: number, ...args: any[]): Promise<T | undefined>;
+      _spawnOverlay<T>(id: string, renderTarget?: HTMLDivElement | undefined, parentPid?: number, ...args: any[]): Promise<T | undefined>;
+      spawnThirdParty<T>(app: App, metaPath: string, ...args: any[]): Promise<T | undefined>;
+      logoff(): Promise<void>;
+      shutdown(): Promise<void>;
+      restart(): Promise<void>;
+      logoffSafeMode(): Promise<void>;
+      toLogin(type: string, props?: Record<string, any>, force?: boolean): Promise<void>;
+      closeOpenedApps(type: string, props?: Record<string, any>, force?: boolean): Promise<boolean>;
+      getLoginActivity(): Promise<LoginActivity[]>;
+      logActivity(action: string): Promise<boolean>;
       startFilesystemSupplier(): Promise<void>;
-      stop(): Promise<void>;
-      sanitizeUserPreferences(): Promise<void>;
+      mountZip(path: string, letter?: string, fromSystem?: boolean): Promise<false | FilesystemDrive | undefined>;
+      startDriveNotifierWatcher(): void;
+      unmountMountedDrives(): Promise<void>;
+      FileProgress(initialData: Partial<FsProgressOperation>, parentPid?: number): Promise<FileProgressMutator>;
+      moveMultiple(sources: string[], destination: string, pid: number): Promise<void>;
+      copyMultiple(sources: string[], destination: string, pid: number): Promise<void>;
+      findHandlerToOpenFile(path: string): Promise<FileOpenerResult[]>;
+      getAllFileHandlers(): Promise<FileOpenerResult[]>;
+      LoadSaveDialog(data: Omit<LoadSaveDialogData, "returnId">): Promise<string[] | [
+          undefined
+      ]>;
+      openFile(path: string, shortcut?: ArcShortcut): Promise<any>;
+      openWith(path: string): Promise<void>;
+      handleShortcut(path: string, shortcut: ArcShortcut): Promise<any>;
+      createShortcut(data: ArcShortcut, path: string): Promise<boolean>;
+      determineCategorizedDiskUsage(): Promise<CategorizedDiskUsage>;
+      getThumbnailFor(path: string): Promise<string | undefined>;
+      spawnAutoload(): Promise<void>;
+      checkDisabled(appId: string, noSafeMode?: boolean): boolean;
+      isVital(app: App): boolean | undefined;
+      disableApp(appId: string): Promise<false | undefined>;
+      enableApp(appId: string): Promise<false | undefined>;
+      enableThirdParty(): Promise<void>;
+      disableThirdParty(): Promise<void>;
+      appStorage(): ApplicationStorage | undefined;
+      initAppStorage(storage: ApplicationStorage, cb: (app: App) => void): Promise<void>;
+      getUserApps(): Promise<AppStorage>;
+      registerApp(data: InstalledApp): Promise<void>;
+      deleteApp(id: string, deleteFiles?: boolean): Promise<boolean>;
+      registerAppFromPath(path: string): Promise<"failed to read file" | "failed to convert to JSON" | "missing properties" | undefined>;
+      uninstallAppWithAck(app: App): Promise<boolean>;
+      getAppIcon(app: App): string;
+      getAppIconByProcess(process: AppProcess): string;
+      getIcon(id: string): Promise<string>;
+      getIconCached(id: string): string;
+      getIconStore(id: string): ReadableStore<string>;
+      pinApp(appId: string): Promise<void>;
+      unpinApp(appId: string): void;
+      getAppRendererStyle(accent: string): string;
+      setAppRendererClasses(v: UserPreferences): Promise<void>;
+      setUserStyleLoader(style: CustomStylePreferences): void;
       discontinueToken(token?: string): Promise<boolean | undefined>;
-      sendNotification(data: Notification): string | undefined;
-      deleteNotification(id: string): void;
-      clearNotifications(): void;
+      getUserInfo(): Promise<UserInfo | undefined>;
+      changeUsername(newUsername: string): Promise<boolean>;
+      changePassword(newPassword: string): Promise<boolean>;
+      getPublicUserInfoOf(userId: string): Promise<PublicUserInfo | undefined>;
+      deleteAccount(): Promise<void>;
+      startPreferencesSync(): Promise<void>;
+      commitPreferences(preferences: UserPreferences): Promise<boolean | undefined>;
+      sanitizeUserPreferences(): Promise<void>;
+      getGlobalSetting(key: string): any;
+      setGlobalSetting(key: string, value: any): void;
+      updateWallpaper(v: UserPreferences): Promise<void>;
+      uploadWallpaper(pid?: number): Promise<Wallpaper | undefined>;
+      getWallpaper(id: string, override?: string): Promise<Wallpaper>;
+      deleteLocalWallpaper(id: string): Promise<boolean>;
+      getLocalWallpaper(id: string): Promise<Wallpaper>;
       themeFromUserPreferences(data: UserPreferences, name: string, author: string, version: string): UserTheme;
       saveCurrentTheme(name: string): void;
       applyThemeData(data: UserTheme, id?: string): false | undefined;
@@ -5277,38 +4268,8 @@ declare global {
       verifyTheme(data: UserTheme): string | undefined;
       checkCurrentThemeIdValidity(data: UserPreferences): UserPreferences;
       deleteUserTheme(id: string): void;
-      uploadWallpaper(pid?: number): Promise<Wallpaper | undefined>;
       changeProfilePicture(newValue: string | number): void;
       uploadProfilePicture(): Promise<string | undefined>;
-      getWallpaper(id: string, override?: string): Promise<Wallpaper>;
-      deleteLocalWallpaper(id: string): Promise<boolean>;
-      getLocalWallpaper(id: string): Promise<Wallpaper>;
-      logoff(): Promise<void>;
-      shutdown(): Promise<void>;
-      restart(): Promise<void>;
-      logoffSafeMode(): Promise<void>;
-      toLogin(type: string, props?: Record<string, any>): Promise<void>;
-      mountZip(path: string, letter?: string, fromSystem?: boolean): Promise<false | FilesystemDrive | undefined>;
-      batteryInfo(): Promise<BatteryType | undefined>;
-      startSystemStatusRefresh(): Promise<void>;
-      getUserApps(): Promise<AppStorage>;
-      spawnApp<T>(id: string, parentPid?: number, ...args: any[]): Promise<T | undefined>;
-      spawnOverlay<T>(id: string, parentPid?: number, ...args: any[]): Promise<T | undefined>;
-      _spawnApp<T>(id: string, renderTarget?: HTMLDivElement | undefined, parentPid?: number, ...args: any[]): Promise<T | undefined>;
-      _spawnOverlay<T>(id: string, renderTarget?: HTMLDivElement | undefined, parentPid?: number, ...args: any[]): Promise<T | undefined>;
-      spawnThirdParty<T>(app: App, metaPath: string, ...args: any[]): Promise<T | undefined>;
-      spawnAutoload(): Promise<void>;
-      checkDisabled(appId: string, noSafeMode?: boolean): boolean;
-      isVital(app: App): boolean | undefined;
-      disableApp(appId: string): Promise<false | undefined>;
-      enableApp(appId: string): Promise<false | undefined>;
-      getLoginActivity(): Promise<LoginActivity[]>;
-      logActivity(action: string): Promise<boolean>;
-      elevate(id: string): Promise<unknown>;
-      manuallyElevate(data: ElevationData): Promise<unknown>;
-      loadElevation(id: string, data: ElevationData): void;
-      changeUsername(newUsername: string): Promise<boolean>;
-      changePassword(newPassword: string): Promise<boolean>;
       syncVirtualDesktops(v: UserPreferences): Promise<void>;
       renderVirtualDesktop(uuid: string): void;
       deleteVirtualDesktop(uuid: string): Promise<void>;
@@ -5321,57 +4282,29 @@ declare global {
       nextDesktop(): boolean;
       previousDesktop(): void;
       moveWindow(pid: number, destination: string): Promise<void>;
-      startDriveNotifierWatcher(): void;
-      unmountMountedDrives(): Promise<void>;
-      FileProgress(initialData: Partial<FsProgressOperation>, parentPid?: number): Promise<FileProgressMutator>;
-      moveMultiple(sources: string[], destination: string, pid: number): Promise<void>;
-      copyMultiple(sources: string[], destination: string, pid: number): Promise<void>;
-      findHandlerToOpenFile(path: string): Promise<FileOpenerResult[]>;
-      getAllFileHandlers(): Promise<FileOpenerResult[]>;
-      getMimeIconByFilename(filename: string): string | undefined;
-      getMimeIconByExtension(extension: string): string | undefined;
-      loadMimeIcon(extension: string, icon: string): void;
-      LoadSaveDialog(data: Omit<LoadSaveDialogData, "returnId">): Promise<string[] | [
-          undefined
-      ]>;
-      openFile(path: string, shortcut?: ArcShortcut): Promise<any>;
-      openWith(path: string): Promise<void>;
-      handleShortcut(path: string, shortcut: ArcShortcut): Promise<any>;
-      createShortcut(data: ArcShortcut, path: string): Promise<boolean>;
-      getGlobalSetting(key: string): any;
-      setGlobalSetting(key: string, value: any): void;
+      sendNotification(data: Notification): string | undefined;
+      deleteNotification(id: string): void;
+      clearNotifications(): void;
+      elevate(id: string): Promise<unknown>;
+      manuallyElevate(data: ElevationData): Promise<unknown>;
+      loadElevation(id: string, data: ElevationData): void;
       checkReducedMotion(): void;
-      IconPicker(data: Omit<IconPickerData, "returnId">): Promise<string | undefined>;
-      installApp(data: InstalledApp): Promise<void>;
-      deleteApp(id: string, deleteFiles?: boolean): Promise<boolean>;
-      installAppFromPath(path: string): Promise<"failed to read file" | "failed to convert to JSON" | "missing properties" | undefined>;
-      activateAdminBootstrapper(): Promise<void>;
-      startShareManager(): Promise<void>;
-      startServiceHost(): Promise<void>;
+      checkForUpdates(): Promise<void>;
+      checkForMissedMessages(): Promise<void>;
       GlobalLoadIndicator(caption?: string, pid?: number): Promise<{
           caption: ReadableStore<string>;
           stop: () => Promise<void>;
       }>;
-      uninstallAppWithAck(app: App): Promise<boolean>;
-      getPublicUserInfoOf(userId: string): Promise<PublicUserInfo | undefined>;
-      getAppIcon(app: App, workingDirectory?: string): string;
-      getAppIconByProcess(process: AppProcess): string;
+      Confirm(title: string, message: string, no: string, yes: string, image?: string, pid?: number): Promise<unknown>;
+      TerminalWindow(pid?: number): Promise<ExpandedTerminal | undefined>;
+      IconPicker(data: Omit<IconPickerData, "returnId">): Promise<string | undefined>;
+      ParentIs(proc: AppProcess, appId: string): boolean | undefined;
       safeModeNotice(): void;
       iHaveFeedback(process: AppProcess): void;
-      activateGlobalDispatch(): Promise<void>;
       changeShell(id: string): Promise<false | undefined>;
-      Confirm(title: string, message: string, no: string, yes: string, image?: string, pid?: number): Promise<unknown>;
-      enableThirdParty(): Promise<void>;
-      disableThirdParty(): Promise<void>;
-      pinApp(appId: string): Promise<void>;
-      unpinApp(appId: string): void;
-      startAnchorRedirectionIntercept(): void;
-      checkForUpdates(): Promise<void>;
-      checkForMissedMessages(): Promise<void>;
-      deleteAccount(): Promise<void>;
       waitForLeaveInvocationAllow(): Promise<void>;
-      migrateFilesystemLayout(): Promise<void>;
-      updateAppShortcutsDir(): Promise<void>;
+      updateFileAssociations(): Promise<void>;
+      checkNightly(): void;
   }
 
   export const installArcPkg: (d: UserDaemon) => FileHandler;
@@ -5403,8 +4336,6 @@ declare global {
   };
 
   export const TimeFrames: Record<string, string>;
-
-  export const DefaultMimeIcons: Record<string, string[]>;
 
   export const BlankUserTheme: UserTheme;
 
@@ -5468,6 +4399,7 @@ declare global {
       Migrations: string;
       Configuration: string;
       AppShortcuts: string;
+      AppRepository: string;
   };
 
   export const SystemFolders: string[];
@@ -5486,8 +4418,14 @@ declare global {
 
   export class ArcFindRuntime extends AppProcess {
       private fileSystemIndex;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData);
+      private searchItems;
+      loading: ReadableStore<boolean>;
+      constructor(pid: number, parentPid: number, app: AppProcessData);
       start(): Promise<void>;
+      refresh(): Promise<SearchItem[] | undefined>;
+      getFilesystemSearchSupplier(preferences: UserPreferences): Promise<SearchItem[]>;
+      getAppSearchSupplier(preferences: UserPreferences): Promise<SearchItem[]>;
+      getFlatTree(): Promise<PathedFileEntry[]>;
       Search(query: string): Promise<{
           id: string;
           item: SearchItem;
@@ -5495,9 +4433,17 @@ declare global {
           score?: number;
           matches?: ReadonlyArray<FuseResultMatch>;
       }[]>;
-      getFilesystemSearchSupplier(preferences: UserPreferences): Promise<SearchItem[]>;
-      getAppSearchSupplier(preferences: UserPreferences): Promise<SearchItem[]>;
-      getFlatTree(): Promise<PathedFileEntry[]>;
+  }
+
+  export class TrayHostRuntime extends Process {
+      userDaemon: UserDaemon | undefined;
+      userPreferences?: UserPreferencesStore;
+      trayIcons: ReadableStore<Record<`${number}#${string}`, TrayIconProcess>>;
+      constructor(pid: number, parentPid: number, _: AppProcessData);
+      start(): Promise<false | undefined>;
+      createTrayIcon(pid: number, identifier: string, options: TrayIconOptions, process?: typeof TrayIconProcess): Promise<boolean>;
+      disposeTrayIcon(pid: number, identifier: string): Promise<false | undefined>;
+      disposeProcessTrayIcons(pid: number): void;
   }
 
   export function ShellContextMenu(runtime: ShellRuntime): AppContextMenu;
@@ -5517,26 +4463,50 @@ declare global {
       searchResults: ReadableStore<FuseResult<SearchItem>[]>;
       searching: ReadableStore<boolean>;
       SelectionIndex: ReadableStore<number>;
-      FullscreenCount: ReadableStore<Record<string, number>>;
+      FullscreenCount: ReadableStore<Record<string, Set<number>>>;
       openedTrayPopup: ReadableStore<string>;
+      searchLoading: ReadableStore<boolean>;
       trayHost?: TrayHostRuntime;
       arcFind?: ArcFindRuntime;
       ready: ReadableStore<boolean>;
       contextMenu: AppContextMenu;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData);
+      constructor(pid: number, parentPid: number, app: AppProcessData);
       start(): Promise<void>;
-      gotReadySignal(): Promise<void>;
       render(): Promise<void>;
-      getWeather(): Promise<WeatherInformation>;
+      stop(): Promise<boolean>;
+      gotReadySignal(): Promise<void>;
       pinApp(appId: string): Promise<void>;
       unpinApp(appId: string): void;
       deleteWorkspace(workspace: Workspace): Promise<void>;
       MutateIndex(e: KeyboardEvent): void | -1;
       Trigger(result: SearchItem): Promise<void>;
       Submit(): void;
+      getWeather(): Promise<WeatherInformation>;
       exit(): Promise<void>;
-      stop(): Promise<boolean>;
   }
+
+  export interface TypedProcess {
+      start?: () => any;
+      stop?: () => any;
+      killSelf: () => Promise<boolean>;
+      pid: number;
+      parentPid?: number;
+      name: string;
+      _disposed: boolean;
+      _criticalProcess: boolean;
+  }
+
+  export interface ProcessContext {
+      pid: number;
+      userId: string | "SYSTEM";
+      appId?: string;
+  }
+
+  export type RenderArgs = Record<string, any>;
+
+  export type ProcessSpawnResult = "success" | "err_disabled" | "err_aboveLimit";
+
+  export type ProcessKillResult = "success" | "err_elevation" | "err_criticalProcess" | "err_disposed" | "err_noExist" | "err_killCancel";
 
   export class AppLoadError extends Error {
       name: string;
@@ -5563,7 +4533,7 @@ declare global {
       componentMount: Record<string, any>;
       userPreferences: ReadableStore<UserPreferences>;
       username: string;
-      systemDispatch: SystemDispatch;
+      systemDispatch: SystemDispatchType;
       userDaemon: UserDaemon | undefined;
       shell: ShellRuntime | undefined;
       overridePopulatable: boolean;
@@ -5576,12 +4546,12 @@ declare global {
       altMenu: ReadableStore<ContextMenuItem[]>;
       windowFullscreen: ReadableStore<boolean>;
       draggable: Draggable | undefined;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, ...args: any[]);
+      constructor(pid: number, parentPid: number, app: AppProcessData, ...args: any[]);
       onClose(): Promise<boolean>;
-      closeWindow(kill?: boolean): Promise<void>;
-      CrashDetection(): Promise<void>;
+      closeWindow(kill?: boolean): Promise<boolean | void>;
       render(args: RenderArgs): any;
       __render__(body: HTMLDivElement): Promise<void>;
+      CrashDetection(): Promise<void>;
       getSingleton(): AppProcess[];
       closeIfSecondInstance(): Promise<AppProcess | undefined>;
       getWindow(): HTMLDivElement;
@@ -5598,6 +4568,33 @@ declare global {
       elevate(id: string): Promise<unknown>;
       notImplemented(what?: string): void;
       appStore(): ApplicationStorage;
+      getIcon(id: string): Promise<string>;
+      getIconCached(id: string): string;
+      getIconStore(id: string): ReadableStore<string>;
+  }
+
+  export function WindowSystemContextMenu(runtime: ContextMenuRuntime): AppContextMenu;
+
+  export class ContextMenuRuntime extends AppProcess {
+      contextData: ReadableStore<ContextMenuInstance | null>;
+      CLICKLOCKED: boolean;
+      contextProps: Record<string, any[]>;
+      currentMenu: ReadableStore<string>;
+      private readonly validContexMenuTags;
+      constructor(pid: number, parentPid: number, app: AppProcessData);
+      start(): Promise<false | undefined>;
+      render(): Promise<void>;
+      assignContextMenuHooks(): void;
+      createContextMenu(data: ContextMenuInstance): Promise<void>;
+      closeContextMenu(): void;
+      handleContext(e: MouseEvent): Promise<void>;
+      getWindowByEventTarget(target: EventTarget[]): HTMLDivElement | null;
+      getContextEntry(pid: number, scope: string): ContextMenuItem[];
+      getContextMenuScope(e: MouseEvent): HTMLDivElement | null;
+      composePosition(x: number, y: number, mW: number, mH: number): [
+          number,
+          number
+      ];
   }
 
   export class AppRenderer extends Process {
@@ -5606,10 +4603,10 @@ declare global {
       maxZIndex: number;
       focusedPid: ReadableStore<number>;
       appStore: ReadableStore<Map<string, AppProcessData>>;
-      defaultApps: AppStorage;
       lastInteract?: AppProcess;
       _criticalProcess: boolean;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, target: string);
+      constructor(pid: number, parentPid: number, target: string);
+      protected start(): Promise<void>;
       disposedCheck(): void;
       render(process: AppProcess, renderTarget: HTMLDivElement | undefined): Promise<void>;
       _windowClasses(proc: AppProcess, window: HTMLDivElement, data: App): void;
@@ -5629,7 +4626,382 @@ declare global {
       toggleFullscreen(pid: number): void;
       getAppInstances(id: string, originPid?: number): AppProcess[];
       notifyCrash(data: App, e: Error, process?: AppProcess): Promise<void>;
-      protected start(): Promise<void>;
+  }
+
+  export type AppModuleLoader = () => Promise<{
+      default: App;
+  }>;
+
+  export interface State {
+      render?: (props: Record<string, any>, accessors: StateRendererAccessors) => Promise<any>;
+      appModule?: AppModuleLoader;
+      html?: string;
+      name: string;
+      identifier: string;
+  }
+
+  export interface StateRendererAccessors {
+      state: StateHandler;
+  }
+
+  export type StateProps = Record<string, any>;
+
+  export class StateError extends Error {
+      name: string;
+      constructor(message: string);
+  }
+
+  export default function TurnedOff(): Promise<void>;
+
+  export class TerminalMode extends Process {
+      userDaemon?: UserDaemon;
+      target: HTMLDivElement;
+      term?: Terminal;
+      rl?: Readline;
+      arcTerm?: ArcTerminal;
+      constructor(pid: number, parentPid: number, target: HTMLDivElement);
+      start(): Promise<boolean | undefined>;
+      initializeTerminal(): Promise<void>;
+      proceed(username: string, password: string): Promise<boolean>;
+      startDaemon(token: string, username: string): Promise<boolean>;
+      private loadToken;
+      private validateUserToken;
+      resetCookies(): void;
+      loginPrompt(): Promise<boolean>;
+      private saveToken;
+      askForTotp(token: string): Promise<boolean>;
+  }
+
+  export default function render(_: StateProps): Promise<void>;
+
+  export default function render(props: StateProps): Promise<void>;
+
+  export default function render(props: StateProps): Promise<void>;
+
+  export default function render(props: StateProps): Promise<void>;
+
+  export default function render(): Promise<void>;
+
+  export const States: Record<string, State>;
+
+  export class StateHandler extends Process {
+      store: Record<string, State>;
+      currentState: string;
+      stateProps: Record<string, Record<any, any>>;
+      stateAppProcess: AppProcess | undefined;
+      _criticalProcess: boolean;
+      constructor(pid: number, parentPid: number, instanceName: string, store?: Record<string, State>);
+      start(): Promise<void>;
+      protected stop(): Promise<any>;
+      loadState(id: string, props?: Record<string, any>, instant?: boolean): Promise<void>;
+      loadStateNormally(id: string, data: State, htmlLoader: HTMLDivElement, cssLoader: HTMLLinkElement): Promise<void>;
+      loadStateAsApp(data: State, props: Record<string, any>): Promise<void>;
+      getStateLoaders(): {
+          htmlLoader: HTMLDivElement;
+          cssLoader: HTMLLinkElement;
+          main: HTMLDivElement;
+      };
+  }
+
+  export type ConstructedWaveKernel = {
+      modules: string[];
+      Logs: LogItem[];
+      PANICKED: boolean;
+      startMs: number;
+      init: Process | undefined;
+      state: StateHandler | undefined;
+      initPid: number;
+      params: URLSearchParams;
+      ARCOS_MODE: string;
+      ARCOS_BUILD: string;
+      ARCOS_LICENSE: string;
+      PREMATURE: boolean;
+      _init(): Promise<void>;
+      getModule<T = any>(id: string, dontCrash?: boolean): T;
+      Log(source: string, message: string, level?: LogLevel): void;
+      panic(reason: string): Promise<void>;
+  };
+
+  export interface EnvironmentType {
+      _init(): Promise<void>;
+      set(key: string, value: any): boolean;
+      setMultiple(entries: [
+          string,
+          any
+      ][]): void;
+      delete(key: string): boolean;
+      get(key: string): any;
+      getMultiple(keys: string[]): any[];
+      setReadonly(key: string): void;
+      setWritable(key: string): void;
+      reset(): void;
+  }
+
+  export interface ServerManagerType {
+      url: string;
+      connected: boolean;
+      serverInfo: ServerInfo | undefined;
+      checkUsernameAvailability(username: string): Promise<boolean>;
+      checkEmailAvailability(email: string): Promise<boolean>;
+      _init(): Promise<void>;
+  }
+
+  export interface FilesystemType {
+      drives: Record<string, FilesystemDrive>;
+      _init(): Promise<void>;
+      getDriveById(id: string): FilesystemDrive;
+      mountDrive<T = FilesystemDrive>(id: string, supplier: typeof FilesystemDrive, letter?: string, onProgress?: FilesystemProgressCallback, ...args: any[]): Promise<T | false>;
+      getDriveIdByIdentifier(identifier: string): string;
+      umountDrive(id: string, fromSystem?: boolean, onProgress?: FilesystemProgressCallback): Promise<boolean>;
+      getDriveByLetter(letter: string, error?: boolean): FilesystemDrive;
+      getDriveIdentifier(path: string): string;
+      getDriveByPath(path: string): FilesystemDrive;
+      validatePath(p: string): void;
+      removeDriveLetter(p: string): string;
+      validateDriveLetter(letter: string): void;
+      readDir(path: string): Promise<DirectoryReadReturn | undefined>;
+      bulk<T = any>(path: string, extension: string): Promise<Record<string, T>>;
+      createDirectory(path: string, dispatch?: boolean): Promise<boolean>;
+      readFile(path: string, onProgress?: FilesystemProgressCallback): Promise<ArrayBuffer | undefined>;
+      writeFile(path: string, data: Blob, onProgress?: FilesystemProgressCallback, dispatch?: boolean): Promise<boolean>;
+      tree(path: string): Promise<RecursiveDirectoryReadReturn | undefined>;
+      copyItem(source: string, destination: string, dispatch?: boolean, onProgress?: FilesystemProgressCallback): Promise<boolean>;
+      moveItem(source: string, destination: string, dispatch?: boolean, onProgress?: FilesystemProgressCallback): Promise<boolean>;
+      deleteItem(path: string, dispatch?: boolean): Promise<boolean>;
+      uploadFiles(target: string, accept?: string, multiple?: boolean, onProgress?: FilesystemProgressCallback): Promise<UploadReturn>;
+      defaultProgress(d: FilesystemProgress): void;
+      lockFile(path: string, pid: number): Promise<void>;
+      releaseLock(path: string, pid: number): Promise<void>;
+      direct(path: string): Promise<string | undefined>;
+      nextAvailableDriveLetter(): string | undefined;
+      isDirectory(path: string): Promise<false | DirectoryReadReturn | undefined>;
+      stat(path: string): Promise<ExtendedStat | undefined>;
+      imageThumbnail(path: string, width: number, height?: number): Promise<string | undefined>;
+  }
+
+  export interface BugHuntType {
+      _init(): Promise<void>;
+      createReport(options?: ReportOptions): OutgoingBugReport;
+      sendReport(outgoing: OutgoingBugReport, token?: string, options?: ReportOptions): Promise<boolean>;
+      getToken(): string;
+      getUserBugReports(token: string): Promise<BugReport[]>;
+      getPublicBugReports(): Promise<BugReport[]>;
+      server: ServerManagerType;
+      env: EnvironmentType;
+      handler: ProcessHandlerType;
+  }
+
+  export interface ProcessHandlerType {
+      BUSY: boolean;
+      store: ReadableStore<Map<number, Process>>;
+      rendererPid: number;
+      renderer: AppRenderer | undefined;
+      env: EnvironmentType;
+      dispatch: SystemDispatchType;
+      _init(): Promise<void>;
+      startRenderer(initPid: number): Promise<void>;
+      spawn<T = Process>(process: typeof Process, renderTarget?: HTMLDivElement | undefined, userId?: string, parentPid?: number | undefined, ...args: any[]): Promise<T | undefined>;
+      kill(pid: number, force?: boolean): Promise<ProcessKillResult>;
+      _killSubProceses(pid: number, force?: boolean): Promise<void>;
+      getSubProcesses(parentPid: number): Map<number, Process>;
+      getProcess<T = Process>(pid: number, disposedToo?: boolean): T | undefined;
+      getPid(): number;
+      isPid(pid: number): boolean;
+      ConnectDispatch(pid: number): ProcessDispatch | undefined;
+      waitForAvailable(): Promise<void>;
+      getProcessContext(pid: number): ProcessContext | undefined;
+  }
+
+  export interface SystemDispatchType {
+      subscribers: Record<string, Record<number, (data: any) => void>>;
+      subscribe<T = any[]>(event: string, callback: (data: T) => void): number;
+      unsubscribeId(event: string, id: number): void;
+      discardEvent(event: string): void;
+      dispatch<T = any[]>(caller: string, data?: T, system?: boolean): SystemDispatchResult;
+  }
+
+  export interface SoundbusType {
+      playSound(id: string, volume?: number): boolean | undefined;
+      stopSound(id: string): boolean;
+      getStore(): [
+          string,
+          string
+      ][];
+      loadExternal(source: string, play?: boolean): void;
+  }
+
+  export const ArcOSVersion = "7.0.7";
+
+  export const BETA = false;
+
+  export const USERFS_UUID = "233D-CE74-18C0-0B08";
+
+  export let CurrentKernel: ConstructedWaveKernel | undefined;
+
+  export function SetCurrentKernel(kernel: ConstructedWaveKernel): void;
+
+  export const Kernel: () => ConstructedWaveKernel | undefined;
+
+  export const KernelStack: () => ProcessHandlerType;
+
+  export function getKMod<T = any>(id: string, dontCrash?: boolean): T;
+
+  export class changeLogs {
+      private CHANGELOG_URL;
+      ChangeLogUrls: Record<string, string>;
+      ChangeLogCache: Record<string, string>;
+      refreshChangelogs(): Promise<false | undefined>;
+      parseChangeLogsRepoFile(input: string): Record<string, string>;
+      readChangelog(version: string): Promise<string | undefined>;
+  }
+
+  export const ChangeLogs: changeLogs;
+
+  export function getLicense(): Promise<void>;
+
+  export const ArcLicense: () => string;
+
+  export function Crash(reason: ErrorEvent | PromiseRejectionEvent): void;
+
+  export function handleGlobalErrors(): void;
+
+  export function interceptTpaErrors(stack: string, e: Error): boolean;
+
+  export class InitProcess extends Process {
+      constructor(pid: number, parentPid?: undefined);
+      stop(): Promise<void>;
+      jumpstart(): Promise<void>;
+      initializeTempFs(): Promise<void>;
+      nightly(): void;
+  }
+
+  export class KernelModule {
+      protected readonly IS_KMOD = true;
+      id: string;
+      protected state?: StateHandler;
+      constructor(kernel: ConstructedWaveKernel, id: string);
+      _init(): Promise<void>;
+      __init(): Promise<void>;
+      protected Log(message: string, level?: LogLevel): void;
+      isKmod(): void;
+  }
+
+  export const defaultReportOptions: ReportOptions;
+
+  export class BugHunt extends KernelModule {
+      server: ServerManagerType;
+      env: EnvironmentType;
+      constructor(kernel: ConstructedWaveKernel, id: string);
+      _init(): Promise<void>;
+      createReport(options?: ReportOptions): OutgoingBugReport;
+      sendReport(outgoing: OutgoingBugReport, token?: string, options?: ReportOptions): Promise<boolean>;
+      getToken(): string;
+      getUserBugReports(token: string): Promise<BugReport[]>;
+      getPublicBugReports(): Promise<BugReport[]>;
+  }
+
+  export const SystemOnlyDispatches: string[];
+
+  export const KnownSystemDispatchers: string[];
+
+  export class SystemDispatch extends KernelModule {
+      subscribers: Record<string, Record<number, (data: any) => void>>;
+      constructor(kernel: ConstructedWaveKernel, id: string);
+      subscribe<T = any[]>(event: string, callback: (data: T) => void): number;
+      unsubscribeId(event: string, id: number): void;
+      discardEvent(event: string): void;
+      dispatch<T = any[]>(caller: string, data?: T, system?: boolean): SystemDispatchResult;
+  }
+
+  export class Filesystem extends KernelModule {
+      private dispatch;
+      drives: Record<string, FilesystemDrive>;
+      constructor(kernel: ConstructedWaveKernel, id: string);
+      _init(): Promise<void>;
+      getDriveById(id: string): FilesystemDrive;
+      mountDrive<T = FilesystemDrive>(id: string, supplier: typeof FilesystemDrive, letter?: string, onProgress?: FilesystemProgressCallback, ...args: any[]): Promise<T | false>;
+      getDriveIdByIdentifier(identifier: string): string;
+      umountDrive(id: string, fromSystem?: boolean, onProgress?: FilesystemProgressCallback): Promise<boolean>;
+      getDriveByLetter(letter: string, error?: boolean): FilesystemDrive;
+      getDriveIdentifier(path: string): string;
+      getDriveByPath(path: string): FilesystemDrive;
+      validatePath(p: string): void;
+      removeDriveLetter(p: string): string;
+      validateDriveLetter(letter: string): void;
+      readDir(path: string): Promise<DirectoryReadReturn | undefined>;
+      bulk<T = any>(path: string, extension: string): Promise<Record<string, T>>;
+      createDirectory(path: string, dispatch?: boolean): Promise<boolean>;
+      readFile(path: string, onProgress?: FilesystemProgressCallback): Promise<ArrayBuffer | undefined>;
+      writeFile(path: string, data: Blob, onProgress?: FilesystemProgressCallback, dispatch?: boolean): Promise<boolean>;
+      tree(path: string): Promise<RecursiveDirectoryReadReturn | undefined>;
+      copyItem(source: string, destination: string, dispatch?: boolean, onProgress?: FilesystemProgressCallback): Promise<boolean>;
+      moveItem(source: string, destination: string, dispatch?: boolean, onProgress?: FilesystemProgressCallback): Promise<boolean>;
+      deleteItem(path: string, dispatch?: boolean): Promise<boolean>;
+      uploadFiles(target: string, accept?: string, multiple?: boolean, onProgress?: FilesystemProgressCallback): Promise<UploadReturn>;
+      defaultProgress(d: FilesystemProgress): void;
+      lockFile(path: string, pid: number): Promise<void>;
+      releaseLock(path: string, pid: number): Promise<void>;
+      direct(path: string): Promise<string | undefined>;
+      nextAvailableDriveLetter(): string | undefined;
+      isDirectory(path: string): Promise<false | DirectoryReadReturn | undefined>;
+      stat(path: string): Promise<ExtendedStat | undefined>;
+      imageThumbnail(path: string, width: number, height?: number): Promise<string | undefined>;
+  }
+
+  export type SoundStore = Record<string, any>;
+
+  export type SoundBusStore = {
+      [key: string]: HTMLAudioElement[];
+  };
+
+  export const ArcSounds: SoundStore;
+
+  export class SoundBus extends KernelModule {
+      private store;
+      private _bus;
+      private env;
+      constructor(kernel: ConstructedWaveKernel, id: string);
+      playSound(id: string, volume?: number): boolean | undefined;
+      stopSound(id: string): boolean;
+      getStore(): [
+          string,
+          string
+      ][];
+      loadExternal(source: string, play?: boolean): void;
+  }
+
+  export class Environment extends KernelModule {
+      private store;
+      private readOnlyValues;
+      constructor(kernel: ConstructedWaveKernel, id: string);
+      _init(): Promise<void>;
+      set(key: string, value: any): boolean;
+      setMultiple(entries: [
+          string,
+          any
+      ][]): void;
+      delete(key: string): boolean;
+      get(key: string): any;
+      getMultiple(keys: string[]): any[];
+      setReadonly(key: string): void;
+      setWritable(key: string): void;
+      reset(): void;
+  }
+
+  export const VALIDATION_STR = "thisWonderfulArcOSServerIdentifiedByTheseWordsPleaseDontSteal(c)IzKuipers";
+
+  export class ServerManager extends KernelModule {
+      url: string;
+      connected: boolean;
+      serverInfo: ServerInfo | undefined;
+      static isConnected(): boolean;
+      static url(): string | undefined;
+      constructor(kernel: ConstructedWaveKernel, id: string);
+      _init(): Promise<void>;
+      private getServerUrl;
+      private testConnection;
+      checkUsernameAvailability(username: string): Promise<boolean>;
+      checkEmailAvailability(email: string): Promise<boolean>;
   }
 
   export class ProcessHandler extends KernelModule {
@@ -5638,14 +5010,17 @@ declare global {
       store: ReadableStore<Map<number, Process>>;
       rendererPid: number;
       renderer: AppRenderer | undefined;
-      env: Environment;
-      dispatch: SystemDispatch;
-      constructor(kernel: WaveKernel, id: string);
-      _init(): Promise<void>;
+      env: EnvironmentType;
+      dispatch: SystemDispatchType;
+      processContexts: Map<number, ProcessContext>;
+      constructor(kernel: ConstructedWaveKernel, id: string);
       startRenderer(initPid: number): Promise<void>;
       private makeBusy;
       private makeNotBusy;
-      spawn<T = Process>(process: typeof Process, renderTarget?: HTMLDivElement | undefined, parentPid?: number | undefined, ...args: any[]): Promise<T | undefined>;
+      spawn<T = Process>(process: typeof Process, renderTarget: HTMLDivElement | undefined, userId: string | undefined, parentPid?: number | undefined, ...args: any[]): Promise<T | undefined>;
+      getProcessContext(pid: number): ProcessContext | undefined;
+      setProcessContext(pid: number, context: ProcessContext): void;
+      updateProcessContext(pid: number, cb: (context: ProcessContext) => ProcessContext): Promise<false | undefined>;
       kill(pid: number, force?: boolean): Promise<ProcessKillResult>;
       _killSubProceses(pid: number, force?: boolean): Promise<void>;
       getSubProcesses(parentPid: number): Map<number, Process>;
@@ -5656,52 +5031,659 @@ declare global {
       waitForAvailable(): Promise<void>;
   }
 
-  export const defaultReportOptions: ReportOptions;
+  export const KernelModules: Record<string, any>;
 
-  export class BugHunt extends KernelModule {
-      server: ServerManager;
-      env: Environment;
-      handler: ProcessHandler;
-      constructor(kernel: WaveKernel, id: string);
+  export function prematurePanic(): void;
+
+  export class WaveKernel {
+      modules: string[];
+      PANICKED: boolean;
+      Logs: LogItem[];
+      startMs: number;
+      init: InitProcess | undefined;
+      state: StateHandler | undefined;
+      initPid: number;
+      params: URLSearchParams;
+      ARCOS_MODE: string;
+      ARCOS_BUILD: string;
+      ARCOS_LICENSE: string;
+      PREMATURE: boolean;
+      constructor();
+      panic(reason: string): Promise<void>;
       _init(): Promise<void>;
-      createReport(options?: ReportOptions): OutgoingBugReport;
-      sendReport(outgoing: OutgoingBugReport, token?: string, options?: ReportOptions): Promise<boolean>;
-      getToken(): string;
-      getUserBugReports(token: string): Promise<BugReport[]>;
-      getPublicBugReports(): Promise<BugReport[]>;
+      getModule<T = any>(id: string, dontCrash?: boolean): T;
+      private _kernelModules;
+      Log(source: string, message: string, level?: LogLevel): void;
   }
 
-  export function Crash(reason: ErrorEvent | PromiseRejectionEvent): void;
+  export const ArcOSApp: App;
 
-  export function handleGlobalErrors(): void;
+  export function stringifyLogs(logs: LogItem[]): string;
 
-  export function interceptTpaErrors(stack: string, e: Error): boolean;
+  export function getReportIcon(report: BugReport): string;
 
-  export interface State {
-      render?: (props: Record<string, any>, accessors: StateRendererAccessors) => Promise<any>;
-      app?: App;
-      html?: string;
+  export class AcceleratorOverviewRuntime extends AppProcess {
+      KnownAcceleratorKeys: string[];
+      store: ReadableStore<[
+          string,
+          [
+              string[],
+              string
+          ][]
+      ][]>;
+      apps: ReadableStore<AppStorage>;
+      constructor(pid: number, parentPid: number, app: AppProcessData);
+      render(): Promise<void>;
+      splitAcceleratorString(accelerator: string): string[];
+  }
+
+  export const AcceleratorOverviewApp: App;
+
+  export class AppInfoRuntime extends AppProcess {
+      targetApp: ReadableStore<App>;
+      targetAppId: string;
+      constructor(pid: number, parentPid: number, app: AppProcessData, appId: string);
+      start(): Promise<false | undefined>;
+      render(): Promise<void>;
+      killAll(): Promise<void>;
+      processManager(): Promise<void>;
+  }
+
+  export const AppInfoApp: App;
+
+  export class AppInstallerRuntime extends AppProcess {
+      progress?: InstallerProcess;
+      metadata?: ArcPackage;
+      zip?: JSZip;
+      constructor(pid: number, parentPid: number, app: AppProcessData, metadata: ReadableStore<ArcPackage>, zip: JSZip);
+      start(): Promise<false | undefined>;
+      render(): Promise<void>;
+      revert(): Promise<void>;
+      runNow(): void;
+      go(): Promise<void>;
+  }
+
+  export const AppInstallerApp: App;
+
+  export type InstallStatusType = "mkdir" | "file" | "registration" | "other";
+
+  export type InstallStatusMode = "done" | "failed" | "working";
+
+  export interface InstallStatusItem {
+      type: InstallStatusType;
+      status: InstallStatusMode;
+      content: string;
+  }
+
+  export type InstallStatus = Record<string, InstallStatusItem>;
+
+  export class AppPreInstallRuntime extends AppProcess {
+      pkgPath: string;
+      zip: JSZip | undefined;
+      metadata: ReadableStore<ArcPackage>;
+      constructor(pid: number, parentPid: number, app: AppProcessData, pkgPath: string);
+      start(): Promise<false | undefined>;
+      render(): Promise<void>;
+      fail(reason: string): void;
+      install(): Promise<void>;
+  }
+
+  export const AppPreinstallApp: App;
+
+  export const ArcFind: App;
+
+  export const ContextMenuApp: App;
+
+  export class DriveInfoRuntime extends AppProcess {
+      drive?: FilesystemDrive;
+      isUserFs: boolean;
+      usage?: CategorizedDiskUsage;
+      quota?: UserQuota;
+      constructor(pid: number, parentPid: number, app: AppProcessData, drive: FilesystemDrive);
+      start(): Promise<false | undefined>;
+  }
+
+  export const DriveInfoApp: App;
+
+  export interface ExitAction {
+      caption: string;
+      action: (daemon: UserDaemon) => void;
+      alternateAction?: (daemon: UserDaemon) => void;
+      icon: string;
+  }
+
+  export const ExitActions: Record<string, ExitAction>;
+
+  export class ExitRuntime extends AppProcess {
+      selected: ReadableStore<string>;
+      constructor(pid: number, parentPid: number, app: AppProcessData, selected?: string);
+      go(action: ExitAction | undefined, alternate?: boolean): Promise<void>;
+  }
+
+  export const ExitApp: App;
+
+  export const ChooseProfilePictureApp: App;
+
+  export interface FirstRunPage {
       name: string;
-      identifier: string;
+      component: any;
+      hero?: boolean;
+      actions: {
+          left: Action[];
+          right: Action[];
+      };
   }
 
-  export interface StateRendererAccessors {
-      state: StateHandler;
-      kernel: WaveKernel;
-      stack: ProcessHandler;
+  export interface Action {
+      caption: string;
+      suggested?: boolean;
+      disabled?: boolean;
+      action: (process: FirstRunRuntime) => void;
   }
 
-  export type StateProps = Record<string, any>;
-
-  export class StateError extends Error {
+  export interface FirstRunTheme {
       name: string;
-      constructor(message: string);
+      subtitle: string;
+      image: string;
+      configuration: {
+          style: string;
+          wallpaper: string;
+          accent: string;
+      };
   }
+
+  export const FirstRunPages: Map<string, FirstRunPage>;
+
+  export const FirstRunThemes: Record<string, FirstRunTheme>;
+
+  export const FirstRunShortcuts: Record<string, ArcShortcut>;
+
+  export class FirstRunRuntime extends AppProcess {
+      done: ReadableStore<boolean>;
+      currentPage: ReadableStore<FirstRunPage>;
+      protected overlayStore: Record<string, App>;
+      constructor(pid: number, parentPid: number, app: AppProcessData, daemon: UserDaemon);
+      render(): Promise<void>;
+      onClose(): Promise<boolean>;
+      switchPage(id: string): void;
+      chooseProfilePicture(): void;
+  }
+
+  export const FirstRunApp: App;
+
+  export class NewFileRuntime extends AppProcess {
+      newFile: ReadableStore<string>;
+      path: string;
+      constructor(pid: number, parentPid: number, app: AppProcessData, path: string);
+      render(): void;
+      createFile(): Promise<void>;
+  }
+
+  export const FsNewFileApp: App;
+
+  export class NewFolderRuntime extends AppProcess {
+      newFolder: ReadableStore<string>;
+      path: string;
+      constructor(pid: number, parentPid: number, app: AppProcessData, path: string);
+      render(): void;
+      createFolder(): Promise<void>;
+  }
+
+  export const FsNewFolderApp: App;
+
+  export class FsProgressRuntime extends AppProcess {
+      Progress: ReadableStore<FsProgressOperation>;
+      constructor(pid: number, parentPid: number, app: AppProcessData, store: ReadableStore<FsProgressOperation>);
+      render({ store }: RenderArgs): Promise<boolean | void> | undefined;
+      onClose(): Promise<boolean>;
+  }
+
+  export const FsProgressApp: App;
+
+  export class FsProgressFailRuntime extends AppProcess {
+      prog?: FsProgressProc;
+      errors: string[];
+      icon: string;
+      title: string;
+      constructor(pid: number, parentPid: number, app: AppProcessData, prog: FsProgressProc);
+      start(): Promise<false | undefined>;
+  }
+
+  export const FsProgressFailApp: App;
+
+  export class RenameItemRuntime extends AppProcess {
+      newName: ReadableStore<string>;
+      parentDir: string;
+      path: string;
+      constructor(pid: number, parentPid: number, app: AppProcessData, path: string);
+      render(): void;
+      rename(): Promise<void>;
+  }
+
+  export const FsRenameItemApp: App;
+
+  export class IconEditDialogRuntime extends AppProcess {
+      store?: ReadableStore<Record<string, string>>;
+      id?: string;
+      type: ReadableStore<string>;
+      values: ReadableStore<Record<string, string>>;
+      currentIcon: ReadableStore<string>;
+      constructor(pid: number, parentPid: number, app: AppProcessData, store?: ReadableStore<Record<string, string>>, id?: string);
+      start(): Promise<false | undefined>;
+      updateCurrentIcon(type?: string, values?: Record<string, any>): Promise<void>;
+      default(): void;
+      save(): void;
+  }
+
+  export const IconEditDialogApp: App;
+
+  export class IconPickerRuntime extends AppProcess {
+      forWhat?: string;
+      defaultIcon?: string;
+      selected: ReadableStore<string>;
+      groups: Record<string, Record<string, string>>;
+      store: Record<string, string>;
+      returnId?: string;
+      constructor(pid: number, parentPid: number, app: AppProcessData, data: IconPickerData);
+      start(): Promise<false | undefined>;
+      confirm(): Promise<void>;
+      cancel(): Promise<void>;
+  }
+
+  export const IconPickerApp: App;
+
+  export const ICON_GROUP_CAPTIONS: {
+      Branding: string;
+      General: string;
+      Apps: string;
+      Filesystem: string;
+      Power: string;
+      Dialog: string;
+      Status: string;
+      Mimetypes: string;
+  };
+
+  export interface ItemInfo {
+      meta: {
+          sort: "file" | "folder";
+          mimetype?: string;
+          size?: number;
+          created: string;
+          modified: string;
+      };
+      location: {
+          fullPath: string;
+          extension?: string;
+          parent?: string;
+          drive?: string;
+          driveFs?: string;
+      };
+      isFolder: boolean;
+      isShortcut: boolean;
+      name: string;
+  }
+
+  export class ItemInfoRuntime extends AppProcess {
+      info: ReadableStore<ItemInfo>;
+      shortcut: ReadableStore<ArcShortcut>;
+      constructor(pid: number, parentPid: number, app: AppProcessData, path: string, file: FileEntry | FolderEntry);
+      start(): Promise<false | undefined>;
+      render({ path, file }: RenderArgs): Promise<void>;
+      open(): Promise<void>;
+      openWith(path: string): Promise<void>;
+      renameItem(): Promise<void>;
+  }
+
+  export const ItemInfoApp: App;
+
+  export interface Attachment {
+      data: File;
+      uuid: string;
+  }
+
+  export class MessageComposerRuntime extends AppProcess {
+      sending: ReadableStore<boolean>;
+      recipients: ReadableStore<string[]>;
+      attachments: ReadableStore<Attachment[]>;
+      title: ReadableStore<string>;
+      body: ReadableStore<string>;
+      replyId: string | undefined;
+      service: MessagingInterface;
+      constructor(pid: number, parentPid: number, app: AppProcessData, initialData?: MessageCreateData, replyId?: string);
+      send(): Promise<void>;
+      discard(): Promise<boolean | void>;
+      sendFailed(): void;
+      addAttachment(): Promise<void>;
+      filesToAttachments(...files: File[]): Attachment[];
+      removeAttachment(uuid: string): void;
+      removeRecipient(recipient: string): void;
+      isModified(): number;
+  }
+
+  export const MessageComposerApp: App;
+
+  export interface MultiUpdateStatusNode {
+      state: "pending" | "working" | "success" | "failed" | "downloading";
+      max: number;
+      done: number;
+      pkg: StoreItem;
+  }
+
+  export const StateIconTranslations: Record<string, string>;
+
+  export type MultiUpdateStatus = MultiUpdateStatusNode[];
+
+  export class MultiUpdateGuiRuntime extends AppProcess {
+      private updates;
+      private distrib;
+      private win;
+      status: ReadableStore<MultiUpdateStatus>;
+      currentPackage: ReadableStore<StoreItem | undefined>;
+      working: ReadableStore<boolean>;
+      done: ReadableStore<boolean>;
+      errored: ReadableStore<string[]>;
+      logs: ReadableStore<Record<string, InstallStatus>>;
+      focused: ReadableStore<string>;
+      showLog: ReadableStore<boolean>;
+      unified: ReadableStore<boolean>;
+      constructor(pid: number, parentPid: number, app: AppProcessData, updates: UpdateInfo[]);
+      start(): Promise<false | undefined>;
+      render(): Promise<void>;
+      onClose(): Promise<boolean>;
+      updatePackageStatus(appId: string, newData: Partial<MultiUpdateStatusNode>): void;
+      packageFailed(appId: string): void;
+      go(): Promise<void>;
+      checkForErrors(): void;
+      mainAction(): void;
+      toggleLog(): void;
+  }
+
+  export const MultiUpdateGuiApp: App;
+
+  export interface ParsedStackUrl {
+      userId?: string;
+      timestamp?: string;
+      appId?: string;
+      filename?: string;
+  }
+
+  export type ParsedStackFrame = StackFrame & {
+      parsed?: ParsedStackUrl;
+  };
+
+  export class OopsNotifierRuntime extends AppProcess {
+      data: App;
+      exception: Error | PromiseRejectionEvent;
+      process?: AppProcess;
+      installed: boolean;
+      parseFailed: boolean;
+      stackFrames: ParsedStackFrame[];
+      URL_REGEX: RegExp;
+      constructor(pid: number, parentPid: number, app: AppProcessData, data: App, exception: Error | PromiseRejectionEvent, process?: AppProcess);
+      start(): Promise<void>;
+      parseStack(): void;
+      details(): Promise<void>;
+      reopen(): Promise<void>;
+  }
+
+  export const OopsNotifierApp: App;
+
+  export class OopsStackTracerRuntime extends AppProcess {
+      data: App;
+      proc?: AppProcess;
+      exception: Error | PromiseRejectionEvent;
+      stackFrames: ParsedStackFrame[];
+      trace: string;
+      string: string;
+      constructor(pid: number, parentPid: number, app: AppProcessData, data: App, exception: Error | PromiseRejectionEvent, process: AppProcess | undefined, stackFrames: ParsedStackFrame[]);
+  }
+
+  export const OopsStackTracerApp: App;
+
+  export class OpenWithRuntime extends AppProcess {
+      available: ReadableStore<FileOpenerResult[]>;
+      all: ReadableStore<FileOpenerResult[]>;
+      apps: ReadableStore<FileOpenerResult[]>;
+      filename: ReadableStore<string>;
+      path: ReadableStore<string>;
+      selectedId: ReadableStore<string>;
+      viewMode: ReadableStore<"all" | "apps" | "compatible">;
+      constructor(pid: number, parentPid: number, app: AppProcessData, path: string);
+      start(): Promise<false | undefined>;
+      render({ path }: RenderArgs): Promise<void>;
+      go(id?: string): Promise<void>;
+  }
+
+  export const OpenWithApp: App;
+
+  export const ProcessKillResultCaptions: Record<ProcessKillResult, string>;
+
+  export class ProcessInfoRuntime extends AppProcess {
+      parent?: Process;
+      proc?: Process;
+      inherit?: typeof Process;
+      constructor(pid: number, parentPid: number, app: AppProcessData, proc: Process);
+      kill(proc: Process): Promise<void>;
+      killError(name: string, result: ProcessKillResult): void;
+  }
+
+  export const ProcessInfoApp: App;
+
+  export class SecureContextRuntime extends AppProcess {
+      private id;
+      private key;
+      data: ElevationData;
+      password: ReadableStore<string>;
+      loading: ReadableStore<boolean>;
+      constructor(pid: number, parentPid: number, app: AppProcessData, id: string, key: string, data: ElevationData);
+      start(): Promise<false | undefined>;
+      render(): Promise<void>;
+      validate(): Promise<boolean | undefined>;
+      approve(): Promise<void>;
+      deny(): Promise<void>;
+      passwordIncorrect(): Promise<void>;
+      settings(): Promise<void>;
+  }
+
+  export const SecureContextApp: App;
+
+  export const ElevationLevelIcons: Record<ElevationLevel, string>;
+
+  export class ServiceInfoRuntime extends AppProcess {
+      serviceId: string;
+      service: ReadableStore<Service | undefined>;
+      serviceProcess: ReadableStore<BaseService | undefined>;
+      serviceSubscriber?: Unsubscriber;
+      constructor(pid: number, parentPid: number, app: AppProcessData, serviceId: string);
+      start(): Promise<false | undefined>;
+      stop(): Promise<void>;
+      toggleRunningState(): Promise<void>;
+  }
+
+  export const ServiceInfoApp: App;
+
+  export class ShareConnGuiRuntime extends AppProcess {
+      shareUsername: ReadableStore<string>;
+      shareName: ReadableStore<string>;
+      sharePassword: ReadableStore<string>;
+      shares: ShareManager;
+      constructor(pid: number, parentPid: number, app: AppProcessData);
+      go(): Promise<void>;
+      myShares(): Promise<void>;
+  }
+
+  export const ShareConnGuiApp: App;
+
+  export class ShareCreateGuiRuntime extends AppProcess {
+      shareName: ReadableStore<string>;
+      sharePassword: ReadableStore<string>;
+      shares: ShareManager;
+      constructor(pid: number, parentPid: number, app: AppProcessData);
+      go(): Promise<void>;
+      myShares(): Promise<void>;
+  }
+
+  export const ShareCreateGuiApp: App;
+
+  export class ShareListGuiRuntime extends AppProcess {
+      ownedShares: ReadableStore<SharedDriveType[]>;
+      joinedShares: ReadableStore<SharedDriveType[]>;
+      selectedShare: ReadableStore<string>;
+      selectedIsOwn: ReadableStore<boolean>;
+      selectedIsMounted: ReadableStore<boolean>;
+      loading: ReadableStore<boolean>;
+      shares: ShareManager;
+      thisUserId: string;
+      constructor(pid: number, parentPid: number, app: AppProcessData);
+      start(): Promise<void>;
+      manageShare(): Promise<void>;
+      leaveShare(): Promise<void>;
+      mountShare(): Promise<void>;
+      openShare(): Promise<void>;
+      createShare(): Promise<void>;
+  }
+
+  export const ShareListGuiApp: App;
+
+  export class OverlayRuntime extends AppProcess {
+      parentProcess: ShareMgmtGuiRuntime;
+      constructor(pid: number, parentPid: number, app: AppProcessData);
+  }
+
+  export const ChangePasswordApp: App;
+
+  export const RenameShareApp: App;
+
+  export class ShareMgmtGuiRuntime extends AppProcess {
+      members: ReadableStore<Record<string, string>>;
+      info: SharedDriveType | undefined;
+      shares: ShareManager;
+      shareId: string;
+      selectedMember: ReadableStore<string>;
+      myShare: boolean;
+      protected overlayStore: Record<string, App>;
+      constructor(pid: number, parentPid: number, app: AppProcessData, shareId: string);
+      start(): Promise<any>;
+      updateMembers(): Promise<void>;
+      kickUser(id: string, username: string): Promise<void>;
+      deleteShare(): Promise<void>;
+  }
+
+  export const ShareMgmtGuiApp: App;
+
+  export const ArcShellApp: App;
+
+  export class ShellHostRuntime extends Process {
+      private autoloadApps;
+      readonly shellComponents: string[];
+      userDaemon: UserDaemon | undefined;
+      userPreferences: UserPreferencesStore;
+      constructor(pid: number, parentPid: number, _: AppProcessData, autoloadApps: string[]);
+      start(): Promise<false | undefined>;
+  }
+
+  export const ShellHostApp: App;
+
+  export class ShortcutPropertiesRuntime extends AppProcess {
+      shortcutData: ReadableStore<ArcShortcut>;
+      iconStore: Record<string, string>;
+      path?: string;
+      constructor(pid: number, parentPid: number, app: AppProcessData, path: string, data: ArcShortcut);
+      start(): Promise<false | undefined>;
+      save(): Promise<void>;
+      goTarget(): Promise<void>;
+      changeIcon(): Promise<void>;
+      pickTarget(): Promise<void>;
+  }
+
+  export const ShortcutPropertiesApp: App;
+
+  export class SystemShortcutsRuntime extends AppProcess {
+      constructor(pid: number, parentPid: number, app: AppProcessData);
+      start(): Promise<false | undefined>;
+      closeFocused(): Promise<void>;
+  }
+
+  export const SystemShortcuts: App;
+
+  export class TotpAuthGuiRuntime extends AppProcess {
+      private token;
+      private dispatchId;
+      constructor(pid: number, parentPid: number, app: AppProcessData, token: string, dispatchId: string);
+      render(args: RenderArgs): false | undefined;
+      validate(code: string): boolean;
+      verifyTotp(code: string): Promise<boolean>;
+      cantAccess(): void;
+      doDispatch(): Promise<void>;
+      cancel(): Promise<void>;
+  }
+
+  export const TotpAuthGuiApp: App;
+
+  export class TotpSetupGuiRuntime extends AppProcess {
+      code: ReadableStore<string>;
+      url: ReadableStore<string>;
+      constructor(pid: number, parentPid: number, app: AppProcessData);
+      render(): Promise<void>;
+      validate(): boolean;
+      activateTotp(): Promise<boolean>;
+  }
+
+  export const TotpSetupGuiApp: App;
+
+  export const TrayHost: App;
+
+  export class UpdateNotifierRuntime extends AppProcess {
+      constructor(pid: number, parentPid: number, app: AppProcessData);
+      start(): Promise<false | undefined>;
+      onClose(): Promise<boolean>;
+      updateFileDefinitions(): Promise<void>;
+  }
+
+  export const UpdateNotifierApp: App;
+
+  export interface DesktopIconPos {
+      x: number;
+      y: number;
+  }
+
+  export type DesktopIcons = Record<string, DesktopIconPos>;
+
+  export class WallpaperRuntime extends AppProcess {
+      CONFIG_PATH: string;
+      contents: ReadableStore<DirectoryReadReturn | undefined>;
+      selected: ReadableStore<string>;
+      shortcuts: ReadableStore<ShortcutStore>;
+      iconsElement: ReadableStore<HTMLDivElement>;
+      orphaned: ReadableStore<string[]>;
+      loading: ReadableStore<boolean>;
+      directory: string;
+      Configuration: ReadableStore<DesktopIcons>;
+      contextMenu: AppContextMenu;
+      constructor(pid: number, parentPid: number, app: AppProcessData, desktopDir?: string);
+      start(): Promise<void>;
+      render(): Promise<void>;
+      updateContents(): Promise<void>;
+      findAndDeleteOrphans(contents: DirectoryReadReturn | undefined): void;
+      findFreeDesktopIconPosition(identifier: string, wrapper?: HTMLDivElement): Promise<unknown> | {
+          x: number;
+          y: number;
+      };
+      deleteItem(path: string): Promise<void>;
+      uploadItems(): Promise<void>;
+      loadConfiguration(): Promise<DesktopIcons | undefined>;
+      writeConfiguration(data: DesktopIcons): Promise<DesktopIcons>;
+      migrateDesktopIcons(): Promise<boolean>;
+  }
+
+  export function WallpaperContextMenu(runtime: WallpaperRuntime): AppContextMenu;
+
+  export const WallpaperApp: App;
 
   export class BootScreenRuntime extends AppProcess {
       progress: ReadableStore<boolean>;
       status: ReadableStore<string>;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData);
+      constructor(pid: number, parentPid: number, app: AppProcessData);
       begin(): Promise<void>;
       startBooting(e?: KeyboardEvent): Promise<void>;
   }
@@ -5734,17 +5716,16 @@ declare global {
       actionsDisabled: ReadableStore<boolean>;
       showMainContent: ReadableStore<boolean>;
       displayName: ReadableStore<string>;
-      server: ServerManager;
-      private token;
+      server: ServerManagerType;
       readonly pages: LegacyComponentType[];
       readonly pageButtons: PageButtons;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData);
+      constructor(pid: number, parentPid: number, app: AppProcessData);
       render(): Promise<void>;
+      finish(): Promise<void>;
       licenseConfirmation(): Promise<void>;
       viewLicense(): Promise<void>;
       createAccount(): Promise<void>;
       checkAccountActivation(): Promise<void>;
-      finish(): Promise<void>;
   }
 
   export const InitialSetupWizard: App;
@@ -5778,19 +5759,23 @@ declare global {
       unexpectedInvocation: boolean;
       safeMode: boolean;
       private type;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, props?: LoginAppProps);
-      render(): Promise<void>;
-      proceed(username: string, password: string): Promise<void>;
+      constructor(pid: number, parentPid: number, app: AppProcessData, props?: LoginAppProps);
+      start(): Promise<void>;
+      stop(): Promise<void>;
+      render(): Promise<false | undefined>;
+      getWelcomeString(): string;
       startDaemon(token: string, username: string, info?: UserInfo): Promise<void>;
       logoff(daemon: UserDaemon): Promise<void>;
       shutdown(daemon?: UserDaemon): Promise<void>;
       restart(daemon?: UserDaemon): Promise<void>;
+      proceed(username: string, password: string): Promise<void>;
       private saveToken;
       private loadToken;
       private validateUserToken;
       resetCookies(): void;
       private askForTotp;
       firstRun(daemon: UserDaemon): Promise<void>;
+      createUser(): void;
       loadPersistence(): void;
       savePersistence(username: string, profilePicture: string, loginWallpaper?: string): void;
       deletePersistence(): void;
@@ -5798,494 +5783,846 @@ declare global {
 
   export const LoginApp: App;
 
-  export default function TurnedOff(): Promise<void>;
-
-  export class TerminalMode extends Process {
-      userDaemon?: UserDaemon;
-      target: HTMLDivElement;
-      term?: Terminal;
-      rl?: Readline;
-      arcTerm?: ArcTerminal;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, target: HTMLDivElement);
-      initializeTerminal(): Promise<void>;
-      proceed(username: string, password: string): Promise<boolean>;
-      start(): Promise<boolean | undefined>;
-      startDaemon(token: string, username: string): Promise<boolean>;
-      private loadToken;
-      private validateUserToken;
-      resetCookies(): void;
-      loginPrompt(): Promise<boolean>;
-      private saveToken;
-      askForTotp(token: string): Promise<boolean>;
+  export class AdvSysSetRuntime extends AppProcess {
+      currentTab: ReadableStore<string>;
+      tabs: Record<string, Component>;
+      preferencesBuffer: ReadableStore<UserPreferences>;
+      syncInitialized: boolean;
+      bufferInitialized: boolean;
+      bufferChanged: ReadableStore<boolean>;
+      displayingDesync: boolean;
+      preferencesSub?: Unsubscriber;
+      bufferSub?: Unsubscriber;
+      constructor(pid: number, parentPid: number, app: AppProcessData, tab?: string);
+      start(): Promise<false | undefined>;
+      apply(close?: boolean): void;
   }
 
-  export default function render(_: StateProps, { stack, kernel }: StateRendererAccessors): Promise<void>;
+  export const AdvSystemSettings: App;
 
-  export default function render(props: StateProps): Promise<void>;
-
-  export default function render(props: StateProps): Promise<void>;
-
-  export default function render(props: StateProps): Promise<void>;
-
-  export default function render(): Promise<void>;
-
-  export const States: Record<string, State>;
-
-  export class StateHandler extends Process {
-      store: Record<string, State>;
-      currentState: string;
-      stateProps: Record<string, Record<any, any>>;
-      stateAppProcess: AppProcess | undefined;
-      _criticalProcess: boolean;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, instanceName: string, store?: Record<string, State>);
-      start(): Promise<void>;
-      loadState(id: string, props?: Record<string, any>, instant?: boolean): Promise<void>;
-      loadStateNormally(id: string, data: State, htmlLoader: HTMLDivElement, cssLoader: HTMLLinkElement): Promise<void>;
-      loadStateAsApp(data: State, props: Record<string, any>): Promise<void>;
-      getStateLoaders(): {
-          htmlLoader: HTMLDivElement;
-          cssLoader: HTMLLinkElement;
-          main: HTMLDivElement;
-      };
-      protected stop(): Promise<any>;
+  export interface StorePage {
+      name: string;
+      icon: string;
+      content: Component<any>;
+      hidden?: boolean;
+      separator?: boolean;
+      props?: (process: AppStoreRuntime, props: Record<string, any>) => Promise<Record<string, any>>;
+      groupName?: string;
   }
 
-  export class InitProcess extends Process {
-      constructor(handler: ProcessHandler, pid: number, parentPid?: undefined);
-      stop(): Promise<void>;
-      jumpstart(): Promise<void>;
-      initializeTempFs(): Promise<void>;
+  export type StorePages = Map<string, StorePage>;
+
+  export const appStorePages: StorePages;
+
+  export class AppStoreRuntime extends AppProcess {
+      searchQuery: ReadableStore<string>;
+      loadingPage: ReadableStore<boolean>;
+      pageProps: ReadableStore<Record<string, any>>;
+      searching: ReadableStore<boolean>;
+      currentPage: ReadableStore<string>;
+      operations: Record<string, InstallerProcess>;
+      distrib: DistributionServiceProcess;
+      constructor(pid: number, parentPid: number, app: AppProcessData, page?: number, props?: Record<string, any>);
+      start(): Promise<false | undefined>;
+      render({ page, props }: {
+          page?: string;
+          props?: Record<string, any>;
+      }): Promise<false | undefined>;
+      switchPage(id: string, props?: Record<string, any>, force?: boolean): Promise<void>;
+      Search(): Promise<void>;
+      installPackage(pkg: StoreItem, onDownloadProgress?: FilesystemProgressCallback): Promise<false | 0 | InstallerProcess>;
+      updatePackage(pkg: StoreItem, onDownloadProgress?: FilesystemProgressCallback): Promise<false | 0 | InstallerProcess>;
+      deprecatePackage(pkg: StoreItem): Promise<false | undefined>;
+      deletePackage(pkg: StoreItem): Promise<false | undefined>;
+      publishPackage(): Promise<boolean | undefined>;
+      updateStoreItem(pkg: StoreItem): Promise<void>;
+      readmeFallback(pkg: StoreItem): string;
+      learnMoreBlocking(): void;
+      registerOperation(id: string, proc: InstallerProcess): boolean;
+      discardOperation(id: string): boolean;
+      getRunningOperation(pkg: StoreItem): InstallerProcess;
+      viewImage(url: string, name?: string): Promise<void>;
   }
 
-  export class ASTNode {
-      type: string;
-      value: any;
-      children: (ASTNode | null)[];
-      key: string;
-      constructor(type: string, value?: null, children?: (ASTNode | null)[]);
+  export const AppStoreApp: App;
+
+  export class ArcTermRuntime extends Process {
+      term: ArcTerminal | undefined;
+      path: string | undefined;
+      app: AppProcessData;
+      constructor(pid: number, parentPid: number, app: AppProcessData, path?: string);
+      protected start(): Promise<any>;
   }
 
-  export class LangError extends Error {
-      line: number | null;
-      column: number | null;
-      input: string;
-      constructor(message: string, line?: number | null, column?: number | null, input?: string);
-      toString(): string;
+  export const ArcTermApp: App;
+
+  export interface BugHuntCreatorOptions {
+      sendAnonymously: boolean;
+      excludeLogs: boolean;
+      makePublic: boolean;
   }
 
-  export class Token {
-      type: TokenType;
-      value: any;
-      constructor(type: TokenType, value: any);
+  export class BugHuntCreatorRuntime extends AppProcess {
+      parent: BugHuntProc | undefined;
+      title: ReadableStore<string>;
+      body: ReadableStore<string>;
+      loading: ReadableStore<boolean>;
+      overrideOptions: BugHuntCreatorOptions | undefined;
+      bughunt: BugHuntUserSpaceProcess;
+      constructor(pid: number, parentPid: number, app: AppProcessData, title?: string, body?: string, options?: BugHuntCreatorOptions);
+      Send(): Promise<void>;
+      dataPrivacy(): Promise<void>;
   }
 
-  export class Lexer {
-      input: string;
-      position: number;
-      line: number;
-      column: number;
-      currentChar: string | null;
-      constructor(input: string);
-      advance(): void;
-      skipWhitespace(): void;
-      skipComment(): void;
-      getNumber(): Token;
-      getString(): Token | undefined;
-      getIdentifier(): string;
-      getNextToken(): Token | undefined;
-      error(message: string): void;
+  export const BugReportsCreatorApp: App;
+
+  export const BugHuntAltMenu: (p: BugHuntRuntime) => ContextMenuItem[];
+
+  export class BugHuntUserDataRuntime extends AppProcess {
+      data: UserInfo;
+      hljs: HLJSApi;
+      html: string;
+      constructor(pid: number, parentPid: number, app: AppProcessData, data: UserInfo);
   }
 
-  export class Parser {
-      lexer: Lexer;
-      currentToken: Token | undefined;
-      constructor(lexer: Lexer);
-      eat(tokenType: string): void;
-      parse(): ASTNode;
-      program(): ASTNode;
-      declaration(): ASTNode;
-      statement(): ASTNode;
-      functionDeclaration(): ASTNode;
-      returnStatement(): ASTNode;
-      ifStatement(): ASTNode;
-      whileStatement(): ASTNode;
-      forStatement(): ASTNode;
-      blockStatement(): ASTNode;
-      assignmentStatement(): ASTNode | undefined;
-      expressionStatement(): ASTNode;
-      expression(): ASTNode;
-      logicalOr(): ASTNode;
-      logicalAnd(): ASTNode;
-      equality(): ASTNode;
-      relational(): ASTNode;
-      additive(): ASTNode;
-      multiplicative(): ASTNode;
-      unary(): any;
-      primary(): any;
-      objectLiteral(): ASTNode;
-      arrayLiteral(): ASTNode;
-      error(message: string): void;
+  export const BugHuntUserDataApp: App;
+
+  export class BugHuntRuntime extends AppProcess {
+      loading: ReadableStore<boolean>;
+      currentTab: ReadableStore<string>;
+      store: ReadableStore<BugReport[]>;
+      selectedReport: ReadableStore<string>;
+      bughunt: BugHuntUserSpaceProcess;
+      protected overlayStore: Record<string, App>;
+      constructor(pid: number, parentPid: number, app: AppProcessData);
+      render(): Promise<void>;
+      changeTab(tab: string): Promise<void>;
+      refresh(tab?: string): Promise<void>;
+      invalidateCaches(restoreSelected?: boolean): Promise<void>;
+      newReport(): void;
+      viewLogs(): void;
+      userData(): void;
+      exportReport(): Promise<void>;
   }
 
-  export const DefaultArcLangOptions: ArcLangOptions;
-
-  export class Interpreter extends Process {
-      ast: ASTNode | undefined;
-      globalEnvironment: Record<string, any>;
-      currentEnvironment: Record<string, any>;
-      callStack: Record<string, any>[];
-      onError: LangErrorCallback;
-      stdout: LangStdoutCallback;
-      stdin: LangStdinCallback;
-      onExit: LangExitCallback;
-      allowUnsafe: boolean;
-      arguments: any[];
-      workingDir: string;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, options?: ArcLangOptions);
-      protected stop(): Promise<any>;
-      interpret(ast?: ASTNode | undefined): Promise<any>;
-      visit(node: ASTNode): Promise<any>;
-      visitProgram(node: ASTNode): Promise<any>;
-      visitExpressionStatement(node: ASTNode): Promise<any>;
-      visitAssignment(node: ASTNode): Promise<any>;
-      visitIfStatement(node: ASTNode): Promise<any>;
-      visitWhileStatement(node: ASTNode): Promise<any>;
-      visitForStatement(node: ASTNode): Promise<null>;
-      visitBlockStatement(node: ASTNode): Promise<any>;
-      visitFunctionDeclaration(node: ASTNode): Promise<{
-          parameters: any[] | undefined;
-          body: ASTNode | null;
-      }>;
-      visitFunctionCall(node: ASTNode): Promise<any>;
-      visitReturnStatement(node: ASTNode): Promise<any>;
-      visitArrayLiteral(node: ASTNode): Promise<Promise<any>[]>;
-      visitArrayAccess(node: ASTNode): Promise<any>;
-      visitObjectLiteral(node: ASTNode): Promise<Record<string, ASTNode>>;
-      visitPropertyAccess(node: ASTNode): Promise<any>;
-      visitIdentifier(node: ASTNode): Promise<any>;
-      visitBinaryOperator(node: ASTNode): Promise<any>;
-      error(message: string): void;
-      run(code: string): Promise<any>;
-  }
-
-  export interface NativeFunction {
-      parameters: string[];
-      body: ASTNode | ((...args: any[]) => any);
-      native?: boolean;
-  }
-
-  export type TokenType = "PLUS" | "MINUS" | "MULTIPLY" | "DIVIDE" | "MODULO" | "LPAREN" | "RPAREN" | "LBRACE" | "RBRACE" | "LBRACKET" | "RBRACKET" | "SEMICOLON" | "COMMA" | "COLON" | "DOT" | "EQUAL_EQUAL" | "ASSIGN" | "NOT_EQUAL" | "NOT" | "GREATER_EQUAL" | "GREATER" | "LESS_EQUAL" | "LESS" | "AND" | "OR" | "EOF" | "STRING" | "BOOLEAN" | "IDENTIFIER" | "NULL" | "FLOAT" | "INTEGER" | "FUN" | "IF" | "WHILE" | "FOR" | "RETURN" | "ELSE";
-
-  export type LangErrorCallback = (error: LangError) => void;
-
-  export type LangStdoutCallback = (...args: any[]) => void;
-
-  export type LangStdinCallback = () => Promise<string>;
-
-  export type LangExitCallback = (interpreter: Interpreter) => void;
-
-  export type GlobalEnvironmentCallback = (interpreter: Interpreter) => Record<string, any>;
-
-  export interface ArcLangOptions {
-      onError?: LangErrorCallback;
-      stdout?: LangStdoutCallback;
-      stdin?: LangStdinCallback;
-      onExit?: LangExitCallback;
-      allowUnsafe?: boolean;
-      globalEnvironment?: GlobalEnvironmentCallback;
-      arguments?: any[];
-      workingDir?: string;
-      ast?: ASTNode;
-  }
-
-  export class ArcLang extends KernelModule {
-      stack: ProcessHandler;
-      locked: boolean;
-      constructor(kernel: WaveKernel, id: string);
-      run(code: string, parentPid: number, options?: ArcLangOptions): Promise<unknown>;
-  }
-
-  export const clear: Keyword;
-
-  export const echo: Keyword;
-
-  export const exit: Keyword;
-
-  export const idle: Keyword;
-
-  export const If: Keyword;
-
-  export const input: Keyword;
-
-  export const jump: Keyword;
-
-  export const mount: Keyword;
-
-  export const MsgBox: Keyword;
-
-  export const Return: Keyword;
-
-  export const sleep: Keyword;
-
-  export const umount: Keyword;
-
-  export const exec: Keyword;
-
-  export const keyword: Keyword;
-
-  export const BaseLibrary: Library;
-
-  export const Atob: Keyword;
-
-  export const Btoa: Keyword;
-
-  export const Base64Library: Library;
-
-  export const abtostr: Keyword;
-
-  export const dataurl: Keyword;
-
-  export const ConvertLibrary: Library;
-
-  export const calc: Keyword;
-
-  export const chr: Keyword;
-
-  export const length: Keyword;
-
-  export const push: Keyword;
-
-  export const DataLibrary: Library;
-
-  export const get: Keyword;
-
-  export const set: Keyword;
-
-  export const EnvLibrary: Library;
-
-  export const action: Keyword;
-
-  export class ScriptedAppProcess extends AppProcess {
-      private lang;
-      bodyStore: ReadableStore<HTMLDivElement>;
-      body: HTMLDivElement | undefined;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, app: AppProcessData, lang: LanguageInstance);
-      __render__(): Promise<void>;
-      protected stop(): Promise<void>;
-  }
-
-  export const create: Keyword;
-
-  export const append: Keyword;
-
-  export const button: Keyword;
-
-  export const create: Keyword;
-
-  export const div: Keyword;
-
-  export const ElementGet: Keyword;
-
-  export const h1: Keyword;
-
-  export const GuiLibrary: Library;
-
-  export const get: Keyword;
-
-  export const jload: Keyword;
-
-  export const parse: Keyword;
-
-  export const JsonLibrary: Library;
-
-  export const cat: Keyword;
-
-  export const css: Keyword;
-
-  export const html: Keyword;
-
-  export const Img: Keyword;
-
-  export const Import: Keyword;
-
-  export const _unsafe: Keyword;
-
-  export const SourceLibrary: Library;
-
-  export const BaseLibraries: Libraries;
-
-  export const DefaultLanguageOptions: LanguageOptions;
-
-  export class LanguageInstance extends Process {
-      output: string[];
-      variables: Map<string, any>;
-      pointer: number;
-      oldPointer: number;
-      source: InterpreterCommand[];
-      tokens: any[];
-      stdin: () => Promise<string>;
-      stdout: (m: string) => void;
-      onTick: (l: LanguageInstance) => void;
-      onError: (error: LanguageExecutionError) => void;
-      onExit: (l: LanguageInstance) => void;
-      private consumed;
-      private MAX_EXECUTION_CAP;
-      libraries: Libraries;
-      executionCount: number;
-      workingDir: string;
-      options: LanguageOptions;
-      fs: Filesystem;
-      private exception;
-      app: AppProcessData | undefined;
-      appProcess: AppProcess | undefined;
-      userDaemon: UserDaemon | undefined;
-      constructor(handler: ProcessHandler, pid: number, parentPid: number, source: string, options?: LanguageOptions, libraries?: Libraries);
-      stop(): Promise<void>;
-      private parseSource;
-      watchException(): Promise<void>;
-      error(reason: string, keyword?: string): LanguageExecutionError;
-      run(): Promise<string[]>;
-      interpret(): Promise<void>;
-      normalizeTokens(tokens: any[]): any[] | undefined;
-      tokenise(code: string): string[];
-      reset(): Promise<void>;
-      defaultVariables(): Promise<Map<string, any>>;
-      expectTokenLength(length: number, where: string): boolean;
-      calculate(left: string, operator: string, right: string): string | number | boolean | undefined;
-      jump(codepoint: string): void;
-      readDir(relativePath: string): Promise<DirectoryReadReturn | undefined>;
-      createDirectory(relativePath: string): Promise<boolean>;
-      readFile(relativePath: string): Promise<ArrayBuffer | undefined>;
-      writeFile(relativePath: string, data: Blob): Promise<boolean>;
-      tree(relativePath: string): Promise<RecursiveDirectoryReadReturn | undefined>;
-      copyItem(source: string, destination: string): Promise<boolean>;
-      moveItem(source: string, destination: string): Promise<boolean>;
-      deleteItem(relativePath: string): Promise<boolean>;
-  }
-
-  export class LanguageExecutionError extends Error {
-      pointer: number;
-      executionCount: number;
-      keyword: string;
-      message: string;
-      tokens: string[];
-      instruction: InterpreterCommand;
-      constructor(message: string, lang: LanguageInstance, keyword?: string);
-      getObject(): {
-          pointer: number;
-          executionCount: number;
-          keyword: string;
-          message: string;
-          tokens: string[];
-          instruction: InterpreterCommand;
-      };
-  }
-
-  export class PrematureLanguageError extends Error {
-      message: string;
-      constructor(message: string);
-  }
-
-  export type StdIn = (p?: string) => Promise<string>;
-
-  export type StdOut = (m: string) => void;
-
-  export type Keyword = (lang: LanguageInstance) => Promise<any>;
-
-  export type Library = Record<string, Keyword | Record<string, Keyword>>;
-
-  export type Libraries = Record<string, Library>;
-
-  export interface LanguageOptions {
-      stdin?: () => Promise<string>;
-      stdout?: (m: string) => void;
-      onTick?: (l: LanguageInstance) => void;
-      onError?: (error: LanguageExecutionError) => void;
-      onExit?: (l: LanguageInstance) => void;
-      allowUnsafe?: boolean;
-      continuous?: boolean;
-      tickDelay?: number;
-      workingDir?: string;
-      arguments?: any[];
-  }
-
-  export interface InterpreterCommand {
-      line: number;
-      column: number;
-      command: string;
-  }
-
-  export class ArcMSL extends KernelModule {
-      private stack;
-      private locked;
-      constructor(kernel: WaveKernel, id: string);
-      _init(): Promise<void>;
-      run(source: string, parent: number, options?: LanguageOptions): Promise<string[] | undefined>;
-  }
-
-  export const KernelModules: Record<string, any>;
-
-  export function prematurePanic(): void;
-
-  export class WaveKernel {
-      modules: string[];
-      private PANICKED;
-      Logs: ReadableStore<LogItem[]>;
-      startMs: number;
-      init: InitProcess | undefined;
-      state: StateHandler | undefined;
-      initPid: number;
-      params: URLSearchParams;
-      ARCOS_MODE: string;
-      ARCOS_BUILD: string;
-      ARCOS_LICENSE: string;
-      PREMATURE: boolean;
-      static get(): WaveKernel;
-      static isPanicked(): boolean;
-      constructor();
-      static panic(reason: string): Promise<void>;
-      _init(): Promise<void>;
-      getModule<T = any>(id: string, dontCrash?: boolean): T;
-      private _kernelModules;
-      Log(source: string, message: string, level?: LogLevel): void;
-  }
-
-  export function stringifyLogs(logs: LogItem[]): string;
-
-  export function getReportIcon(report: BugReport): string;
-
-  export type InstallStatusType = "mkdir" | "file" | "registration" | "other";
-
-  export type InstallStatusMode = "done" | "failed" | "working";
-
-  export interface InstallStatusItem {
-      type: InstallStatusType;
-      status: InstallStatusMode;
-      content: string;
-  }
-
-  export type InstallStatus = Record<string, InstallStatusItem>;
-
-  export const ICON_GROUP_CAPTIONS: {
-      Branding: string;
-      General: string;
-      Apps: string;
-      Filesystem: string;
-      Power: string;
-      Dialog: string;
-      Status: string;
-      Mimetypes: string;
+  export const BugHuntApp: App;
+
+  export type CalculatorKey = [
+      string | null,
+      string | null
+  ];
+
+  export type CalculatorKeys = [
+      string | null,
+      string | null
+  ][];
+
+  export type CalculatorOverrides = {
+      [key: string]: string;
   };
 
-  export const ElevationLevelIcons: Record<ElevationLevel, string>;
+  export class CalculatorStore {
+      AllowedKeys: string[];
+      Shortcuts: string[];
+      Overrides: CalculatorOverrides;
+      altClasses: string[];
+  }
+
+  export class CalculatorRuntime extends AppProcess {
+      Value: ReadableStore<string>;
+      Store: CalculatorStore;
+      constructor(pid: number, parentPid: number, app: AppProcessData);
+      render(args: RenderArgs): Promise<void>;
+      keys: CalculatorKeys;
+      Functions: {
+          [key: string]: [
+              string,
+              () => void,
+              string
+          ];
+      };
+      private eval;
+      private compileKeys;
+      evaluate(): string | false;
+      private isValid;
+      generateKeyboardShortcuts(): AppKeyCombination[];
+      processKey(key: string): false | undefined;
+      validate(expr: string): boolean;
+  }
+
+  export const CalculatorApp: App;
+
+  export function FileMenu(runtime: CodRuntime): ContextMenuItem;
+
+  export function LanguageMenu(runtime: CodRuntime): ContextMenuItem;
+
+  export function CodAltMenu(runtime: CodRuntime): ContextMenuItem[];
+
+  export type CodLang = "css" | "ini" | "javascript" | "json" | "markdown" | "xml" | "yaml" | "plaintext" | "sql";
+
+  export const CodTranslations: Record<string, CodLang>;
+
+  export class CodRuntime extends AppProcess {
+      language: ReadableStore<CodLang>;
+      buffer: ReadableStore<string>;
+      openedFile: ReadableStore<string>;
+      filename: ReadableStore<string>;
+      mimetype: ReadableStore<string>;
+      directoryName: ReadableStore<string>;
+      original: ReadableStore<string>;
+      mimeIcon: ReadableStore<string>;
+      acceleratorStore: AppKeyCombinations;
+      constructor(pid: number, parentPid: number, app: AppProcessData, path?: string);
+      render({ path }: {
+          path: string;
+      }): Promise<void>;
+      onClose(): Promise<boolean>;
+      readFile(path: string): Promise<void>;
+      saveChanges(force?: boolean): Promise<void>;
+      saveAs(): Promise<void>;
+      openFile(): Promise<void>;
+  }
+
+  export function CodAccelerators(runtime: CodRuntime): AppKeyCombinations;
+
+  export const CodApp: App;
+
+  export function EditMenu(runtime: FileManagerRuntime): ContextMenuItem;
+
+  export function FileMenu(runtime: FileManagerRuntime): ContextMenuItem;
+
+  export function GoMenu(runtime: FileManagerRuntime): ContextMenuItem;
+
+  export function ViewMenu(runtime: FileManagerRuntime): ContextMenuItem;
+
+  export function FileManagerAltMenu(runtime: FileManagerRuntime): ContextMenuItem[];
+
+  export function FileManagerContextMenu(runtime: FileManagerRuntime): AppContextMenu;
+
+  export class FileManagerRuntime extends AppProcess {
+      path: ReadableStore<string>;
+      contents: ReadableStore<DirectoryReadReturn | undefined>;
+      shortcuts: ReadableStore<ShortcutStore>;
+      loading: ReadableStore<boolean>;
+      errored: ReadableStore<boolean>;
+      selection: ReadableStore<string[]>;
+      copyList: ReadableStore<string[]>;
+      cutList: ReadableStore<string[]>;
+      starting: ReadableStore<boolean>;
+      rootFolders: ReadableStore<FolderEntry[]>;
+      drives: ReadableStore<Record<string, QuotedDrive>>;
+      notice: ReadableStore<FileManagerNotice | undefined>;
+      showNotice: ReadableStore<boolean>;
+      loadSave: LoadSaveDialogData | undefined;
+      saveName: ReadableStore<string>;
+      virtual: ReadableStore<VirtualFileManagerLocation | undefined>;
+      drive: ReadableStore<FilesystemDrive | undefined>;
+      directoryListing: ReadableStore<HTMLDivElement>;
+      virtualLocations: Record<string, VirtualFileManagerLocation>;
+      private _refreshLocked;
+      constructor(pid: number, parentPid: number, app: AppProcessData, path?: string, loadSave?: LoadSaveDialogData);
+      render({ path }: RenderArgs): Promise<void>;
+      contextMenu: AppContextMenu;
+      updateAltMenu(): void;
+      updateDrives(): Promise<void>;
+      updateRootFolders(): Promise<void>;
+      navigate(path: string): Promise<void>;
+      refresh(): Promise<void>;
+      DirectoryNotFound(): void;
+      parentDir(): void;
+      updateSelection(e: MouseEvent, path: string): void;
+      setCopyFiles(files?: string[]): void;
+      setCutFiles(files?: string[]): void;
+      pasteFiles(): Promise<void>;
+      unmountDrive(drive: FilesystemDrive, id: string): void;
+      confirmUmountDrive(drive: FilesystemDrive, id: string): Promise<void>;
+      uploadItems(): Promise<void>;
+      lockRefresh(): void;
+      unlockRefresh(refresh?: boolean): void;
+      openFile(path: string): Promise<void>;
+      deleteSelected(): Promise<void>;
+      confirmDeleteSelected(isUserFs?: boolean): Promise<void>;
+      downloadSelected(): Promise<false | undefined>;
+      singlefySelected(): void;
+      selectorUp(): Promise<void>;
+      selectorDown(): Promise<void>;
+      EnterKey(alternative?: boolean): Promise<void>;
+      isDirectory(path: string, workingPath?: string): boolean | undefined;
+      confirmLoadSave(): Promise<void>;
+      createShortcut(name: string, path: string, folder?: boolean): Promise<void>;
+      checkNotice(): Promise<void>;
+      shareAccessIsAdministrative(drive: FilesystemDrive): boolean;
+  }
+
+  export function FileManagerAccelerators(runtime: FileManagerRuntime): AppKeyCombinations;
+
+  export const FileManagerApp: App;
 
   export const DriveIcons: Record<string, string>;
+
+  export class EditRowRuntime extends AppProcess {
+      view: ReadableStore<Uint8Array<ArrayBufferLike>>;
+      output: ReadableStore<Uint8Array<ArrayBufferLike>>;
+      offset: ReadableStore<number>;
+      rows: ReadableStore<[
+          number,
+          [
+              number,
+              number
+          ][]
+      ][]>;
+      editorInputs: ReadableStore<HTMLInputElement[]>;
+      constructor(pid: number, parentPid: number, app: AppProcessData, view: ReadableStore<Uint8Array>, offset: number);
+      render(): Promise<void>;
+      getByteClass(byte: number): "nul" | "ascii-control" | "printable-ascii" | "rest";
+      writeBytes(): Promise<void>;
+  }
+
+  export const EditRow: App;
+
+  export class HexEditRuntime extends AppProcess {
+      buffer: ReadableStore<ArrayBuffer>;
+      original: ReadableStore<Uint8Array<ArrayBufferLike> | undefined>;
+      view: ReadableStore<Uint8Array<ArrayBufferLike>>;
+      offsets: ReadableStore<number[]>;
+      offsetLength: ReadableStore<number>;
+      hexRows: ReadableStore<[
+          number,
+          number
+      ][][]>;
+      decoded: ReadableStore<[
+          string,
+          number
+      ][][]>;
+      requestedFile: string;
+      editorInputs: ReadableStore<HTMLButtonElement[]>;
+      filename: ReadableStore<string>;
+      activeByte: ReadableStore<number>;
+      modified: ReadableStore<boolean>;
+      protected overlayStore: Record<string, App>;
+      constructor(pid: number, parentPid: number, app: AppProcessData, file: string);
+      render(): Promise<void>;
+      onClose(): Promise<boolean>;
+      updateVariables(view: Uint8Array): void;
+      saveVariables(hexRows: [
+          number,
+          number
+      ][][], decoded: [
+          string,
+          number
+      ][][], offsetLength: number, offsets: number[]): void;
+      sanitizeDecoded(input: string): string;
+      getByteClass(byte: number): "nul" | "ascii-control" | "printable-ascii" | "rest";
+      newByte(): void;
+      alterRow(rowIndex: number): Promise<void>;
+      isModified(): boolean;
+      saveFile(): Promise<void>;
+  }
+
+  export const HexEditorApp: App;
+
+  export class IconEditorRuntime extends AppProcess {
+      iconGroups: ReadableStore<Record<string, string[]>>;
+      icons: ReadableStore<Record<string, string>>;
+      filtered: ReadableStore<Record<string, string>>;
+      iconService?: IconService;
+      selectedIcon: ReadableStore<string>;
+      selectedGroup: ReadableStore<string>;
+      hasChanges: ReadableStore<boolean>;
+      constructor(pid: number, parentPid: number, app: AppProcessData);
+      start(): Promise<void>;
+      onClose(): Promise<boolean>;
+      revert(): void;
+      setGroups(): void;
+      updateFiltered(v?: string): void;
+      save(): Promise<void>;
+      editIcon(): Promise<void>;
+  }
+
+  export const IconEditorApp: App;
+
+  export const IconIdTypeCaptions: Record<string, string>;
+
+  export const IconGroupIcons: Record<string, string>;
+
+  export class ImageViewerRuntime extends AppProcess {
+      openedFile: ReadableStore<string>;
+      imageUrl: ReadableStore<string>;
+      indirect: ReadableStore<boolean>;
+      overridePopulatable: boolean;
+      constructor(pid: number, parentPid: number, app: AppProcessData, path?: string);
+      render({ path }: {
+          path: string;
+      }): Promise<boolean | void>;
+      readFile(path: string): Promise<void>;
+      readFileIndirectFallback(path: string): Promise<void>;
+  }
+
+  export const ImageViewerApp: App;
+
+  export type LightsOffGrid = boolean[][];
+
+  export class LightsOffLevels {
+      runtime: LightsOffRuntime;
+      constructor(runtime: LightsOffRuntime);
+      private _store;
+      loadLevel(level: number): void;
+      checkNextLevel(): Promise<boolean | void>;
+  }
+
+  export class LightsOffRuntime extends AppProcess {
+      xModifiers: number[];
+      yModifiers: number[];
+      Grid: ReadableStore<LightsOffGrid>;
+      Transitioning: ReadableStore<boolean>;
+      Clicks: ReadableStore<number>;
+      LEVEL: ReadableStore<number>;
+      Levels: LightsOffLevels;
+      constructor(pid: number, parentPid: number, app: AppProcessData);
+      containsLights(): boolean;
+      finish(): void;
+      ToggleLight(x: number, y: number): void;
+      loadData(): void;
+      saveData(): void;
+  }
+
+  export const LightsOffApp: App;
+
+  export type CollectorResult = {
+      [key: string]: LogItem[];
+  };
+
+  export type IterableCollectorResult = [
+      string,
+      LogItem[]
+  ][];
+
+  export type FilterLevel = LogLevel | "all";
+
+  export type GroupedBySource = Map<string, LogItem[]>;
+
+  export type CurrentSource = ReadableStore<string>;
+
+  export type LogSource = {
+      what: string;
+      timestamp: number;
+  };
+
+  export class LoggingRuntime extends AppProcess {
+      groups: ReadableStore<Map<string, LogItem[]>>;
+      sources: ReadableStore<LogSource[]>;
+      currentSource: ReadableStore<string>;
+      selectedLevel: ReadableStore<FilterLevel>;
+      private archive;
+      isArchive: boolean;
+      constructor(pid: number, parentPid: number, app: AppProcessData, source?: string, level?: FilterLevel, archive?: LogItem[]);
+      updateGroups(): void;
+      collectLogsBySource(logs: LogItem[], reverse?: boolean): {
+          items: CollectorResult;
+          sources: LogSource[];
+      };
+  }
+
+  export const LoggingApp: App;
 
   export const FilterLevels: FilterLevel[];
 
   export const FilterIcons: Map<"all" | LogLevel, string>;
 
   export const LogItemIcons: Record<LogLevel, string>;
+
+  export const MediaPlayerAccelerators: (runtime: MediaPlayerRuntime) => AppKeyCombinations;
+
+  export function FileMenu(runtime: MediaPlayerRuntime): ContextMenuItem;
+
+  export function PlaylistAltMenu(runtime: MediaPlayerRuntime): ContextMenuItem;
+
+  export function MediaPlayerAltMenu(runtime: MediaPlayerRuntime): ContextMenuItem[];
+
+  export interface PlayerState {
+      paused: boolean;
+      current: number;
+      duration: number;
+  }
+
+  export class MediaPlayerRuntime extends AppProcess {
+      queue: ReadableStore<string[]>;
+      queueIndex: ReadableStore<number>;
+      url: ReadableStore<string>;
+      player: HTMLVideoElement | undefined;
+      State: ReadableStore<PlayerState>;
+      isVideo: ReadableStore<boolean>;
+      Loaded: ReadableStore<boolean>;
+      playlistPath: ReadableStore<string>;
+      contextMenu: AppContextMenu;
+      constructor(pid: number, parentPid: number, app: AppProcessData, file?: string);
+      onClose(): Promise<boolean>;
+      protected stop(): Promise<any>;
+      render({ file }: RenderArgs): Promise<void>;
+      setPlayer(player: HTMLVideoElement): void;
+      Reset(): void;
+      Play(): Promise<void>;
+      Pause(): Promise<void>;
+      Seek(mod: number): void;
+      Stop(): void;
+      updateState(): void | {
+          paused: boolean;
+          current: number;
+          duration: number;
+      };
+      formatTime(seconds: number): string;
+      openFileLocation(): void;
+      openFile(): Promise<void>;
+      readFile(paths: string[], addToQueue?: boolean): Promise<void>;
+      nextSong(): void;
+      previousSong(): Promise<void>;
+      clearQueue(): void;
+      handleSongChange(v: number): Promise<void>;
+      addToQueue(): Promise<void>;
+      moveQueueItem(sourceIndex: number, targetIndex: number): void;
+      savePlaylist(): Promise<void>;
+      loadPlaylist(): Promise<void>;
+      readPlaylist(path: string): Promise<void>;
+      createPlaylistShortcut(): Promise<void>;
+      failedToPlay(): Promise<void>;
+  }
+
+  export const MediaPlayerApp: App;
+
+  export interface MessagingPage {
+      name: string;
+      icon: string;
+      supplier: (process: MessagingAppRuntime) => Promise<PartialMessage[]> | PartialMessage[];
+  }
+
+  export const messagingPages: Record<string, MessagingPage>;
+
+  export class MessagingAppRuntime extends AppProcess {
+      service: MessagingInterface;
+      page: ReadableStore<MessagingPage | undefined>;
+      pageId: ReadableStore<string | undefined>;
+      buffer: ReadableStore<PartialMessage[]>;
+      correlated: ReadableStore<PartialMessage[][]>;
+      loading: ReadableStore<boolean>;
+      refreshing: ReadableStore<boolean>;
+      errored: ReadableStore<boolean>;
+      messageNotFound: ReadableStore<boolean>;
+      message: ReadableStore<ExpandedMessage | undefined>;
+      userInfoCache: Record<string, PublicUserInfo>;
+      searchQuery: ReadableStore<string>;
+      searchResults: ReadableStore<string[]>;
+      messageWindow: boolean;
+      messageFromFile: boolean;
+      constructor(pid: number, parentPid: number, app: AppProcessData, pageOrMessagePath?: string, messageId?: string);
+      render({ page }: {
+          page: string;
+      }): Promise<void>;
+      getInbox(): Promise<PartialMessage[]>;
+      getSent(): Promise<PartialMessage[]>;
+      getArchived(): Promise<PartialMessage[]>;
+      getArchiveState(): string[];
+      setArchiveState(state: string[]): void;
+      isArchived(id: string): boolean;
+      addToArchive(id: string): void;
+      removeFromArchive(id: string): void;
+      switchPage(id: string): Promise<void>;
+      refresh(): Promise<void>;
+      correlateMessages(messages: PartialMessage[]): PartialMessage[][];
+      refreshFailed(): void;
+      readMessage(messageId: string, force?: boolean): Promise<void>;
+      userInfo(userId: string): Promise<PublicUserInfo | undefined>;
+      readAttachment(attachment: MessageAttachment, messageId: string, prog: FileProgressMutator): Promise<ArrayBuffer | undefined>;
+      openAttachment(attachment: MessageAttachment, messageId: string): Promise<void>;
+      Search(query: string): void;
+      popoutMessage(messageId: string): void;
+      saveMessage(): Promise<void>;
+      readMessageFromFile(path: string): Promise<boolean | void>;
+      compose(): void;
+      replyTo(message: ExpandedMessage): void;
+      forward(message: ExpandedMessage): Promise<void>;
+      toggleArchived(message: ExpandedMessage): void;
+      deleteMessage(id: string): Promise<void>;
+  }
+
+  export const MessagingApp: App;
+
+  export class PdfViewerRuntime extends AppProcess {
+      openedFile: ReadableStore<string>;
+      documentUrl: ReadableStore<string>;
+      constructor(pid: number, parentPid: number, app: AppProcessData, path?: string);
+      render({ path }: {
+          path: string;
+      }): Promise<boolean | void>;
+      readFile(path: string): Promise<void>;
+      readFileIndirectFallback(path: string): Promise<void>;
+  }
+
+  export const PdfViewerApp: App;
+
+  export class ProcessManagerRuntime extends AppProcess {
+      selected: ReadableStore<string>;
+      running: ReadableStore<number>;
+      currentTab: ReadableStore<string>;
+      tabs: Record<string, Component>;
+      host: ServiceHost;
+      constructor(pid: number, parentPid: number, app: AppProcessData, page?: string);
+      kill(proc: Process): Promise<void>;
+      killError(name: string, result: ProcessKillResult): void;
+      stopService(id: string): Promise<void>;
+      restartService(id: string): Promise<void>;
+      startService(id: string): Promise<void>;
+      serviceInfoFor(id: string): void;
+  }
+
+  export const ProcessesApp: App;
+
+  export interface Box {
+      modifier: number;
+      class: string;
+      yoffset: number;
+  }
+
+  export class QlorbRuntime extends AppProcess {
+      readonly random: (m: number) => number;
+      readonly Boxes: ReadableStore<Box[]>;
+      readonly BoxesOffset: ReadableStore<number>;
+      readonly Clicks: ReadableStore<number>;
+      readonly Score: ReadableStore<number>;
+      readonly OldClicks: ReadableStore<number>;
+      readonly BOX_SIZE = 30;
+      readonly BOX_VALUES: number[];
+      readonly PAGES: string[];
+      readonly CurrentPage: ReadableStore<string>;
+      constructor(pid: number, parentPid: number, app: AppProcessData);
+      render(): Promise<void>;
+      spawnBox(props?: Box | null, useOffset?: boolean, forcePositive?: boolean): Box;
+      private createRandomBox;
+      private findBoxClass;
+      ScorePoints(box: Box, button?: HTMLButtonElement): void;
+      ScoreNegativePoints(box: Box, button?: HTMLButtonElement): void;
+      private levelDown;
+      clickReset(): void;
+      flushStores(): void;
+      onSwitchPage(): void;
+      switchPage(page: string): boolean;
+  }
+
+  export const QlorbApp: App;
+
+  export class OverlayRuntime extends AppProcess {
+      parentProcess: SettingsRuntime;
+      constructor(pid: number, parentPid: number, app: AppProcessData);
+  }
+
+  export const ChangePasswordApp: App;
+
+  export const ChangeUsernameApp: App;
+
+  export const SaveThemeApp: App;
+
+  export const UrlLoginBackground: App;
+
+  export const UrlProfilePicture: App;
+
+  export const UrlWallpaper: App;
+
+  export const UserFontApp: App;
+
+  export interface SettingsPage {
+      name: string;
+      icon: string;
+      content: Component<any>;
+      hidden?: boolean;
+      separator?: boolean;
+      description: string;
+      noSafeMode?: boolean;
+  }
+
+  export type SettingsPages = Map<string, SettingsPage>;
+
+  export type SettingsSlides = Map<string, Component<any>>;
+
+  export const settingsPageStore: SettingsPages;
+
+  export const SlideStore: SettingsSlides;
+
+  export class SettingsRuntime extends AppProcess {
+      currentPage: ReadableStore<string>;
+      currentSlide: ReadableStore<string>;
+      slideVisible: ReadableStore<boolean>;
+      requestedSlide: string | undefined;
+      protected overlayStore: Record<string, App>;
+      protected elevations: Record<string, ElevationData>;
+      contextMenu: AppContextMenu;
+      constructor(pid: number, parentPid: number, app: AppProcessData, page?: string, slide?: string);
+      render(): Promise<void>;
+      switchPage(pageId: string): void;
+      showSlide(id: string): Promise<void>;
+      loginActivity(): Promise<void>;
+      logOutEverywhere(): Promise<void>;
+      uploadWallpaper(): Promise<void>;
+      viewLicense(): Promise<void>;
+      deleteThemeConfirmation(id?: string): void;
+      chooseProfilePicture(): Promise<void>;
+      chooseWallpaper(): Promise<void>;
+      chooseLoginBackground(): Promise<void>;
+      setup2fa(): Promise<void>;
+      disableTotp(): Promise<void>;
+  }
+
+  export function SettingsContext(runtime: SettingsRuntime): AppContextMenu;
+
+  export const SystemSettings: App;
+
+  export function sqljsResultToJSON(result: QueryExecResult[]): Record<string, any>[][];
+
+  export class SqlInterfaceProcess extends Process {
+      private filePath;
+      private sql?;
+      db?: initSqlJs.Database;
+      isFresh: boolean;
+      constructor(pid: number, parentPid: number, path: string);
+      start(): Promise<void>;
+      reset(): void;
+      initialize(): Promise<void>;
+      readFile(): Promise<void>;
+      writeFile(): Promise<void>;
+      stop(): Promise<void>;
+      exec(sql: string, params?: initSqlJs.BindParams | undefined): Record<string, any>[][] | string;
+  }
+
+  export interface SqlTable {
+      uuid: string;
+      name: string;
+      rootpage: number;
+      sql: string;
+      tbl_name: string;
+      type: string;
+      columns: SqlTableColumn[];
+  }
+
+  export interface SqlTableColumn {
+      cid: number;
+      name: string;
+      type: string;
+      notnull: IntBool;
+      dflt_value: any;
+      pk: IntBool;
+      uuid: string;
+  }
+
+  export interface SqeletonTab {
+      name: string;
+      count?: ReadableStore<any[]>;
+      className?: string;
+  }
+
+  export type SqeletonTabs = Record<string, SqeletonTab>;
+
+  export interface SqeletonError {
+      uuid: string;
+      sql: string;
+      timestamp: number;
+      text: string;
+      system: boolean;
+  }
+
+  export interface SqeletonHistoryItem {
+      uuid: string;
+      sql: string;
+      timestamp: number;
+      result: Record<string, any>[][];
+      system: boolean;
+  }
+
+  export class SqeletonRuntime extends AppProcess {
+      openedFile: ReadableStore<string>;
+      openedFileName: ReadableStore<string>;
+      _intf: ReadableStore<SqlInterfaceProcess | undefined>;
+      queries: ReadableStore<string[]>;
+      queryIndex: ReadableStore<number>;
+      errors: ReadableStore<SqeletonError[]>;
+      queryHistory: ReadableStore<SqeletonHistoryItem[]>;
+      working: ReadableStore<boolean>;
+      errored: ReadableStore<boolean>;
+      result: ReadableStore<Record<string, any>[][] | undefined>;
+      tables: ReadableStore<SqlTable[]>;
+      busy: boolean;
+      currentTab: ReadableStore<string>;
+      syntaxError: ReadableStore<boolean>;
+      tempDbPath: string;
+      tempDb?: SqlInterfaceProcess;
+      tabs: SqeletonTabs;
+      get Interface(): SqlInterfaceProcess | undefined;
+      set Interface(value: SqlInterfaceProcess | undefined);
+      constructor(pid: number, parentPid: number, app: AppProcessData, path?: string);
+      start(): Promise<void>;
+      stop(): Promise<void>;
+      render({ path }: {
+          path?: string;
+      }): Promise<void>;
+      readFile(path: string): Promise<void>;
+      openFile(): Promise<void>;
+      newFile(): Promise<void>;
+      execute(code: string, simple?: boolean, system?: boolean): Promise<string | Record<string, any>[][] | undefined>;
+      updateTables(): Promise<void>;
+      newQuery(value?: string): void;
+      openOrCreateQuery(value: string): void;
+      deleteQuery(index?: number): void;
+      tableToSql(table: SqlTable, pretty?: boolean, dropFirst?: boolean): Promise<string | undefined>;
+      hasSyntaxError(input: string): Promise<boolean>;
+      waitForAvailable(): Promise<void>;
+      dropTableInteractively(table: string): void;
+      ExistingConnectionError(): void;
+      DbOpenError(e: string): void;
+      TablesUpdateError(e: string): void;
+  }
+
+  export const SqeletonApp: App;
+
+  export function EditMenu(runtime: WriterRuntime): ContextMenuItem;
+
+  export function FileMenu(runtime: WriterRuntime): ContextMenuItem;
+
+  export function ViewMenu(runtime: WriterRuntime): ContextMenuItem;
+
+  export function WriterAltMenu(runtime: WriterRuntime): ContextMenuItem[];
+
+  export class ReplaceRuntime extends AppProcess {
+      parent: WriterRuntime;
+      constructor(pid: number, parentPid: number, app: AppProcessData);
+      replaceOnce(text: string, replacer: string): void;
+      replaceAll(text: string, replacer: string): void;
+  }
+
+  export const ReplaceOverlay: App;
+
+  export class WriterRuntime extends AppProcess {
+      buffer: ReadableStore<string>;
+      openedFile: ReadableStore<string>;
+      filename: ReadableStore<string>;
+      mimetype: ReadableStore<string>;
+      directoryName: ReadableStore<string>;
+      original: ReadableStore<string>;
+      input: ReadableStore<HTMLTextAreaElement>;
+      mimeIcon: ReadableStore<string>;
+      protected overlayStore: Record<string, App>;
+      acceleratorStore: AppKeyCombinations;
+      constructor(pid: number, parentPid: number, app: AppProcessData, path?: string);
+      render({ path }: {
+          path: string;
+      }): Promise<void>;
+      onClose(): Promise<boolean>;
+      readFile(path: string): Promise<void>;
+      saveChanges(force?: boolean): Promise<void>;
+      saveAs(): Promise<void>;
+      openFile(): Promise<void>;
+      selectAll(): void;
+  }
+
+  export function WriterAccelerators(runtime: WriterRuntime): AppKeyCombinations;
+
+  export const WriterApp: App;
 
   export function toBase64(input: string): string;
 
@@ -6313,7 +6650,38 @@ declare global {
 
   export const Logo: (m?: string) => string;
 
-  export const set: Keyword;
+  export class FilesystemContext {
+      #private;
+      constructor(pid: number);
+      getDriveById(id: string): FilesystemDrive;
+      mountDrive<T = FilesystemDrive>(id: string, supplier: typeof FilesystemDrive, letter?: string, onProgress?: FilesystemProgressCallback, ...args: any[]): Promise<T | false>;
+      getDriveIdByIdentifier(identifier: string): string;
+      umountDrive(id: string, fromSystem?: boolean, onProgress?: FilesystemProgressCallback): Promise<boolean>;
+      getDriveByLetter(letter: string, error?: boolean): FilesystemDrive;
+      getDriveIdentifier(path: string): string;
+      getDriveByPath(path: string): FilesystemDrive;
+      validatePath(p: string): void;
+      removeDriveLetter(p: string): string;
+      validateDriveLetter(letter: string): void;
+      readDir(path: string): Promise<DirectoryReadReturn | undefined>;
+      bulk<T = any>(path: string, extension: string): Promise<Record<string, T>>;
+      createDirectory(path: string, dispatch?: boolean): Promise<boolean>;
+      readFile(path: string, onProgress?: FilesystemProgressCallback): Promise<ArrayBuffer | undefined>;
+      writeFile(path: string, data: Blob, onProgress?: FilesystemProgressCallback, dispatch?: boolean): Promise<boolean>;
+      tree(path: string): Promise<RecursiveDirectoryReadReturn | undefined>;
+      copyItem(source: string, destination: string, dispatch?: boolean, onProgress?: FilesystemProgressCallback): Promise<boolean>;
+      moveItem(source: string, destination: string, dispatch?: boolean, onProgress?: FilesystemProgressCallback): Promise<boolean>;
+      deleteItem(path: string, dispatch?: boolean): Promise<boolean>;
+      uploadFiles(target: string, accept?: string, multiple?: boolean, onProgress?: FilesystemProgressCallback): Promise<UploadReturn>;
+      defaultProgress(d: FilesystemProgress): void;
+      lockFile(path: string, pid: number): Promise<void>;
+      releaseLock(path: string, pid: number): Promise<void>;
+      direct(path: string): Promise<string | undefined>;
+      nextAvailableDriveLetter(): string | undefined;
+      isDirectory(path: string): Promise<false | DirectoryReadReturn | undefined>;
+      stat(path: string): Promise<ExtendedStat | undefined>;
+      imageThumbnail(path: string, width: number, height?: number): Promise<string | undefined>;
+  }
 
   export function scopeToScopeCaption(scope: string): string;
 
@@ -6350,19 +6718,15 @@ declare global {
       generationtime_ms: number;
   }
 
-  export const kernel: WaveKernel;
-
   export const daemon: UserDaemon;
 
-  export const handler: ProcessHandler;
+  export const fs: FilesystemType;
 
-  export const fs: Filesystem;
-
-  export const env: Environment;
+  export const env: EnvironmentType;
 
   export const serviceHost: ServiceHost | undefined;
 
-  export const dispatch: SystemDispatch;
+  export const dispatch: SystemDispatchType;
 
   export const icons: Record<string, string>;
 
