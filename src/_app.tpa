@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "name": "ArcOS",
-    "version": "0.7.0",
+    "name": "ArcOS Switcheroo",
+    "version": "0.8.0",
     "author": "Nik Nikovsky",
     "icon": "@local:icon.png",
     "appGroup": "entertainment"
