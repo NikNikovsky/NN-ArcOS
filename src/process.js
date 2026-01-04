@@ -227,10 +227,9 @@ class proc extends ThirdPartyAppProcess {
         
         // Version URLs mapping
         const versionUrls = {
-            'v5': 'https://v5.izkuipers.nl', 
-            'v6': 'https://v6.izkuipers.nl', 
-            'v7': 'https://v7.izkuipers.nl',
-            'nightly': 'https://v7.izkuipers.nl/nightly/' 
+            'v5': 'https://v5.arcweb.nl', 
+            'v6': 'https://v6.arcweb.nl', 
+            'v7': 'https://os.arcweb.nl',
         };
 
         const versionCards = document.querySelectorAll('.version-card');
