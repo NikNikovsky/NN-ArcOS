@@ -1,5 +1,6 @@
 
 # ArcOS inside of ArcOS
+[![AI Slop Inside](https://sladge.net/badge.svg)](https://sladge.net)
 
 ## Version structure is (7).ArcOS.Version.Number of app patches.
 
