@@ -3,7 +3,7 @@
     "name": "ArcOS Multichooser Thing",
     "description": "Basically an app for not having to switch between multiple ArcOS versions.",
     "author": "Nik Nikovsky",
-    "version": "0.8.0",
+    "version": "0.8.1",
     "installLocation": "U:/Applications/NikN_ArcOS",
     "appId": "NikN_ArcOS",
     "store": {
@@ -16,6 +16,6 @@
   "outFile": "ArcOS.arc",
   "payloadDir": "src",
   "devPort": 3128,
-  "buildHash": "0b530289",
+  "buildHash": "0a1a70d3",
   "noHotRelaunch": false
 }

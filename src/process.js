@@ -30,37 +30,46 @@ class proc extends ThirdPartyAppProcess {
     async render() {
         if (this._disposed) return;
 
-        // Define the elevation request before calling elevate
-        // This definition must be present before the elevate call.
-        this.elevations = this.elevations || {}; // Ensure elevations object exists
-        this.elevations.prepareThyself = {
-            what: "You might regret running this, please confirm that you are mentally prepared.",
-            image: await this.fs.direct(util.join(workingDirectory, "icon.png")),
-            title: "ArcOS",
-            description: "by Nik Nikovsky",
-            level: 2, // 0-low, 1-medium, 2-high severity
-        };
-
-        // Request elevation immediately at the start of the app's rendering lifecycle.
-        // If elevation is denied or fails, dispose of the process and prevent further rendering.
+        // Show security/confirmation dialog at startup
         try {
-            const elevated = await this.elevate("prepareThyself");
-            if (!elevated) {
-                this.Log("Elevation denied. Closing application.", LogLevel.critical);
-                this.killSelf(); // Close the app if elevation is denied
-                return; // Stop further rendering
+            this.Log("Showing startup confirmation dialog...", LogLevel.info);
+            const icon = await fs.direct(util.join(this.workingDirectory, "icon.png"));
+            
+            let shouldContinue = false;
+            
+            const dialogPromise = new Promise((resolve) => {
+                MessageBox({
+                    title: "ArcOS",
+                    message: "You might regret running this, please confirm that you are mentally prepared.",
+                    image: icon,
+                    sound: "arcos.dialog.info",
+                    buttons: [
+                        { caption: "Cancel", action: () => {
+                            this.Log("User cancelled startup.", LogLevel.info);
+                            shouldContinue = false;
+                            resolve();
+                        }},
+                        { caption: "Continue", action: () => {
+                            this.Log("User confirmed startup.", LogLevel.info);
+                            shouldContinue = true;
+                            resolve();
+                        }},
+                    ],
+                }, this.pid, true);
+            });
+            
+            await dialogPromise;
+            
+            if (!shouldContinue) {
+                this.killSelf();
+                return;
             }
-            this.Log("Elevation granted.", LogLevel.info);
-            // Continue with rendering and other operations if elevation is granted
-
         } catch (error) {
-            this.Log(`Error during elevation request: ${error}`, LogLevel.critical);
-            this.killSelf(); // Close the app on error during elevation request
-            return; // Stop further rendering
+            this.Log(`Error showing startup dialog: ${error.message || error}`, LogLevel.error);
         }
 
         const body = this.getBody();
-        this.deleteOldFolder();
+        await this.deleteOldFolder();
         body.innerHTML = html;
 
         this.Log("ArcOS rendered.", LogLevel.info);
@@ -230,6 +239,7 @@ class proc extends ThirdPartyAppProcess {
             'v5': 'https://v5.arcweb.nl', 
             'v6': 'https://v6.arcweb.nl', 
             'v7': 'https://os.arcweb.nl',
+            'beta': 'https://beta.arcweb.nl'
         };
 
         const versionCards = document.querySelectorAll('.version-card');
